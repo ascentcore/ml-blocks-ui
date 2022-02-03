@@ -1,0 +1,3 @@
+[submodule "samples/ml-blocks"]
+	path = samples/ml-blocks
+	url = git@github.com:ascentcore/ml-blocks.git
