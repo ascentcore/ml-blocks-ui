@@ -34,7 +34,6 @@ services:
       - "ml_blocks_root:ml_blocks_root"
     environment:
       - CHOKIDAR_USEPOLLING=true
-      - ROOT_HOST=ml_blocks_root
     networks:
       - ml-blocks-net
 
