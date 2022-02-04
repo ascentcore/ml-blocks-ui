@@ -23,20 +23,30 @@ const useStyles = makeStyles(() => ({
 const DataScreen = () => {
     const classes = useStyles();
     const [value, setValue] = useState();
-    useEffect(async () => {
-        const response = await getValue.getData()
-        setValue(response);
-    }, []);
+    const [page, setPage] = React.useState(0);
 
     const [count, setCount] = useState();
 
-    useEffect(async () => {
-        const response = await getValue.dataCount()
-        setCount(response);
+    useEffect(() => {
+        async function fetchData() {
+            const response = await getValue.dataCount()
+            console.log('count', response?.data[0])
+            return setCount(response)
+        }
+        fetchData();
+    }, [count]);
+
+    console.log('c', count?.data[0])
+    useEffect(() => {
+        async function fetchData() {
+            const response = await getValue.getData(page, count?.data[0])
+            console.log('resp', response)
+            return setValue(response)
+        }
+        fetchData();
     }, []);
 
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -51,27 +61,41 @@ const DataScreen = () => {
         <Paper className={classes.paper}>
             <TableContainer className={classes.tableContainer}>
                 <Table  >
-                    <TableBody>
-                        {value?.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
-                            <TableRow hover key={row}>
-                                <TableCell component="th" scope="row">{row[0]}</TableCell>
-                                <TableCell align="right">{row[1]}</TableCell>
-                                <TableCell align="right">{row[2]}</TableCell>
-                                <TableCell align="right">{row[3]}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                    <TableFooter className={classes.tableFooter}>
-                        <TableRow align="right">
-                            <TablePagination
-                                rowsPerPageOptions={[5, 10, 50]}
-                                count={count?.data[0]}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                            />
+                    <TableHead>
+                        <TableRow>
+                            <TableCell >Sepal Lenght</TableCell>
+                            <TableCell align="right">Sepal Weight</TableCell>
+                            <TableCell align="right">Petal Length</TableCell>
+                            <TableCell align="right">Petal Weight</TableCell>
+                            <TableCell align="right">Variety</TableCell>
                         </TableRow>
+                    </TableHead>
+                    {value?.data?.length > 0 &&
+                        <TableBody>
+                            {value?.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
+                                <TableRow hover key={row[Object.keys(row)[index]]}>
+                                    <TableCell  >{row[Object.keys(row)[0]]}</TableCell>
+                                    <TableCell align="right">{row[Object.keys(row)[1]]}</TableCell>
+                                    <TableCell align="right">{row[Object.keys(row)[2]]}</TableCell>
+                                    <TableCell align="right">{row[Object.keys(row)[3]]}</TableCell>
+                                    <TableCell align="right">{row[Object.keys(row)[4]]}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    }
+                    <TableFooter className={classes.tableFooter}>
+                        {count?.data?.length > 0 &&
+                            <TableRow align="right">
+                                <TablePagination
+                                    rowsPerPageOptions={[5, 10, 50]}
+                                    count={count?.data[0]}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                />
+                            </TableRow>
+                        }
                     </TableFooter>
                 </Table>
             </TableContainer>
