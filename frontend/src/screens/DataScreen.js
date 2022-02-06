@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
 const DataScreen = () => {
     const classes = useStyles();
     const [value, setValue] = useState();
-    const [page, setPage] = React.useState(0);
+    const [page, setPage] = useState(0);
 
     const [count, setCount] = useState();
 
@@ -34,19 +34,21 @@ const DataScreen = () => {
             return setCount(response)
         }
         fetchData();
-    }, [count]);
+
+    }, []);
 
     console.log('c', count?.data[0])
     useEffect(() => {
+        if (!count) return
         async function fetchData() {
             const response = await getValue.getData(page, count?.data[0])
             console.log('resp', response)
             return setValue(response)
         }
         fetchData();
-    }, []);
+    }, [count]);
 
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
