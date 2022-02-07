@@ -24,29 +24,32 @@ const DataScreen = () => {
     const classes = useStyles();
     const [value, setValue] = useState();
     const [page, setPage] = useState(0);
-
+    const [columns, setColumns] = useState([]);
     const [count, setCount] = useState();
 
     useEffect(() => {
         async function fetchData() {
             const response = await getValue.dataCount()
-            console.log('count', response?.data[0])
             return setCount(response)
         }
         fetchData();
 
     }, []);
 
-    console.log('c', count?.data[0])
     useEffect(() => {
         if (!count) return
         async function fetchData() {
             const response = await getValue.getData(page, count?.data[0])
-            console.log('resp', response)
             return setValue(response)
         }
         fetchData();
+
     }, [count]);
+
+    useEffect(() => {
+        if (!value) return
+        setColumns(Object.keys(value?.data[0]))
+    }, [value])
 
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -64,23 +67,21 @@ const DataScreen = () => {
             <TableContainer className={classes.tableContainer}>
                 <Table  >
                     <TableHead>
-                        <TableRow>
-                            <TableCell >Sepal Lenght</TableCell>
-                            <TableCell align="right">Sepal Weight</TableCell>
-                            <TableCell align="right">Petal Length</TableCell>
-                            <TableCell align="right">Petal Weight</TableCell>
-                            <TableCell align="right">Variety</TableCell>
-                        </TableRow>
+                        {columns?.length > 0 &&
+                            <TableRow>
+                                {columns.map((column) => (
+                                    <TableCell key={column}>{column}</TableCell>
+                                ))}
+                            </TableRow>
+                        }
                     </TableHead>
                     {value?.data?.length > 0 &&
                         <TableBody>
                             {value?.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
                                 <TableRow hover key={row[Object.keys(row)[index]]}>
-                                    <TableCell  >{row[Object.keys(row)[0]]}</TableCell>
-                                    <TableCell align="right">{row[Object.keys(row)[1]]}</TableCell>
-                                    <TableCell align="right">{row[Object.keys(row)[2]]}</TableCell>
-                                    <TableCell align="right">{row[Object.keys(row)[3]]}</TableCell>
-                                    <TableCell align="right">{row[Object.keys(row)[4]]}</TableCell>
+                                    {Object.keys(row).map((item) => (
+                                        <TableCell >{row[item]}</TableCell>
+                                    ))}
                                 </TableRow>
                             ))}
                         </TableBody>
