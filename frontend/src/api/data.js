@@ -12,3 +12,12 @@ export const getData = async (page, count) => {
         }
     });
 }
+
+
+export const getGraph = async() => {
+    return await API.get('/pipeline/graph')
+}
+
+export const getStatusOfIp = async (ip) => {
+    return await API.get(`/pipeline/proxy?ip=${ip}&path=api/v1/status`)
+}
