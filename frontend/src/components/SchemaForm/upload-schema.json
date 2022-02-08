@@ -10,7 +10,7 @@
             "type": "array",
             "items": {
                 "type": "string",
-                "contentMediaType": "image/*",
+                "contentMediaType": "text/*",
                 "contentEncoding": "base64"
             }
         },

@@ -6,13 +6,8 @@ export function MUIChooseFile({ value, property, onChange }) {
     const classes = useStyles();
     return (
         <Grid container className={classes.grid}>
-
-            <Button
-                variant="text"
-                className={classes.chooseFile}
-            >
+            <Button onClick={onChange}>
                 <input
-                    onChange={onChange}
                     type="file"
                     accept={property.contentMediaType}
                 />
