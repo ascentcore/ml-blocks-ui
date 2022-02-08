@@ -17,64 +17,87 @@ const useStyles = makeStyles(() => ({
         '& tr > td': {
             border: 0
         }
-    }
+    },
 }))
 
 const DataScreen = () => {
+
     const classes = useStyles();
     const [value, setValue] = useState();
-    useEffect(async () => {
-        const response = await getValue.getData()
-        setValue(response);
+    const [page, setPage] = useState(0);
+    const [columns, setColumns] = useState([]);
+    const [totalCount, settotalCount] = useState();
+    const [pageSize, setPageSize] = useState(10);
+
+    useEffect(() => {
+        async function fetchData() {
+            const response = await getValue.dataCount()
+            return settotalCount(response.data)
+        }
+        fetchData();
+
     }, []);
 
-    const [count, setCount] = useState();
+    useEffect(() => {
+        if (!totalCount) return
+        async function fetchData() {
+            const response = await getValue.getData(page, pageSize)
+            return setValue(response)
+        }
+        fetchData();
 
-    useEffect(async () => {
-        const response = await getValue.dataCount()
-        setCount(response);
-    }, []);
+    }, [totalCount, page]);
 
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    useEffect(() => {
+        if (!value) return
+        setColumns(Object.keys(value?.data[0]))
+    }, [value])
+
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
 
     const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
+        setPageSize(+event.target.value);
         setPage(0);
     };
 
     return (
         <Paper className={classes.paper}>
-            <TableContainer className={classes.tableContainer}>
-                <Table  >
-                    <TableBody>
-                        {value?.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
-                            <TableRow hover key={row}>
-                                <TableCell component="th" scope="row">{row[0]}</TableCell>
-                                <TableCell align="right">{row[1]}</TableCell>
-                                <TableCell align="right">{row[2]}</TableCell>
-                                <TableCell align="right">{row[3]}</TableCell>
+            {totalCount && <TableContainer className={classes.tableContainer} md={{ maxHeight: 640 }}>
+                <Table stickyHeader aria-label="sticky table">
+                    <TableHead>
+                        {columns?.length > 0 &&
+                            <TableRow>
+                                {columns.map((column) => (
+                                    <TableCell>{column}</TableCell>
+                                ))}
                             </TableRow>
-                        ))}
-                    </TableBody>
-                    <TableFooter className={classes.tableFooter}>
-                        <TableRow align="right">
-                            <TablePagination
-                                rowsPerPageOptions={[5, 10, 50]}
-                                count={count?.data[0]}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                            />
-                        </TableRow>
-                    </TableFooter>
+                        }
+                    </TableHead>
+                    {value?.data?.length > 0 &&
+                        <TableBody>
+                            {value.data.map((row, index) => (
+                                <TableRow hover>
+                                    {Object.keys(row).map((item) => (
+                                        <TableCell >{row[item]}</TableCell>
+                                    ))}
+                                </TableRow>))
+                            }
+                        </TableBody>
+                    }
                 </Table>
-            </TableContainer>
+            </TableContainer>}
+            <TablePagination
+                component="div"
+                rowsPerPageOptions={[5, 10, 50]}
+                count={totalCount}
+                rowsPerPage={pageSize}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
         </Paper>
     )
 }

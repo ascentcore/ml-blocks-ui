@@ -4,6 +4,11 @@ export const dataCount = async () => {
     return await API.get('/data/count');
 }
 
-export const getData = async () => {
-    return await API.get('/data/');
+export const getData = async (page, count) => {
+    return await API.get('/data/', {
+        params: {
+            page: page,
+            count: count
+        }
+    });
 }
