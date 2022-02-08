@@ -21,87 +21,86 @@ const useStyles = makeStyles(() => ({
 }))
 
 const DataScreen = () => {
+
     const classes = useStyles();
     const [value, setValue] = useState();
     const [page, setPage] = useState(0);
     const [columns, setColumns] = useState([]);
-    const [count, setCount] = useState();
+    const [totalCount, settotalCount] = useState();
+    const [pageSize, setPageSize] = useState(10);
 
     useEffect(() => {
         async function fetchData() {
             const response = await getValue.dataCount()
-            return setCount(response)
+            return settotalCount(response.data)
         }
         fetchData();
 
     }, []);
 
     useEffect(() => {
-        if (!count) return
+        if (!totalCount) return
         async function fetchData() {
-            const response = await getValue.getData(page, count?.data[0])
+            const response = await getValue.getData(page, pageSize)
             return setValue(response)
         }
         fetchData();
 
-    }, [count]);
+    }, [totalCount, page]);
 
     useEffect(() => {
         if (!value) return
         setColumns(Object.keys(value?.data[0]))
     }, [value])
 
-    const [rowsPerPage, setRowsPerPage] = useState(10);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
 
     const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
+        setPageSize(+event.target.value);
         setPage(0);
     };
 
     return (
         <Paper className={classes.paper}>
-            <TableContainer className={classes.tableContainer}>
-                <Table  >
+            {totalCount && <TableContainer className={classes.tableContainer} sx={{ maxHeight: 440 }}>
+                <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         {columns?.length > 0 &&
                             <TableRow>
                                 {columns.map((column) => (
-                                    <TableCell key={column}>{column}</TableCell>
+                                    <TableCell>{column}</TableCell>
                                 ))}
                             </TableRow>
                         }
                     </TableHead>
                     {value?.data?.length > 0 &&
                         <TableBody>
-                            {value?.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
-                                <TableRow hover key={row[Object.keys(row)[index]]}>
+                            {value.data.map((row, index) => (
+                                <TableRow hover>
                                     {Object.keys(row).map((item) => (
                                         <TableCell >{row[item]}</TableCell>
                                     ))}
-                                </TableRow>
-                            ))}
+                                </TableRow>))
+                            }
                         </TableBody>
                     }
                     <TableFooter className={classes.tableFooter}>
-                        {count?.data?.length > 0 &&
-                            <TableRow align="right">
-                                <TablePagination
-                                    rowsPerPageOptions={[5, 10, 50]}
-                                    count={count?.data[0]}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    onPageChange={handleChangePage}
-                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                />
-                            </TableRow>
-                        }
+                        <TableRow align="right">
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 50]}
+                                count={totalCount}
+                                rowsPerPage={pageSize}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                            />
+                        </TableRow>
                     </TableFooter>
                 </Table>
-            </TableContainer>
+            </TableContainer>}
         </Paper>
     )
 }
