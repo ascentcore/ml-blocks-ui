@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
         '& tr > td': {
             border: 0
         }
-    }
+    },
 }))
 
 const DataScreen = () => {
@@ -65,7 +65,7 @@ const DataScreen = () => {
 
     return (
         <Paper className={classes.paper}>
-            {totalCount && <TableContainer className={classes.tableContainer} sx={{ maxHeight: 440 }}>
+            {totalCount && <TableContainer className={classes.tableContainer} md={{ maxHeight: 640 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         {columns?.length > 0 &&
@@ -87,20 +87,17 @@ const DataScreen = () => {
                             }
                         </TableBody>
                     }
-                    <TableFooter className={classes.tableFooter}>
-                        <TableRow align="right">
-                            <TablePagination
-                                rowsPerPageOptions={[5, 10, 50]}
-                                count={totalCount}
-                                rowsPerPage={pageSize}
-                                page={page}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                            />
-                        </TableRow>
-                    </TableFooter>
                 </Table>
             </TableContainer>}
+            <TablePagination
+                component="div"
+                rowsPerPageOptions={[5, 10, 50]}
+                count={totalCount}
+                rowsPerPage={pageSize}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
         </Paper>
     )
 }
