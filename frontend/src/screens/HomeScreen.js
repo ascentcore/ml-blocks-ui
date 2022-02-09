@@ -10,21 +10,60 @@ const HomeScreen = () => {
         async function fetchData() {
             const response = await getGraph()
             const localBlocks = []
+            const blocks = {}
 
-            const registerBlock = val => {
-                if (val !== 'None' && localBlocks.indexOf(val) === -1) {
-                    localBlocks.push(val)
+            const registerBlock = (ip) => {
+                let block = blocks[ip]
+
+                if (ip !== 'None' && !blocks[ip]) {
+                    block = {
+                        ip,
+                        location: [0, 20],
+                        downstream: {},
+                        upstream: {}
+                    }
+
+                    blocks[ip] = block
+
+                    localBlocks.push(block)
                 }
+
+                return block
             }
 
             response.data.forEach(({ upstream, downstream }) => {
-                registerBlock(upstream)
-                registerBlock(downstream)
+                const upstreamBlock = registerBlock(upstream)
+                const downstreamBlock = registerBlock(downstream, true)
+                if (upstreamBlock && downstreamBlock) {
+                    upstreamBlock.downstream[downstreamBlock.ip] = downstreamBlock
+                    downstreamBlock.upstream[upstreamBlock.ip] = upstreamBlock
+                }
             });
 
-            console.log(localBlocks)
+            function repositionDownstream(currentBlock) {
+                let lastYVal = currentBlock.location[1]
+                Object.values(currentBlock.downstream).forEach((block, index) => {
+                    const [cx, cy] = currentBlock.location
+                    block.location = [cx + 300, cy + 140 * index]
+                    lastYVal = Math.max(lastYVal, repositionDownstream(block))
+                })
+
+                return lastYVal
+            }
+
+            let lastYVal = 30
+            localBlocks.forEach(block => {
+                if (Object.keys(block.upstream).length === 0) {
+                    block.location[1] = lastYVal
+                    lastYVal = repositionDownstream(block)
+                }
+            })
+
+
 
             setBlocks(localBlocks)
+
+            console.log(localBlocks)
 
             return setGraph(response.data)
         }
@@ -34,8 +73,11 @@ const HomeScreen = () => {
     const height = 120
 
     return (
-        <svg width={300} height={blocks.length * height} style={{marginTop: 100}}>
-            {blocks.map((ip, index) => (<SVGBlock ip={ip} key={ip} transform={`translate(10, ${index * height + 30})`} />))}
+        <svg width={1280} height={blocks.length * height} style={{ marginTop: 100 }}>
+            {blocks.map((block, index) => (<SVGBlock
+                block={block}
+                key={block.ip}
+                 />))}
         </svg>
     )
 }
