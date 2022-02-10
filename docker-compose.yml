@@ -1,0 +1,96 @@
+version: "3.3"
+services:
+
+  ml_blocks_root:
+    volumes:
+      - ./samples/ml-blocks:/app
+      - ./samples/stores/default:/app/data
+    build:
+      context: ./samples/ml-blocks
+      dockerfile: Dockerfile
+      args:
+        - INSTALL_DEV=true
+    environment:
+      - LOADER=pandas
+      - BLOCK_NAME=root
+    ports:
+      - "9080:80"
+    command: ["/app/start.sh"]
+    networks:
+        - ml-blocks-net
+
+  layer1:
+    depends_on:
+      - ml_blocks_root
+    volumes:
+      - ./samples/ml-blocks:/app
+      - ./samples/stores/layer1:/app/data
+    build:
+      context: ./samples/ml-blocks
+      dockerfile: Dockerfile
+      args:
+        - INSTALL_DEV=true
+    links:
+      - "ml_blocks_root:ml_blocks_root"
+    environment:
+      - LOADER=pandas
+      - DEPENDENCY_BLOCK=ml_blocks_root
+      - REGISTRY=ml_blocks_root
+      - BLOCK_NAME=layer1
+    ports:
+      - "9081:80"
+    command: [ "/app/start.sh" ]
+    # command: [ "/app/start_dev.sh" ]
+    networks:
+      - ml-blocks-net
+
+  layer2:
+    depends_on:
+      - layer1
+    volumes:
+      - ./samples/ml-blocks:/app
+      - ./samples/stores/layer2:/app/data
+    build:
+      context: ./samples/ml-blocks
+      dockerfile: Dockerfile
+      args:
+        - INSTALL_DEV=true
+    links:
+      - "ml_blocks_root:ml_blocks_root"
+      - "layer1:layer1"
+    environment:
+      - LOADER=pandas
+      - DEPENDENCY_BLOCK=layer1
+      - REGISTRY=ml_blocks_root
+      - BLOCK_NAME=layer2
+    ports:
+      - "9082:80"
+    command: [ "/app/start.sh" ]
+    # command: [ "/app/start_dev.sh" ]
+    networks:
+      - ml-blocks-net
+
+  ui:
+    depends_on:
+      - ml_blocks_root
+    container_name: ml-blocks-ui
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - './frontend:/app'
+      - '/app/node_modules'
+    ports:
+      - 3000:3000
+    links:
+      - "ml_blocks_root:ml_blocks_root"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      - ml-blocks-net
+
+volumes:
+  store-data-volume: null
+
+networks:
+  ml-blocks-net:
