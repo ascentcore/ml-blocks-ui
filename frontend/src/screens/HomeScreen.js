@@ -73,11 +73,12 @@ const HomeScreen = () => {
     const height = 120
 
     return (
-        <svg width={1280} height={blocks.length * height} style={{ marginTop: 100 }}>
+        <svg viewBox="-10 10 1280 190" width={1280} height={blocks.length * height} style={{ marginTop: 100 }}>
             {blocks.map((block, index) => (<SVGBlock
+                key={block[index]}
                 block={block}
                 key={block.ip}
-                 />))}
+            />))}
         </svg>
     )
 }
