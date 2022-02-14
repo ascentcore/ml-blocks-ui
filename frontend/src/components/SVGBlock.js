@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getStatusOfIp } from '../api/data';
 import { makeStyles } from '@mui/styles';
 
@@ -35,6 +35,7 @@ function SVGBlock({ block, transform }) {
     const classes = useStyles();
     const [status, setStatus] = useState();
     const [timer, setTimer] = useState(Date.now());
+    const myRef = useRef('');
 
     const blockWidth = 200
     const blockHeight = 70
@@ -45,14 +46,21 @@ function SVGBlock({ block, transform }) {
             const response = await getStatusOfIp(block.ip)
             setStatus(response.data)
         }
-
         fetchData()
     }, [timer])
+
+    myRef.current = () => {
+        if (!status) return
+        states.map(item => (
+            console.log('item', item)
+        ))
+    }
 
     useEffect(() => {
         if (!status) return
         const interval = setInterval(() => {
             console.log('status', status.status[0].state_name)
+            myRef.current()
         }, 5000);
         return () => clearInterval(interval)
     }, [])
@@ -77,7 +85,7 @@ function SVGBlock({ block, transform }) {
                         <rect stroke="#000" x={0} y={10} strokeWidth="1" width={blockWidth} height={blockHeight} fill="transparent" />
                         {status.status.map(state => (
                             <>
-                                <circle cx="0" cy="30" r={radius} className={(state.state_name === states[1] || state.state_name === states[1]) ? classes.fill : classes.circle} />
+                                <circle cx="0" cy="30" r={radius} className={(state.state_name === states[1] || state.state_name === states[2]) ? classes.fill : classes.circle} />
                                 <path d="M 6 30 H 100 " className={(state.state_name === states[2]) ? classes.stroke : classes.path} markerEnd="url(#arrow-1)" />
                                 <circle cx="100" cy="30" r="8" className={state.state_name === states[2] ? classes.fill : classes.circle} />
                                 <path d="M 200 30 H 108 " className={classes.path} markerEnd="url(#arrow-2)" />
