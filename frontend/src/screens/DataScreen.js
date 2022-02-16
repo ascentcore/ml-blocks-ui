@@ -31,8 +31,8 @@ const DataScreen = () => {
     const [totalCount, settotalCount] = useState();
     const [pageSize, setPageSize] = useState(10);
     const { ip } = useParams();
-    const path = `api/v1/data?page=2&count=12`;
-    const id = `172.22.0.2`
+    const [path, setPath] = useState('');
+
     useEffect(() => {
         async function fetchData() {
             const response = await getValue.dataCount()
@@ -43,14 +43,16 @@ const DataScreen = () => {
     }, []);
 
     useEffect(() => {
-        if (!totalCount && ip === '') return
+        setPath(`api/v1/data?page=${page}&count=${totalCount}`)
+        if (!totalCount && ip === '' && path === '') return
         async function fetchData() {
-            const response = await getIP.getProxy(ip)
+            const response = await getIP.getProxy(ip, path)
             return setValue(response)
         }
         fetchData();
 
     }, [totalCount, page, ip]);
+    console.log('path', path)
 
     useEffect(() => {
         if (!value) return

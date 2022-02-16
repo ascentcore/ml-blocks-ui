@@ -21,6 +21,6 @@ export const getStatusOfIp = async (ip) => {
     return await API.get(`/pipeline/proxy?ip=${ip}&path=api/v1/status`)
 }
 
-export const getProxy = async (ip) => {
-    return await API.get(`/pipeline/proxy?ip=${ip}&path=api/v1/data?page=2&count=12`)
+export const getProxy = async (ip, path) => {
+    return await API.get(`/pipeline/proxy?ip=${ip}&path=${path}`)
 }
