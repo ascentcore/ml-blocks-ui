@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as getValue from '../api/data';
 import { makeStyles } from '@mui/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, TableFooter } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { getTargetIP } from '../api/API';
 import * as getIP from '../api/data';
 
 const useStyles = makeStyles(() => ({
@@ -30,8 +30,8 @@ const DataScreen = () => {
     const [columns, setColumns] = useState([]);
     const [totalCount, settotalCount] = useState();
     const [pageSize, setPageSize] = useState(10);
-    const { ip } = useParams();
     const [path, setPath] = useState('');
+    let ip = getTargetIP()
 
     useEffect(() => {
         async function fetchData() {
@@ -44,7 +44,7 @@ const DataScreen = () => {
 
     useEffect(() => {
         setPath(`api/v1/data?page=${page}&count=${totalCount}`)
-        if (!totalCount && ip === '' && path === '') return
+        if (!totalCount && ip === undefined && path === '') return
         async function fetchData() {
             const response = await getIP.getProxy(ip, path)
             return setValue(response)
@@ -52,7 +52,6 @@ const DataScreen = () => {
         fetchData();
 
     }, [totalCount, page, ip]);
-    console.log('path', path)
 
     useEffect(() => {
         if (!value) return

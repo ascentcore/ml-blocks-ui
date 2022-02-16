@@ -9,7 +9,7 @@ function Routes() {
         <Switch>
             <Route exact path="/" component={HomeScreen} />
             <Route exact path="/upload" component={UploadScreen} />
-            <Route exact path="/data/:ip" component={DataScreen} />
+            <Route exact path="/data" component={DataScreen} />
         </Switch>
     )
 }

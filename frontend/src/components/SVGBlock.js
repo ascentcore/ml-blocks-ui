@@ -3,6 +3,7 @@ import { getStatusOfIp } from '../api/data';
 import { makeStyles } from '@mui/styles';
 import { useHistory } from 'react-router-dom';
 
+
 const useStyles = makeStyles(() => ({
     '@keyframes dash': {
         to: {
@@ -30,21 +31,18 @@ const useStyles = makeStyles(() => ({
         fill: 'green'
     },
     rect: {
-        fill: (props) => props.color === 1 ? "transparent" : '#89cff0',
         strokeWidth: "1"
     }
 }))
 
-function SVGBlock({ block, transform }) {
+function SVGBlock({ block, transform, selected, onClick }) {
     const states = ['statics', 'ingesting', 'processing', 'storing', 'pending'];
-    const [color, setColor] = useState(1)
-    const classes = useStyles({ color });
+    const classes = useStyles();
     const [status, setStatus] = useState();
     const [timer, setTimer] = useState(Date.now());
     const myRef = useRef('');
-    const [ip, setIP] = useState();
-    let history = useHistory();
 
+    const radius = 6;
     const blockWidth = 200
     const blockHeight = 70
     const offset = 30
@@ -61,7 +59,7 @@ function SVGBlock({ block, transform }) {
     myRef.current = () => {
         if (!status) return
         states.map(item => (
-            console.log('item', item)
+            <></>
         ))
     }
 
@@ -74,8 +72,6 @@ function SVGBlock({ block, transform }) {
         return () => clearInterval(interval)
     }, [])
 
-
-    const radius = 6;
     function getUpstream(upstreamBlock) {
         const [ux, uy] = upstreamBlock.location
         const [dx, dy] = block.location
@@ -86,24 +82,13 @@ function SVGBlock({ block, transform }) {
         return (<path d={str} stroke="#000" fill="transparent" strokeWidth={1} />)
     }
 
-
-    const handleClick = () => {
-        setColor(0);
-        setIP(block.ip);
-
-    }
-    if (ip) {
-        console.log('ip', ip)
-        history.push(`/data/${ip}`);
-    }
-
     return (
         <g transform={transform}>
             {status && (
                 <g>
                     <g transform={`translate(${block.location[0]}, ${block.location[1]})`}>
                         <text textAnchor='middle' x={blockWidth / 2}>{status.name}</text>
-                        <rect stroke="#000" x={0} y={10} width={blockWidth} height={blockHeight} className={classes.rect} onClick={handleClick} />
+                        <rect stroke="#000" x={0} y={10} width={blockWidth} height={blockHeight} fill={!selected ? "transparent" : '#89cff0'} className={classes.rect} onClick={onClick} />
                         {status.status.map(state => (
                             <>
                                 <circle cx="0" cy="30" r={radius} className={(state.state_name === states[1] || state.state_name === states[2]) ? classes.fill : classes.circle} />
