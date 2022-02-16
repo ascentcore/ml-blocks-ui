@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { getStatusOfIp } from '../api/data';
 import { makeStyles } from '@mui/styles';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
     '@keyframes dash': {
@@ -27,15 +28,22 @@ const useStyles = makeStyles(() => ({
     fill: {
         stroke: "#000",
         fill: 'green'
+    },
+    rect: {
+        fill: (props) => props.color === 1 ? "transparent" : '#89cff0',
+        strokeWidth: "1"
     }
 }))
 
 function SVGBlock({ block, transform }) {
     const states = ['statics', 'ingesting', 'processing', 'storing', 'pending'];
-    const classes = useStyles();
+    const [color, setColor] = useState(1)
+    const classes = useStyles({ color });
     const [status, setStatus] = useState();
     const [timer, setTimer] = useState(Date.now());
     const myRef = useRef('');
+    const [ip, setIP] = useState();
+    let history = useHistory();
 
     const blockWidth = 200
     const blockHeight = 70
@@ -48,6 +56,7 @@ function SVGBlock({ block, transform }) {
         }
         fetchData()
     }, [timer])
+
 
     myRef.current = () => {
         if (!status) return
@@ -65,6 +74,7 @@ function SVGBlock({ block, transform }) {
         return () => clearInterval(interval)
     }, [])
 
+
     const radius = 6;
     function getUpstream(upstreamBlock) {
         const [ux, uy] = upstreamBlock.location
@@ -76,13 +86,24 @@ function SVGBlock({ block, transform }) {
         return (<path d={str} stroke="#000" fill="transparent" strokeWidth={1} />)
     }
 
+
+    const handleClick = () => {
+        setColor(0);
+        setIP(block.ip);
+
+    }
+    if (ip) {
+        console.log('ip', ip)
+        history.push(`/data/${ip}`);
+    }
+
     return (
         <g transform={transform}>
             {status && (
                 <g>
                     <g transform={`translate(${block.location[0]}, ${block.location[1]})`}>
                         <text textAnchor='middle' x={blockWidth / 2}>{status.name}</text>
-                        <rect stroke="#000" x={0} y={10} strokeWidth="1" width={blockWidth} height={blockHeight} fill="transparent" />
+                        <rect stroke="#000" x={0} y={10} width={blockWidth} height={blockHeight} className={classes.rect} onClick={handleClick} />
                         {status.status.map(state => (
                             <>
                                 <circle cx="0" cy="30" r={radius} className={(state.state_name === states[1] || state.state_name === states[2]) ? classes.fill : classes.circle} />
