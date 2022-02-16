@@ -31,7 +31,8 @@ const useStyles = makeStyles(() => ({
         fill: 'green'
     },
     rect: {
-        strokeWidth: "1"
+        strokeWidth: "1",
+        fill: "transparent"
     }
 }))
 
@@ -88,7 +89,7 @@ function SVGBlock({ block, transform, selected, onClick }) {
                 <g>
                     <g transform={`translate(${block.location[0]}, ${block.location[1]})`}>
                         <text textAnchor='middle' x={blockWidth / 2}>{status.name}</text>
-                        <rect stroke="#000" x={0} y={10} width={blockWidth} height={blockHeight} fill={!selected ? "transparent" : '#89cff0'} className={classes.rect} onClick={onClick} />
+                        <rect stroke="#000" x={0} y={10} width={blockWidth} height={blockHeight} stroke={!selected ? "#000" : '#1c05cf'} className={classes.rect} onClick={onClick} />
                         {status.status.map(state => (
                             <>
                                 <circle cx="0" cy="30" r={radius} className={(state.state_name === states[1] || state.state_name === states[2]) ? classes.fill : classes.circle} />
