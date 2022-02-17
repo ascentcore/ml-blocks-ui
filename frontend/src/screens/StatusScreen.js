@@ -7,16 +7,16 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 
 export const useStyles = makeStyles((theme) => ({
     grid: {
-        marginTop: '60px'
+        marginTop: '100px'
     },
     tableContainer: {
-        backgroundColor: '#F3F6F4',
         width: '500px',
-        marginTop: '30px'
+        marginTop: '30px',
+        border: 'thin solid grey'
     },
     button: {
         width: '100px',
-        margin: '-50px 0 0 300px'
+        margin: '-50px 0 0 400px'
     },
     gridRow: {
         justifyContent: "center",
@@ -48,11 +48,11 @@ const StatusScreen = () => {
             {status &&
                 <Grid container alignItems="center" className={classes.grid} direction="column">
                     <Grid item container className={classes.gridRow} >
-                        <Typography>Status:</Typography>
+                        <Typography style={{ marginLeft: '-130px' }}>Status:</Typography>
                         <Typography>{status?.state_name}</Typography>
                     </Grid>
                     <Grid item container className={classes.gridRow}>
-                        <Typography>Format:</Typography>
+                        <Typography style={{ marginLeft: '-70px' }}>Format:</Typography>
                         <Typography>{format}</Typography>
                     </Grid>
                     <Button variant="outlined" className={classes.button}>Rebuild</Button>
@@ -60,15 +60,15 @@ const StatusScreen = () => {
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>State name</TableCell>
-                                    <TableCell>Time</TableCell>
+                                    <TableCell align="center">State name</TableCell>
+                                    <TableCell align="center">Time</TableCell>
                                 </TableRow>
 
                             </TableHead>
                             <TableBody>
                                 <TableRow hover>
-                                    <TableCell>{status?.state_name}</TableCell>
-                                    <TableCell>{status?.time}</TableCell>
+                                    <TableCell align="center">{status?.state_name}</TableCell>
+                                    <TableCell align="center">{status?.time}</TableCell>
 
                                 </TableRow>
                             </TableBody>
