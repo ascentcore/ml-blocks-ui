@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { getTargetIP, setTargetIP } from '../api/API';
 import { getGraph } from '../api/data';
 import SVGBlock from '../components/SVGBlock';
 
 const HomeScreen = () => {
 
-    const [graph, setGraph] = useState([])
-    const [blocks, setBlocks] = useState([])
+    const [graph, setGraph] = useState([]);
+    const [blocks, setBlocks] = useState([]);
+    const [ip, setIP] = useState(getTargetIP());
+
     useEffect(() => {
         async function fetchData() {
             const response = await getGraph()
@@ -59,8 +62,6 @@ const HomeScreen = () => {
                 }
             })
 
-
-
             setBlocks(localBlocks)
 
             console.log(localBlocks)
@@ -70,6 +71,10 @@ const HomeScreen = () => {
         fetchData();
     }, [])
 
+    const handleClick = block => () => {
+        setTargetIP(block.ip)
+        setIP(block.ip);
+    }
     const height = 120
 
     return (
@@ -78,6 +83,8 @@ const HomeScreen = () => {
                 key={block[index]}
                 block={block}
                 key={block.ip}
+                selected={block.ip === ip}
+                onClick={handleClick(block)}
             />))}
         </svg>
     )

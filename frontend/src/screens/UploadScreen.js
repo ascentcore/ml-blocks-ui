@@ -11,6 +11,7 @@ export const useStyles = makeStyles((theme) => ({
 
 const UploadScreen = () => {
     const classes = useStyles();
+    localStorage.removeItem('IP');
     return (
         <Grid container justifyContent="center" alignItems="baseline" className={classes.grid}>
             <Upload />
