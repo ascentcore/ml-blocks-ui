@@ -24,6 +24,7 @@ function Header() {
                         <Link href="/" className={classes.link} underline='none'>Home</Link>
                         <Link href="/upload" className={classes.link} underline='none'>Upload</Link>
                         <Link href="/data" className={classes.link} underline='none'>Data</Link>
+                        <Link href="/status" className={classes.link} underline='none'>Status</Link>
                     </Toolbar>
                 </Container>
             </AppBar>
