@@ -41,7 +41,6 @@ const StatusScreen = () => {
         }
         fetchData();
     }, [ip])
-    console.log('status', status)
 
     return (
         <>
