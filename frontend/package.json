@@ -6,6 +6,8 @@
     "@ascentcore/react-schema-form": "^0.1.2",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@material-ui/icons": "^4.11.2",
+    "@mui/icons-material": "^5.4.2",
     "@mui/material": "^5.3.0",
     "@mui/styles": "^5.3.0",
     "@mui/x-data-grid": "^5.4.0",

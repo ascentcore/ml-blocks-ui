@@ -11,19 +11,42 @@ export function MUITextField({ property, value, onChange }) {
             if (event.target.value === '' || re.test(event.target.value)) {
                 onChange(event.target.value)
             }
+        } else {
+            let { value } = event.target
+            if (property.type === 'integer') {
+                value = parseInt(value)
+            } else if (property.type === 'number') {
+                value = parseFloat(value)
+            }
+            onChange(value)
         }
-        else onChange(event.target.value)
+    }
+
+    const getHelperText = () => {
+        let helperText = undefined
+        if (property.error) {
+            helperText = property.error[0].message
+        } else {
+
+            if (property.minimum) {
+                helperText = (helperText || '') + ` min: ${property.minimum}`
+            }
+
+            if (property.maximum) {
+                helperText = (helperText || '') + ` max: ${property.maximum}`
+            }
+        }
+
+        return helperText
     }
     return (
-        <Grid container className={classes.grid}>
-            <TextField
-                value={value || ''}
-                onChange={handleChange}
-                error={!!property.error}
-                label={property.title}
-                required={property.isRequired}
-                className={classes.input}
-            />
-        </Grid>
+        <TextField
+            value={value || ''}
+            onChange={handleChange}
+            error={!!property.error}
+            label={property.title}
+            required={property.isRequired}
+            helperText={getHelperText()}
+        />
     )
 }

@@ -21,6 +21,10 @@ export const getStatusOfIp = async (ip) => {
     return await API.get(`/pipeline/proxy?ip=${ip}&path=api/v1/status`)
 }
 
+export const getSchemaForBlock = async ip => {
+    return await API.get(`/pipeline/proxy?ip=${ip}&path=api/v1/model/predict_schema`)
+}
+
 export const getProxy = async (ip, path) => {
     return await API.get(`/pipeline/proxy?ip=${ip}&path=${path}`)
 }
