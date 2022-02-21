@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import * as getValue from '../api/data';
 import { makeStyles } from '@mui/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, TableFooter } from '@mui/material';
+import { getTargetIP } from '../api/API';
+import * as getIP from '../api/data';
 
 const useStyles = makeStyles(() => ({
     paper: {
@@ -28,6 +30,8 @@ const DataScreen = () => {
     const [columns, setColumns] = useState([]);
     const [totalCount, settotalCount] = useState();
     const [pageSize, setPageSize] = useState(10);
+    const [path, setPath] = useState('');
+    let ip = getTargetIP()
 
     useEffect(() => {
         async function fetchData() {
@@ -39,14 +43,15 @@ const DataScreen = () => {
     }, []);
 
     useEffect(() => {
-        if (!totalCount) return
+        setPath(`api/v1/data?page=${page}&count=${totalCount}`)
+        if (!totalCount && ip === undefined && path === '') return
         async function fetchData() {
-            const response = await getValue.getData(page, pageSize)
+            const response = await getIP.getProxy(ip, path)
             return setValue(response)
         }
         fetchData();
 
-    }, [totalCount, page]);
+    }, [totalCount, page, ip]);
 
     useEffect(() => {
         if (!value) return

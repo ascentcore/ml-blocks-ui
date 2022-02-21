@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { getStatusOfIp } from '../api/data';
 import { makeStyles } from '@mui/styles';
+import { useHistory } from 'react-router-dom';
+
 
 const useStyles = makeStyles(() => ({
     '@keyframes dash': {
@@ -27,16 +29,21 @@ const useStyles = makeStyles(() => ({
     fill: {
         stroke: "#000",
         fill: 'green'
+    },
+    rect: {
+        strokeWidth: "1",
+        fill: "transparent"
     }
 }))
 
-function SVGBlock({ block, transform }) {
+function SVGBlock({ block, transform, selected, onClick }) {
     const states = ['statics', 'ingesting', 'processing', 'storing', 'pending'];
     const classes = useStyles();
     const [status, setStatus] = useState();
     const [timer, setTimer] = useState(Date.now());
     const myRef = useRef('');
 
+    const radius = 6;
     const blockWidth = 200
     const blockHeight = 70
     const offset = 30
@@ -49,10 +56,11 @@ function SVGBlock({ block, transform }) {
         fetchData()
     }, [timer])
 
+
     myRef.current = () => {
         if (!status) return
         states.map(item => (
-            console.log('item', item)
+            <></>
         ))
     }
 
@@ -65,7 +73,6 @@ function SVGBlock({ block, transform }) {
         return () => clearInterval(interval)
     }, [])
 
-    const radius = 6;
     function getUpstream(upstreamBlock) {
         const [ux, uy] = upstreamBlock.location
         const [dx, dy] = block.location
@@ -82,7 +89,7 @@ function SVGBlock({ block, transform }) {
                 <g>
                     <g transform={`translate(${block.location[0]}, ${block.location[1]})`}>
                         <text textAnchor='middle' x={blockWidth / 2}>{status.name}</text>
-                        <rect stroke="#000" x={0} y={10} strokeWidth="1" width={blockWidth} height={blockHeight} fill="transparent" />
+                        <rect stroke="#000" x={0} y={10} width={blockWidth} height={blockHeight} stroke={!selected ? "#000" : '#1c05cf'} className={classes.rect} onClick={onClick} />
                         {status.status.map(state => (
                             <>
                                 <circle cx="0" cy="30" r={radius} className={(state.state_name === states[1] || state.state_name === states[2]) ? classes.fill : classes.circle} />
