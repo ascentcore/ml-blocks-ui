@@ -2,8 +2,8 @@ import { Button, Grid, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { getTargetIP } from '../api/API';
-import { getStatusOfIp } from '../api/data';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, TableFooter } from '@mui/material';
+import { getStatusOfIp, pipelineRebuild } from '../api/data';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 export const useStyles = makeStyles((theme) => ({
     grid: {
@@ -42,6 +42,15 @@ const StatusScreen = () => {
         fetchData();
     }, [ip])
 
+    const handleClick = async () => {
+        try {
+            const response = await pipelineRebuild()
+            console.log('res', response)
+        } catch (error) {
+            console.log('error', error);
+        }
+    }
+
     return (
         <>
             {status &&
@@ -54,7 +63,7 @@ const StatusScreen = () => {
                         <Typography style={{ marginLeft: '-70px' }}>Format:</Typography>
                         <Typography>{format}</Typography>
                     </Grid>
-                    <Button variant="outlined" className={classes.button}>Rebuild</Button>
+                    <Button variant="outlined" className={classes.button} onClick={handleClick}>Rebuild</Button>
                     <TableContainer className={classes.tableContainer} md={{ maxHeight: 640 }}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
