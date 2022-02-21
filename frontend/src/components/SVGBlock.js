@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { getStatusOfIp } from '../api/data';
 import { makeStyles } from '@mui/styles';
-import { useHistory } from 'react-router-dom';
 
 
 const useStyles = makeStyles(() => ({
@@ -41,7 +40,6 @@ function SVGBlock({ block, transform, selected, onClick }) {
     const classes = useStyles();
     const [status, setStatus] = useState();
     const [timer, setTimer] = useState(Date.now());
-    const myRef = useRef('');
 
     const radius = 6;
     const blockWidth = 200
@@ -54,24 +52,12 @@ function SVGBlock({ block, transform, selected, onClick }) {
             setStatus(response.data)
         }
         fetchData()
-    }, [timer])
-
-
-    myRef.current = () => {
-        if (!status) return
-        states.map(item => (
-            <></>
-        ))
-    }
-
-    useEffect(() => {
-        if (!status) return
         const interval = setInterval(() => {
-            console.log('status', status.status[0].state_name)
-            myRef.current()
-        }, 5000);
+            fetchData()
+        }, 10000)
         return () => clearInterval(interval)
-    }, [])
+
+    }, [timer])
 
     function getUpstream(upstreamBlock) {
         const [ux, uy] = upstreamBlock.location
