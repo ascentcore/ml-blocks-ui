@@ -79,6 +79,21 @@ const HomeScreen = () => {
 
     return (
         <svg viewBox="-10 10 1280 190" width={1280} height={blocks.length * height} style={{ marginTop: 100 }}>
+            <defs>
+                <marker id="arrow-1" markerWidth="10" markerHeight="10" refX="12" refY="4">
+                    <path d="M0,0 L4,4 L0,8 z" fill="#000"></path>
+                </marker>
+            </defs>
+            <defs>
+                <marker id="arrow-2" markerWidth="10" markerHeight="10" refX="-82" refY="4">
+                    <path d="M0,0 L4,4 L0,8 z" fill="#000"></path>
+                </marker>
+            </defs>
+            <defs>
+                <marker id="arrow-3" markerWidth="10" markerHeight="10" refX="10" refY="4">
+                    <path d="M0,0 L4,4 L0,8 z" fill="#000"></path>
+                </marker>
+            </defs>
             {blocks.map((block, index) => (<SVGBlock
                 key={block[index]}
                 block={block}
