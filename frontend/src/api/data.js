@@ -24,3 +24,7 @@ export const getStatusOfIp = async (ip) => {
 export const getProxy = async (ip, path) => {
     return await API.get(`/pipeline/proxy?ip=${ip}&path=${path}`)
 }
+
+export const pipelineRebuild = async () => {
+    return await API.post('/pipeline/rebuild')
+}
