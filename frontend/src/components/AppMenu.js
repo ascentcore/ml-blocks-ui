@@ -10,33 +10,33 @@ import EqualizerIcon from '@mui/icons-material/Equalizer';
 function AppMenu() {
     return (
         <>
-            <ListItemButton button component={Link} to="/">
+            <ListItemButton button="true" component={Link} to="/">
                 <ListItemIcon>
                     <DashboardIcon />
                 </ListItemIcon>
                 <ListItemText primary="Home" />
             </ListItemButton>
-            <ListItemButton button component={Link} to="/upload">
+            <ListItemButton button="true" component={Link} to="/upload">
                 <ListItemIcon>
                     <CloudUploadIcon />
                 </ListItemIcon>
                 <ListItemText primary="Upload" />
             </ListItemButton>
-            <ListItemButton button component={Link} to="/data">
+            <ListItemButton button="true" component={Link} to="/data">
                 <ListItemIcon>
                     <StorageIcon />
                 </ListItemIcon>
                 <ListItemText primary="Data" />
             </ListItemButton>
 
-            <ListItemButton button component={Link} to="/status">
+            <ListItemButton button="true" component={Link} to="/status">
                 <ListItemIcon>
                     <PlaylistAddCheckIcon />
                 </ListItemIcon>
                 <ListItemText primary="Status" />
             </ListItemButton>
 
-            <ListItemButton button component={Link} to="/predict">
+            <ListItemButton button="true" component={Link} to="/predict">
                 <ListItemIcon>
                     <PlayCircleOutlineIcon />
                 </ListItemIcon>

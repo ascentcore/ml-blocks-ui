@@ -95,9 +95,8 @@ const HomeScreen = () => {
                 </marker>
             </defs>
             {blocks.map((block, index) => (<SVGBlock
-                key={block[index]}
-                block={block}
                 key={block.ip}
+                block={block}
                 selected={block.ip === ip}
                 onClick={handleClick(block)}
             />))}

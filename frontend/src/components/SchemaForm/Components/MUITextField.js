@@ -43,9 +43,11 @@ export function MUITextField({ property, value, onChange }) {
         <TextField
             value={value || ''}
             onChange={handleChange}
-            error={!!property.error}
+            fullWidth={true}
+           
             label={property.title}
             required={property.isRequired}
+            error={!!property.error}
             helperText={getHelperText()}
         />
     )

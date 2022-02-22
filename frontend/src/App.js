@@ -108,7 +108,6 @@ function App() {
               onClick={toggleDrawer}
               sx={{
                 marginRight: '36px',
-                // ...(open && { display: 'none' }),
               }}
             >
               <MenuIcon />
@@ -154,7 +153,7 @@ function App() {
             overflow: 'auto',
           }}
         >
-          <Container maxWidth="lg" sx={{ p: 4, mt: 4, mb: 4 }}>
+          <Container maxWidth="lg" sx={{ p: 4, mt: 8, mb: 4 }}>
             <Routes />
           </Container>
         </Box>
