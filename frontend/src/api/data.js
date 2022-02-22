@@ -50,3 +50,7 @@ export const upload = (ip, data) => {
         }
     })
 }
+
+export const download = async (file) => {
+    return await API.get(`/download/${file}`)
+}
