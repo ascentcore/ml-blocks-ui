@@ -32,3 +32,21 @@ export const getProxy = async (ip, path) => {
 export const pipelineRebuild = async () => {
     return await API.post('/pipeline/rebuild')
 }
+
+export const upload = (ip, data) => {
+
+    const formData = new FormData();
+    data.files.forEach(file => {
+        console.log(file)
+        formData.append('file', file)
+    })
+
+    API({
+        method: 'post',
+        url: `/pipeline/proxy?ip=${ip}&path=api/v1/data/upload`,
+        data: formData,
+        headers: {
+            'content-type': 'multipart/form-data'
+        }
+    })
+}

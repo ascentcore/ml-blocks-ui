@@ -1,17 +1,15 @@
 import React from 'react';
-import addIcon from './add-icon.png';
 import { useStyles } from './Style.styles';
 import { Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 export function MUIAddButton({ property, onChange }) {
     const classes = useStyles();
     return (
-        <Button onClick={onChange} style={{ backgroundColor: 'transparent' }}>
-            < img
-                className={classes.addButton}
-                src={addIcon}
-                alt='add icon'
-            />
-        </Button>
+        <div>
+            <Button onClick={onChange} >
+                <AddIcon />
+            </Button>
+        </div>
     )
 }

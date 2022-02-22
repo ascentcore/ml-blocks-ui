@@ -6,12 +6,6 @@ import { getTargetIP } from '../api/API';
 import * as getIP from '../api/data';
 
 const useStyles = makeStyles(() => ({
-    paper: {
-        marginTop: '60px',
-        width: '100%',
-        overflow: 'hidden',
-
-    },
     tableContainer: {
         backgroundColor: '#F3F6F4',
     },
@@ -69,7 +63,7 @@ const DataScreen = () => {
     };
 
     return (
-        <Paper className={classes.paper}>
+        <Paper sx={{ p: 2 }}>
             {totalCount && <TableContainer className={classes.tableContainer} md={{ maxHeight: 640 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>

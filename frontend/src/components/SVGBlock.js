@@ -101,8 +101,10 @@ function SVGBlock({ block, transform, selected, onClick }) {
         let str = `
             M ${ux + blockWidth + radius} ${uy + offset}
               ${dx - radius} ${dy + offset}`
-
-        return (<path d={str} className={isState(0) ? classes.animated_stroke : classes.path} fill="transparent" strokeWidth={1} />)
+        return (<path
+            key={upstreamBlock.ip}
+            d={str}
+            className={isState(0) ? classes.animated_stroke : classes.path} fill="transparent" strokeWidth={1} />)
     }
 
     function getCircleState(circleState) {
@@ -127,8 +129,6 @@ function SVGBlock({ block, transform, selected, onClick }) {
 
                         <path d="M 100 38 C 100 72, 90 65, 200 65" className={isState(4) ? classes.animated_stroke : classes.path} markerEnd="url(#arrow-3)" />
                         <circle cx="200" cy="65" r={radius} className={getCircleState(4)} />
-
-
                     </g>
                     {Object.values(block.upstream).map(upstreamBlock => getUpstream(upstreamBlock))}
                 </g>

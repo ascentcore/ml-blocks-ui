@@ -1,5 +1,5 @@
 import { SchemaForm } from '@ascentcore/react-schema-form';
-import { Grid } from '@mui/material';
+import { Grid, Paper } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { getTargetIP } from '../api/API';
 import { makeStyles } from '@mui/styles';
@@ -7,8 +7,9 @@ import { getSchemaForBlock } from '../api/data';
 import customRegistry from '../components/SchemaForm/CustomRegistry';
 
 export const useStyles = makeStyles((theme) => ({
-    grid: {
-        marginTop: '60px'
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap'
     }
 }))
 
@@ -33,11 +34,15 @@ const PredictScreen = () => {
 
     return (
         <>
-            {schema && <SchemaForm
-                schema={schema}
-                onSubmit={onSubmit}
-                config={{ registry: customRegistry }}
-            />}
+            <h2>Predict</h2>
+            <Paper sx={{ p: 2 }}>
+                {schema && <SchemaForm
+                    className={classes.container}
+                    schema={schema}
+                    onSubmit={onSubmit}
+                    config={{ registry: customRegistry }}
+                />}
+            </Paper>
         </>
     )
 }
