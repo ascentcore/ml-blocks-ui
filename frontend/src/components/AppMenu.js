@@ -6,6 +6,7 @@ import StorageIcon from '@mui/icons-material/Storage';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import EqualizerIcon from '@mui/icons-material/Equalizer';
 function AppMenu() {
     return (
         <>
@@ -40,6 +41,13 @@ function AppMenu() {
                     <PlayCircleOutlineIcon />
                 </ListItemIcon>
                 <ListItemText primary="Predict" />
+            </ListItemButton>
+
+            <ListItemButton button component={Link} to="/statics">
+                <ListItemIcon>
+                    <EqualizerIcon />
+                </ListItemIcon>
+                <ListItemText primary="Statics" />
             </ListItemButton>
         </>
     )
