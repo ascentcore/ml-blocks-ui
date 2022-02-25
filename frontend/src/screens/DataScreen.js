@@ -23,18 +23,6 @@ const useStyles = makeStyles(() => ({
         boxShadow: '0 -1px 3px black',
         position: 'relative',
     },
-    rect: {
-        fill: "#1aad58",
-        stroke: 'white',
-        strokeWidth: '2px',
-    },
-    clicked: {
-        fill: "#1aad58",
-        stroke: 'white',
-        strokeWidth: '2px',
-        outline: '1px solid #1aad58',
-        position: 'absolute'
-    },
     typography: {
         margin: '10px 0 0 20px'
     },
@@ -180,7 +168,7 @@ const DataScreen = () => {
     }
 
     const height = 50
-    console.log('blocks', blocks)
+
     return (
         <>
             <Paper sx={{ p: 2 }}>

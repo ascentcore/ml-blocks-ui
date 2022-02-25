@@ -27,39 +27,17 @@ const useStyles = makeStyles(() => ({
         stroke: '#000',
         fill: 'transparent'
     },
-    animated_stroke: {
-        strokeDasharray: 5,
-        stroke: '#000',
-        fill: 'transparent',
-        animation: `$dash linear infinite`,
-        animationDuration: '5s'
-    },
-    animated_circle: {
-        fill: '#8ad18c',
-        stroke: '#000',
-        strokeWidth: 1,
-        animation: `$loading linear infinite`,
-        animationDuration: '3s'
-
-    },
-    pending_circle: {
-        stroke: "#808080",
-        fill: '#FAFAFA'
-    },
-    ready_circle: {
-        fill: '#8ad18c',
-        stroke: '#000',
-        strokeWidth: 1,
-    },
     rect: {
-        stroke: "#000",
-        strokeWidth: "1",
-        fill: 'green'
+        stroke: "#1aad58",
+        strokeWidth: "1 ",
+        fill: '#1aad58'
     },
     selectedRect: {
-        stroke: "#000",
-        strokeWidth: "1",
-        fill: '#c9c9ff'
+        fill: "#1aad58",
+        stroke: '#fff',
+        strokeWidth: '2px',
+        outline: '2px solid #1aad58',
+        position: 'absolute'
     }
 }))
 
