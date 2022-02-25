@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import * as getValue from '../api/data';
 import { makeStyles } from '@mui/styles';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, TableFooter, Typography } from '@mui/material';
-import { getTargetIP } from '../api/API';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, Grid, Typography } from '@mui/material';
+import { getTargetIP, setTargetIP } from '../api/API';
 import * as getIP from '../api/data';
 import { getGraph } from '../api/data';
+import SVGMinimap from '../components/SVGMinimap';
 
 const useStyles = makeStyles(() => ({
     tableContainer: {
@@ -17,15 +18,50 @@ const useStyles = makeStyles(() => ({
     },
     minigraph: {
         width: '300px',
-        height: '100px',
-        marginTop: '20px'
+        height: '150px',
+        background: '#fff',
+        boxShadow: '0 -1px 3px black',
+        position: 'relative',
     },
     rect: {
-        fill: "green"
+        fill: "#1aad58",
+        stroke: 'white',
+        strokeWidth: '2px',
     },
     clicked: {
-        fill: "green",
-        stroke: 'black'
+        fill: "#1aad58",
+        stroke: 'white',
+        strokeWidth: '2px',
+        outline: '1px solid #1aad58',
+        position: 'absolute'
+    },
+    typography: {
+        margin: '10px 0 0 20px'
+    },
+    paper: {
+        width: '60px',
+        height: '40px',
+        marginLeft: '240px',
+        background: '#fff',
+        zIndex: 1,
+        boxShadow: '0 -3px 3px black ',
+        display: 'inline-block',
+        position: 'relative',
+        float: 'right',
+        borderBottom: '5px solid #fff',
+        marginBottom: '-3px',
+        paddingBottom: '20px',
+
+    },
+    downArrow: {
+        margin: '1px 18px',
+        width: '20px',
+        height: '20px',
+        border: 'solid black',
+        borderWidth: '0 3px 3px 0',
+        display: 'inline-block',
+        padding: '3px',
+        transform: 'rotate(45deg)',
     }
 }))
 
@@ -39,7 +75,7 @@ const DataScreen = () => {
     const [pageSize, setPageSize] = useState(10);
     const [graph, setGraph] = useState([]);
     const [blocks, setBlocks] = useState([]);
-    let ip = getTargetIP()
+    const [ip, setIP] = useState(getTargetIP());
 
     useEffect(() => {
         async function fetchData() {
@@ -67,19 +103,66 @@ const DataScreen = () => {
 
     useEffect(() => {
         async function fetchData() {
-            const localIP = []
             const response = await getGraph()
-            response.data.map(((element, i) => {
-                localIP.unshift(element.upstream)
-                if (localIP.indexOf(element.downstream) === -1) localIP.push(element.downstream)
-            }));
-            setGraph(localIP)
-            return setBlocks(response.data)
+            const localBlocks = []
+            const blocks = {}
+
+            const registerBlock = (ip) => {
+                let block = blocks[ip]
+
+                if (ip !== 'None' && !blocks[ip]) {
+                    block = {
+                        ip,
+                        location: [0, 20],
+                        downstream: {},
+                        upstream: {}
+                    }
+
+                    blocks[ip] = block
+
+                    localBlocks.push(block)
+                }
+
+                return block
+            }
+
+            response.data.forEach(({ upstream, downstream }) => {
+                const upstreamBlock = registerBlock(upstream)
+                const downstreamBlock = registerBlock(downstream, true)
+                if (upstreamBlock && downstreamBlock) {
+                    upstreamBlock.downstream[downstreamBlock.ip] = downstreamBlock
+                    downstreamBlock.upstream[upstreamBlock.ip] = upstreamBlock
+                }
+            });
+
+            function repositionDownstream(currentBlock) {
+                let lastYVal = currentBlock.location[1]
+                Object.values(currentBlock.downstream).forEach((block, index) => {
+                    const [cx, cy] = currentBlock.location
+                    block.location = [cx + 55, cy + 50 * index]
+                    lastYVal = Math.max(lastYVal, repositionDownstream(block))
+                })
+
+                return lastYVal
+            }
+
+            let lastYVal = 30
+            localBlocks.forEach(block => {
+                if (Object.keys(block.upstream).length === 0) {
+                    block.location[1] = lastYVal
+                    lastYVal = repositionDownstream(block)
+                }
+            })
+
+            setBlocks(localBlocks)
+
+            console.log(localBlocks)
+
+            return setGraph(response.data)
         }
         fetchData()
 
     }, [])
-    console.log('graph', graph)
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -89,8 +172,15 @@ const DataScreen = () => {
         setPageSize(+event.target.value);
         setPage(0);
     };
-    const x = 60;
 
+    const handleClick = block => () => {
+        setTargetIP(block.ip)
+        setIP(block.ip);
+        window.location.href = window.location.href;
+    }
+
+    const height = 50
+    console.log('blocks', blocks)
     return (
         <>
             <Paper sx={{ p: 2 }}>
@@ -128,19 +218,24 @@ const DataScreen = () => {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-            {blocks &&
-                <Paper className={classes.minigraph}>
-                    <svg viewBox="0 0 180 20" >
-                        {graph.map(((item, index) => (
-                            <svg viewBox="0 0 180 20" >
-                                <rect width="10" height="10" x={15 + x * index} y={10} className={ip === item ? classes.clicked : classes.rect} />
-                                <line x1={15 + x} y1="15" x2={x * index + 15} y2="15" stroke="black" />
-                            </svg>
-
-                        )))}
-                    </svg>
-                </Paper>
-            }
+            <Grid container direction="column" alignContent="flex-end" justifyContent="flex-end" style={{ marginTop: '20px' }}>
+                <div className={classes.paper} ><i className={classes.downArrow}></i></div>
+                {blocks &&
+                    <div className={classes.minigraph}>
+                        <Typography className={classes.typography}>Graph Minimap</Typography>
+                        <svg viewBox="-10 70 390 90" width={380} height={blocks.length * height} style={{ marginTop: 20 }}>
+                            {blocks.map(((block, index) => (
+                                <SVGMinimap
+                                    key={block.ip}
+                                    block={block}
+                                    selected={block.ip === ip}
+                                    onClick={handleClick(block)}
+                                />)
+                            ))}
+                        </svg>
+                    </div>
+                }
+            </Grid>
         </>
     )
 }
