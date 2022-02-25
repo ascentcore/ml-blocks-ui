@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as getValue from '../api/data';
-import { makeStyles } from '@mui/styles';
+import { makeStyles, propsToClassKey } from '@mui/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, Grid, Typography } from '@mui/material';
 import { getTargetIP, setTargetIP } from '../api/API';
 import * as getIP from '../api/data';
@@ -17,11 +17,13 @@ const useStyles = makeStyles(() => ({
         }
     },
     minigraph: {
-        width: '300px',
+        width: '230px',
         height: '150px',
         background: '#fff',
-        boxShadow: '0 -1px 3px black',
-        position: 'relative',
+        boxShadow: '0 -3px 5px rgba(0, 0, 0, 0.2), 0 -3px 5px rgba(0, 0, 0, 0.19)',
+        position: 'fixed',
+        bottom: 10,
+        right: 50
     },
     typography: {
         margin: '10px 0 0 20px'
@@ -32,10 +34,11 @@ const useStyles = makeStyles(() => ({
         marginLeft: '240px',
         background: '#fff',
         zIndex: 1,
-        boxShadow: '0 -3px 3px black ',
+        boxShadow: (props) => props.show ? '0 -5px 5px rgba(0, 0, 0, 0.2) ' : '0 -5px 5px rgba(0, 0, 0, 0.2), 0 0 7px rgba(0, 0, 0, 0.19) ',
         display: 'inline-block',
-        position: 'relative',
-        float: 'right',
+        position: 'fixed',
+        bottom: (props) => props.show ? 160 : 20,
+        right: 50,
         borderBottom: '5px solid #fff',
         marginBottom: '-3px',
         paddingBottom: '20px',
@@ -54,8 +57,8 @@ const useStyles = makeStyles(() => ({
 }))
 
 const DataScreen = () => {
-
-    const classes = useStyles();
+    const [show, setShow] = useState(false);
+    const classes = useStyles({ show });
     const [value, setValue] = useState();
     const [page, setPage] = useState(0);
     const [columns, setColumns] = useState([]);
@@ -64,6 +67,7 @@ const DataScreen = () => {
     const [graph, setGraph] = useState([]);
     const [blocks, setBlocks] = useState([]);
     const [ip, setIP] = useState(getTargetIP());
+
 
     useEffect(() => {
         async function fetchData() {
@@ -167,6 +171,8 @@ const DataScreen = () => {
         window.location.href = window.location.href;
     }
 
+    const handleShow = () => setShow(!show)
+
     const height = 50
 
     return (
@@ -207,22 +213,26 @@ const DataScreen = () => {
                 />
             </Paper>
             <Grid container direction="column" alignContent="flex-end" justifyContent="flex-end" style={{ marginTop: '20px' }}>
-                <div className={classes.paper} ><i className={classes.downArrow}></i></div>
-                {blocks &&
-                    <div className={classes.minigraph}>
-                        <Typography className={classes.typography}>Graph Minimap</Typography>
-                        <svg viewBox="-10 70 390 90" width={380} height={blocks.length * height} style={{ marginTop: 20 }}>
-                            {blocks.map(((block, index) => (
-                                <SVGMinimap
-                                    key={block.ip}
-                                    block={block}
-                                    selected={block.ip === ip}
-                                    onClick={handleClick(block)}
-                                />)
-                            ))}
-                        </svg>
-                    </div>
-                }
+                <div className={classes.paper} onClick={handleShow} ><i className={classes.downArrow}></i></div>
+                {show ?
+                    <>
+                        {blocks &&
+                            <div className={classes.minigraph}>
+                                <Typography className={classes.typography}>Graph Minimap</Typography>
+                                <svg viewBox="-10 70 390 90" width={380} height={blocks.length * height} style={{ marginTop: 20 }}>
+                                    {blocks.map(((block, index) => (
+                                        <SVGMinimap
+                                            key={block.ip}
+                                            block={block}
+                                            selected={block.ip === ip}
+                                            onClick={handleClick(block)}
+                                        />)
+                                    ))}
+                                </svg>
+                            </div>
+                        }
+                    </>
+                    : <></>}
             </Grid>
         </>
     )
