@@ -128,7 +128,7 @@ const Layout = ({ children }) => {
     const handleClick = block => () => {
         setTargetIP(block.ip)
         setIP(block.ip);
-        window.location.href = window.location.href;
+        window.location.reload();
     }
 
     const handleShow = () => setShow(!show)
