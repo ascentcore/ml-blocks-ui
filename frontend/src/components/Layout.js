@@ -43,7 +43,8 @@ const useStyles = makeStyles(() => ({
 
     },
     downArrow: {
-        margin: '1px 18px',
+        alignItems: 'center',
+        margin: '5px 19px',
         width: '20px',
         height: '20px',
         border: 'solid black',
