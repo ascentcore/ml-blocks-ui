@@ -47,9 +47,9 @@ function SVGMinimap({ block, transform, selected, onClick }) {
     const [state, setState] = useState();
     const [timer, setTimer] = useState(Date.now());
 
-    const blockWidth = 20
-    const blockHeight = 20
-    const offset = 20
+    const blockWidth = 12
+    const blockHeight = 12
+    const offset = 16
 
     useEffect(() => {
         async function fetchData() {
@@ -71,8 +71,8 @@ function SVGMinimap({ block, transform, selected, onClick }) {
         const [ux, uy] = upstreamBlock.location
         const [dx, dy] = block.location
         let str = `
-            M ${ux + blockWidth + 55} ${uy + offset}
-              ${dx - 15} ${dy + offset}`
+            M ${ux + blockWidth + 62} ${uy + offset}
+              ${dx - 22} ${dy + offset}`
         return (<path
             key={upstreamBlock.ip}
             d={str}
