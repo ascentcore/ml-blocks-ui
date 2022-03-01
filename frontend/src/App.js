@@ -16,6 +16,8 @@ import './App.css';
 import Layout from './components/Layout';
 import Routes from './Routes';
 import AppMenu from './components/AppMenu';
+import { getTargetIP } from './api/API';
+import { getStatusOfIp } from './api/data';
 
 // function App() {
 //   return (
@@ -80,11 +82,22 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme()
 
 function App() {
-
+  const [status, setStatus] = React.useState();
+  const ip = getTargetIP()
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  console.log('IP', ip)
+  React.useEffect(() => {
+    async function fetchData() {
+      const response = await getStatusOfIp(ip)
+      return setStatus(response.data)
+    }
+    fetchData()
+  }, [ip])
+  console.log('status,', status)
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -111,6 +124,7 @@ function App() {
             >
               MLBlocks
             </Typography>
+            <Typography>{status?.name}</Typography>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>

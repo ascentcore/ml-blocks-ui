@@ -74,6 +74,7 @@ const HomeScreen = () => {
     const handleClick = block => () => {
         setTargetIP(block.ip)
         setIP(block.ip);
+        window.location.reload();
     }
     const height = 120
 
