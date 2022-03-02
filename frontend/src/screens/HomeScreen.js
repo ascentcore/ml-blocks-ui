@@ -3,11 +3,15 @@ import { getTargetIP, setTargetIP } from '../api/API';
 import { getGraph } from '../api/data';
 import SVGBlock from '../components/SVGBlock';
 
+import { useSelector } from 'react-redux';
 const HomeScreen = () => {
 
     const [graph, setGraph] = useState([]);
     const [blocks, setBlocks] = useState([]);
     const [ip, setIP] = useState(getTargetIP());
+
+    const IP = useSelector((state) => state);
+    console.log('ip-store', IP)
 
     useEffect(() => {
         async function fetchData() {

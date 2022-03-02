@@ -7,6 +7,12 @@ export default axios.create({
     responseType: "json"
 });
 
-export const setTargetIP = (ip) => localStorage.setItem('IP', ip);
+
+
+export const setTargetIP = (ip) => {
+    localStorage.setItem('IP', ip);
+
+}
+
 
 export const getTargetIP = () => localStorage.getItem('IP')
