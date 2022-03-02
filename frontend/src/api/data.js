@@ -14,41 +14,23 @@ export const getData = async (page, count) => {
 }
 
 export const getGraph = async () => {
-    return await API.get('/pipeline/graph')
+    return await API.get('/api/v1/pipeline/graph')
 }
 
 export const getStatusOfIp = async (ip) => {
-    return await API.get(`/pipeline/proxy?ip=${ip}&path=api/v1/status`)
+    return await API.get(`/proxy/${ip}/api/v1/status/`)
 }
 
 export const getSchemaForBlock = async ip => {
-    return await API.get(`/pipeline/proxy?ip=${ip}&path=api/v1/model/predict_schema`)
+    return await API.get(`/proxy/${ip}/api/v1/model/predict_schema`)
 }
 
 export const getProxy = async (ip, path) => {
-    return await API.get(`/pipeline/proxy?ip=${ip}&path=${path}`)
+    return await API.get(`/proxy/${ip}/${path}`)
 }
 
 export const pipelineRebuild = async () => {
-    return await API.post('/pipeline/rebuild')
-}
-
-export const upload = (ip, data) => {
-
-    const formData = new FormData();
-    data.files.forEach(file => {
-        console.log(file)
-        formData.append('file', file)
-    })
-
-    API({
-        method: 'post',
-        url: `/pipeline/proxy?ip=${ip}&path=api/v1/data/upload`,
-        data: formData,
-        headers: {
-            'content-type': 'multipart/form-data'
-        }
-    })
+    return await API.post('/api/v1/pipeline/rebuild')
 }
 
 export const download = async (file) => {

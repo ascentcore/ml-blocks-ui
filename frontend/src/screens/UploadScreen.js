@@ -5,7 +5,7 @@ import { makeStyles } from '@mui/styles';
 import customRegistry from '../components/SchemaForm/CustomRegistry';
 import schema from '../components/SchemaForm/upload-schema.json'
 import { Paper } from '@mui/material';
-import { upload } from '../api/data';
+// import { upload } from '../api/data';
 
 export const useStyles = makeStyles((theme) => ({
     container: {
@@ -27,7 +27,7 @@ const UploadScreen = () => {
 
     const onSubmit = data => {
         const ip = getTargetIP()
-        upload(ip, data)
+        // upload(ip, data)
     }
 
     return (
