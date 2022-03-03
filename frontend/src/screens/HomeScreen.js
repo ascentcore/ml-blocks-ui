@@ -2,23 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { getTargetIP, setTargetIP } from '../api/API';
 import { getGraph } from '../api/data';
 import SVGBlock from '../components/SVGBlock';
+import { useDispatch, useSelector } from 'react-redux';
+import { setIPReducer } from '../redux/ip-reducer';
 
-import { useSelector } from 'react-redux';
 const HomeScreen = () => {
 
     const [graph, setGraph] = useState([]);
     const [blocks, setBlocks] = useState([]);
-    const [ip, setIP] = useState(getTargetIP());
-
-    const IP = useSelector((state) => state);
-    console.log('ip-store', IP)
+    const storeIP = useSelector((state) => state.ip.value);
+    const dispatch = useDispatch();
+    const [ip, setIP] = useState(storeIP);
+    console.log('IP_', storeIP)
 
     useEffect(() => {
         async function fetchData() {
             const response = await getGraph()
             const localBlocks = []
             const blocks = {}
-
+            console.log('response', response)
             const registerBlock = (ip) => {
                 let block = blocks[ip]
 
@@ -69,16 +70,15 @@ const HomeScreen = () => {
             setBlocks(localBlocks)
 
             console.log(localBlocks)
-
             return setGraph(response.data)
         }
         fetchData();
     }, [])
 
     const handleClick = block => () => {
-        setTargetIP(block.ip)
-        setIP(block.ip);
-        window.location.reload();
+        setIP(dispatch(setIPReducer(block.ip)));
+
+        //window.location.reload();
     }
     const height = 120
 

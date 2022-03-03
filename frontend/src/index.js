@@ -5,19 +5,22 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import { reducers } from './redux/reducers';
+import { configureStore } from '@reduxjs/toolkit';
+import ipReducer from './redux/ip-reducer'
 
-const store = createStore(reducers,
-  +  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const store = configureStore({
+  reducer: {
+    ip: ipReducer,
+  }
+});
 
 console.log('store', store.getState())
 ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter>
+  <BrowserRouter>
+    <Provider store={store}>
       <App />
-    </BrowserRouter>
-  </Provider>,
+    </Provider>
+  </BrowserRouter>,
   document.getElementById('root')
 );
 

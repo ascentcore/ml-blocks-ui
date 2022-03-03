@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { useSelector } from 'react-redux';
 export const API_BASE = `/`;
 
 export default axios.create({
@@ -10,9 +10,12 @@ export default axios.create({
 
 
 export const setTargetIP = (ip) => {
-    localStorage.setItem('IP', ip);
-
+    //localStorage.setItem('IP', ip);
+    //const storeIP = useSelector((state) => state.ip.value);
 }
 
 
-export const getTargetIP = () => localStorage.getItem('IP')
+export const getTargetIP = () => {//localStorage.getItem('IP')
+    //const storeIP = useSelector((state) => state.ip.value);
+    //return storeIP;
+}

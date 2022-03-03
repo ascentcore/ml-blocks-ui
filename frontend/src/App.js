@@ -88,7 +88,7 @@ function App() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  console.log('IP', ip)
+
   React.useEffect(() => {
     async function fetchData() {
       const response = await getStatusOfIp(ip)
@@ -96,7 +96,6 @@ function App() {
     }
     fetchData()
   }, [ip])
-  console.log('status,', status)
 
   return (
     <ThemeProvider theme={mdTheme}>
