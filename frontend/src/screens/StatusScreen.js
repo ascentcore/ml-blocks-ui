@@ -30,6 +30,7 @@ const StatusScreen = () => {
     const [status, setStatus] = useState()
     const [format, setFormat] = useState();
     let ip = getTargetIP();
+    console.log('ww', ip)
 
     useEffect(() => {
         if (!ip) return

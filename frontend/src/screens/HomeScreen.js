@@ -9,10 +9,10 @@ const HomeScreen = () => {
 
     const [graph, setGraph] = useState([]);
     const [blocks, setBlocks] = useState([]);
-    const storeIP = useSelector((state) => state.ip.value);
     const dispatch = useDispatch();
-    const [ip, setIP] = useState(storeIP);
-    console.log('IP_', storeIP)
+    const [ip, setIP] = useState(getTargetIP());
+    console.log('storeIP', ip)
+    console.log('IP_', ip)
 
     useEffect(() => {
         async function fetchData() {
@@ -76,10 +76,12 @@ const HomeScreen = () => {
     }, [])
 
     const handleClick = block => () => {
-        setIP(dispatch(setIPReducer(block.ip)));
+        const ip = dispatch(setIPReducer(block.ip));
+        setIP(ip.payload)
+        window.location.reload();
 
-        //window.location.reload();
     }
+
     const height = 120
 
     return (

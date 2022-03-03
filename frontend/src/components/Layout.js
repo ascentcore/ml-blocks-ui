@@ -4,6 +4,8 @@ import { Grid, Typography } from '@mui/material';
 import { getTargetIP, setTargetIP } from '../api/API';
 import { getGraph } from '../api/data';
 import SVGMinimap from '../components/SVGMinimap';
+import { useDispatch, useSelector } from 'react-redux';
+import { setIPReducer } from '../redux/ip-reducer';
 
 const useStyles = makeStyles(() => ({
     tableContainer: {
@@ -61,6 +63,7 @@ const Layout = ({ children }) => {
     const classes = useStyles({ show });
     const [graph, setGraph] = useState([]);
     const [blocks, setBlocks] = useState([]);
+    const dispatch = useDispatch();
     const [ip, setIP] = useState(getTargetIP());
 
     useEffect(() => {
@@ -127,8 +130,8 @@ const Layout = ({ children }) => {
     }, [])
 
     const handleClick = block => () => {
-        setTargetIP(block.ip)
-        setIP(block.ip);
+        const ip = dispatch(setIPReducer(block.ip));
+        setIP(ip.payload)
         window.location.reload();
     }
 

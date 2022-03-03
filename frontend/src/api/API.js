@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { setIPReducer } from '../redux/ip-reducer';
 import { useSelector } from 'react-redux';
 export const API_BASE = `/`;
 
@@ -7,15 +8,7 @@ export default axios.create({
     responseType: "json"
 });
 
-
-
-export const setTargetIP = (ip) => {
-    //localStorage.setItem('IP', ip);
-    //const storeIP = useSelector((state) => state.ip.value);
-}
-
-
-export const getTargetIP = () => {//localStorage.getItem('IP')
-    //const storeIP = useSelector((state) => state.ip.value);
-    //return storeIP;
+export const getTargetIP = () => {
+    const storeIP = useSelector((state) => state.ip.value);
+    return storeIP;
 }
