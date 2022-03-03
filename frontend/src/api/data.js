@@ -25,6 +25,10 @@ export const getSchemaForBlock = async ip => {
     return await API.get(`/proxy/${ip}/api/v1/model/predict_schema`)
 }
 
+export const predict = async (ip, data) => {
+    return await API.post(`/proxy/${ip}/api/v1/model/predict`, data)
+}
+
 export const getProxy = async (ip, path) => {
     return await API.get(`/proxy/${ip}/${path}`)
 }
