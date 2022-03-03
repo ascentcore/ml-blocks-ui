@@ -7,10 +7,12 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import ipReducer from './redux/ip-reducer'
+import graphReducer from './redux/graph-reducer';
 
 const store = configureStore({
   reducer: {
     ip: ipReducer,
+    graph: graphReducer
   }
 });
 
