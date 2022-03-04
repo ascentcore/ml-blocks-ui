@@ -113,7 +113,7 @@ function App() {
                 marginRight: '36px',
               }}
             >
-              <MenuIcon /> test
+              <MenuIcon />
             </IconButton>
             <Typography
               component="h1"

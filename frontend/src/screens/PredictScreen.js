@@ -3,15 +3,19 @@ import { Grid, Paper } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import { getTargetIP } from '../api/API';
 import { makeStyles } from '@mui/styles';
-import { getSchemaForBlock, predict } from '../api/data';
+import { getSchemaForBlock, predict_bg } from '../api/data';
 import customRegistry from '../components/SchemaForm/CustomRegistry';
-import { MUITextField } from '../components/SchemaForm/Components/MUITextField';
 import MUIWrapper from '../components/SchemaForm/Components/wrappers/MUIWrapper';
 
 export const useStyles = makeStyles((theme) => ({
     container: {
         display: 'flex',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+
+        '& .ra-elem-array': {
+            display: 'block',
+            width: '100%'
+        }
     }
 }))
 
@@ -113,7 +117,7 @@ const PredictScreen = () => {
     }, [ip])
 
     const onSubmit = data => {
-        predict(ip, data)
+        predict_bg(ip, data)
     }
 
     return (

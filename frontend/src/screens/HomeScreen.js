@@ -60,6 +60,7 @@ const HomeScreen = () => {
                     block.location[1] = lastYVal
                     lastYVal = repositionDownstream(block)
                 }
+                lastYVal+=40
             })
 
             setBlocks(localBlocks)

@@ -21,13 +21,13 @@ const DataScreen = () => {
     const [value, setValue] = useState();
     const [page, setPage] = useState(0);
     const [columns, setColumns] = useState([]);
-    const [totalCount, settotalCount] = useState();
+    const [totalCount, settotalCount] = useState(10);
     const [pageSize, setPageSize] = useState(10);
     const [ip, setIP] = useState(getTargetIP());
 
     useEffect(() => {
         async function fetchData() {
-            const response = await getValue.dataCount()
+            const response = await getValue.dataCount(ip)
             return settotalCount(response.data)
         }
         fetchData();

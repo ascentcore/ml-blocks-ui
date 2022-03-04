@@ -13,12 +13,13 @@ import { MUIChooseFile } from './Components/MUIChooseFile';
 const customRegistry = {
     string: { component: MUITextField, wrapper: MUIWrapper },
     integer: { component: MUITextField, wrapper: MUIWrapper },
+    number: { component: MUITextField, wrapper: MUIWrapper },
     enum: { component: MUISelectElement, wrapper: MUIWrapper },
     file: { component: MUIChooseFile, wrapper: MUIEmptyWrapper },
     addButton: { component: MUIAddButton, wrapper: MUIFullWrapper },
     removeButton: { component: MUIRemoveButton, wrapper: MUIEmptyWrapper },
     button: { component: MUIButton, wrapper: MUIWrapper },
-    boolean: { component: MUICheckbox, wrapper: MUIWrapper }
+    boolean: { component: MUICheckbox, wrapper: MUIWrapper },
 }
 
 
