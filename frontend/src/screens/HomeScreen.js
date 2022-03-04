@@ -46,9 +46,12 @@ const HomeScreen = () => {
             function repositionDownstream(currentBlock) {
                 let lastYVal = currentBlock.location[1]
                 Object.values(currentBlock.downstream).forEach((block, index) => {
-                    const [cx, cy] = currentBlock.location
-                    block.location = [cx + 300, cy + 140 * index]
-                    lastYVal = Math.max(lastYVal, repositionDownstream(block))
+                    if (!block.hasPosition) {
+                        const [cx, cy] = currentBlock.location
+                        block.location = [cx + 300, cy + 140 * index]
+                        block.hasPosition = true
+                        lastYVal = Math.max(lastYVal, repositionDownstream(block))
+                    }
                 })
 
                 return lastYVal
@@ -60,7 +63,6 @@ const HomeScreen = () => {
                     block.location[1] = lastYVal
                     lastYVal = repositionDownstream(block)
                 }
-                lastYVal+=40
             })
 
             setBlocks(localBlocks)

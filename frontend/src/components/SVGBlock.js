@@ -69,6 +69,7 @@ function SVGBlock({ block, transform, selected, onClick }) {
     const [status, setStatus] = useState();
     const [state, setState] = useState();
     const [timer, setTimer] = useState(Date.now());
+    const [fetching, setFetching] = useState(false)
 
     const radius = 6;
     const blockWidth = 200
@@ -77,16 +78,20 @@ function SVGBlock({ block, transform, selected, onClick }) {
 
     useEffect(() => {
         async function fetchData() {
-            const response = await getStatusOfIp(block.ip)
-            if (response.data.status && response.data.status.length) {
-                setState(response.data.status[0])
-                setStatus(response.data)
+            if (fetching === false) {
+                setFetching(true)
+                const response = await getStatusOfIp(block.ip)
+                if (response.data.status && response.data.status.length) {
+                    setState(response.data.status[0])
+                    setStatus(response.data)
+                }
+                setFetching(false)
             }
         }
         fetchData()
-        const interval = setInterval(() => {
-            fetchData()
-        }, 5000)
+        // const interval = setInterval(() => {
+        //     fetchData()
+        // }, 5000)
         return () => clearInterval(interval)
 
     }, [timer])
@@ -114,25 +119,23 @@ function SVGBlock({ block, transform, selected, onClick }) {
 
     return (
         <g transform={transform}>
-            {status && (
-                <g>
-                    <g transform={`translate(${block.location[0]}, ${block.location[1]})`}>
-                        <text textAnchor='middle' x={blockWidth / 2}>{status.name}</text>
-                        <rect x={0} y={10} width={blockWidth} height={blockHeight} className={selected ? classes.selectedRect : classes.rect} onClick={onClick} />
-                        <circle cx="0" cy="30" r={radius} className={getCircleState(0)} />
+            <g>
+                <g transform={`translate(${block.location[0]}, ${block.location[1]})`}>
+                    <text textAnchor='middle' x={blockWidth / 2}>{status ? status.name : 'Status Pending...'}</text>
+                    <rect x={0} y={10} width={blockWidth} height={blockHeight} className={selected ? classes.selectedRect : classes.rect} onClick={onClick} />
+                    <circle cx="0" cy="30" r={radius} className={getCircleState(0)} />
 
-                        <path d="M 6 30 H 100 " className={isState(1) ? classes.animated_stroke : classes.path} markerEnd="url(#arrow-1)" />
-                        <circle cx="100" cy="30" r="8" className={getCircleState(1)} />
+                    <path d="M 6 30 H 100 " className={isState(1) ? classes.animated_stroke : classes.path} markerEnd="url(#arrow-1)" />
+                    <circle cx="100" cy="30" r="8" className={getCircleState(1)} />
 
-                        <path d="M 200 30 H 108 " className={classes.path} markerEnd="url(#arrow-2)" />
-                        <circle cx="200" cy="30" r={radius} className={getCircleState(3)} />
+                    <path d="M 200 30 H 108 " className={classes.path} markerEnd="url(#arrow-2)" />
+                    <circle cx="200" cy="30" r={radius} className={getCircleState(3)} />
 
-                        <path d="M 100 38 C 100 72, 90 65, 200 65" className={isState(4) ? classes.animated_stroke : classes.path} markerEnd="url(#arrow-3)" />
-                        <circle cx="200" cy="65" r={radius} className={getCircleState(4)} />
-                    </g>
-                    {Object.values(block.upstream).map(upstreamBlock => getUpstream(upstreamBlock))}
+                    <path d="M 100 38 C 100 72, 90 65, 200 65" className={isState(4) ? classes.animated_stroke : classes.path} markerEnd="url(#arrow-3)" />
+                    <circle cx="200" cy="65" r={radius} className={getCircleState(4)} />
                 </g>
-            )}
+                {Object.values(block.upstream).map(upstreamBlock => getUpstream(upstreamBlock))}
+            </g>
         </g>
     )
 };
