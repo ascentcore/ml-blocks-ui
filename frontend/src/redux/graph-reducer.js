@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialStateValue = '';
+const initialStateValue = {
+    graph: []
+};
 
 export const graphSlice = createSlice({
     name: 'graph',

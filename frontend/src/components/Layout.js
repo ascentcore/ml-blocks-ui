@@ -65,6 +65,7 @@ const Layout = ({ children }) => {
     const [blocks, setBlocks] = useState([]);
     const dispatch = useDispatch();
     const [ip, setIP] = useState(getTargetIP());
+    let storedIP = getTargetIP()
 
     useEffect(() => {
         async function fetchData() {
@@ -125,14 +126,16 @@ const Layout = ({ children }) => {
 
             return setGraph(response.data)
         }
-        fetchData()
+        fetchData();
 
-    }, [])
+    }, [ip])
+
 
     const handleClick = block => () => {
         const ip = dispatch(setIPReducer(block.ip));
-        setIP(ip.payload)
-        window.location.reload();
+        setTargetIP(ip.payload);
+        setIP(ip.payload);
+
     }
 
     const handleShow = () => setShow(!show)
@@ -157,7 +160,7 @@ const Layout = ({ children }) => {
                                         <SVGMinimap
                                             key={block.ip}
                                             block={block}
-                                            selected={block.ip === ip}
+                                            selected={block.ip === storedIP}
                                             onClick={handleClick(block)}
                                         />)
                                     ))}

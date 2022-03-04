@@ -4,6 +4,7 @@ import { getGraph } from '../api/data';
 import SVGBlock from '../components/SVGBlock';
 import { useDispatch, useSelector } from 'react-redux';
 import { setIPReducer } from '../redux/ip-reducer';
+import { getGraphReducer } from '../redux/graph-reducer';
 
 const HomeScreen = () => {
 
@@ -11,15 +12,14 @@ const HomeScreen = () => {
     const [blocks, setBlocks] = useState([]);
     const dispatch = useDispatch();
     const [ip, setIP] = useState(getTargetIP());
-    console.log('storeIP', ip)
-    console.log('IP_', ip)
+    let storedIP = getTargetIP()
 
     useEffect(() => {
         async function fetchData() {
             const response = await getGraph()
             const localBlocks = []
             const blocks = {}
-            console.log('response', response)
+
             const registerBlock = (ip) => {
                 let block = blocks[ip]
 
@@ -70,16 +70,15 @@ const HomeScreen = () => {
             setBlocks(localBlocks)
 
             console.log(localBlocks)
-            return setGraph(response.data)
+            return dispatch(getGraphReducer(response.data))
         }
         fetchData();
-    }, [])
+    }, [ip])
 
     const handleClick = block => () => {
         const ip = dispatch(setIPReducer(block.ip));
+        setTargetIP(ip.payload);
         setIP(ip.payload)
-        window.location.reload();
-
     }
 
     const height = 120
@@ -104,7 +103,7 @@ const HomeScreen = () => {
             {blocks.map((block, index) => (<SVGBlock
                 key={block.ip}
                 block={block}
-                selected={block.ip === ip}
+                selected={block.ip === storedIP}
                 onClick={handleClick(block)}
             />))}
         </svg>

@@ -1,11 +1,11 @@
 import API from './API';
 
 export const dataCount = async () => {
-    return await API.get('/data/count');
+    return await API.get('/api/v1/data/count');
 }
 
 export const getData = async (page, count) => {
-    return await API.get('/data/', {
+    return await API.get('/api/v1//data/', {
         params: {
             page: page,
             count: count

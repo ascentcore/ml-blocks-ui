@@ -33,6 +33,7 @@ const DataScreen = () => {
         fetchData();
 
     }, []);
+    console.log('totalCount', totalCount)
 
     useEffect(() => {
         if (!totalCount && ip === undefined && path === '') return
@@ -48,6 +49,8 @@ const DataScreen = () => {
         if (!value) return
         setColumns(Object.keys(value?.data[0]))
     }, [value])
+
+    console.log('columns', value)
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
