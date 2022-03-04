@@ -33,12 +33,11 @@ const DataScreen = () => {
         fetchData();
 
     }, []);
-    console.log('totalCount', totalCount)
 
     useEffect(() => {
         if (!totalCount && ip === undefined && path === '') return
         async function fetchData() {
-            const response = await getIP.getProxy(ip, `api/v1/data?page=${page}&count=${totalCount}`)
+            const response = await getIP.getProxy(ip, `api/v1/data/?page=${page}&count=${totalCount}`)
             return setValue(response)
         }
         fetchData();
@@ -49,8 +48,6 @@ const DataScreen = () => {
         if (!value) return
         setColumns(Object.keys(value?.data[0]))
     }, [value])
-
-    console.log('columns', value)
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -78,9 +75,9 @@ const DataScreen = () => {
                         {value?.data?.length > 0 &&
                             <TableBody>
                                 {value.data.map((row, index) => (
-                                    <TableRow hover>
+                                    <TableRow hover key={row.index}>
                                         {Object.keys(row).map((item) => (
-                                            <TableCell >{row[item]}</TableCell>
+                                            <TableCell key={item} >{row[item]}</TableCell>
                                         ))}
                                     </TableRow>))
                                 }

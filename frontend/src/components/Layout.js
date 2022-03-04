@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Grid, Typography } from '@mui/material';
-import { getTargetIP, setTargetIP } from '../api/API';
+import { getTargetIP } from '../api/API';
 import { getGraph } from '../api/data';
 import SVGMinimap from '../components/SVGMinimap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setIPReducer } from '../redux/ip-reducer';
+import { getGraphReducer } from '../redux/graph-reducer';
 
 const useStyles = makeStyles(() => ({
     tableContainer: {
@@ -61,7 +62,6 @@ const Layout = ({ children }) => {
 
     const [show, setShow] = useState(false);
     const classes = useStyles({ show });
-    const [graph, setGraph] = useState([]);
     const [blocks, setBlocks] = useState([]);
     const dispatch = useDispatch();
     const [ip, setIP] = useState(getTargetIP());
@@ -124,16 +124,15 @@ const Layout = ({ children }) => {
 
             console.log(localBlocks)
 
-            return setGraph(response.data)
+            return dispatch(getGraphReducer(response.data))
         }
         fetchData();
 
-    }, [ip])
+    }, [ip, storedIP])
 
 
     const handleClick = block => () => {
         const ip = dispatch(setIPReducer(block.ip));
-        setTargetIP(ip.payload);
         setIP(ip.payload);
 
     }

@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { getTargetIP, setTargetIP } from '../api/API';
+import { getTargetIP } from '../api/API';
 import { getGraph } from '../api/data';
 import SVGBlock from '../components/SVGBlock';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setIPReducer } from '../redux/ip-reducer';
 import { getGraphReducer } from '../redux/graph-reducer';
 
 const HomeScreen = () => {
 
-    const [graph, setGraph] = useState([]);
     const [blocks, setBlocks] = useState([]);
     const dispatch = useDispatch();
     const [ip, setIP] = useState(getTargetIP());
@@ -73,11 +72,10 @@ const HomeScreen = () => {
             return dispatch(getGraphReducer(response.data))
         }
         fetchData();
-    }, [ip])
+    }, [ip, storedIP])
 
     const handleClick = block => () => {
         const ip = dispatch(setIPReducer(block.ip));
-        setTargetIP(ip.payload);
         setIP(ip.payload)
     }
 
