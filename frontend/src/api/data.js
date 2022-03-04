@@ -1,11 +1,11 @@
 import API from './API';
 
 export const dataCount = async (ip) => {
-    return await API.get(`/proxy/${ip}/api/v1//data/count`);
+    return await API.get(`/proxy/${ip}/api/v1/data/count`);
 }
 
-export const getData = async (page, count) => {
-    return await API.get('/data/', {
+export const getData = async (ip, page, count) => {
+    return await API.get(`/proxy/${ip}/api/v1/data/`, {
         params: {
             page: page,
             count: count
