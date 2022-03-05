@@ -3,6 +3,8 @@ import { MenuItem, TextField } from '@mui/material';
 
 export function MUISelectElement({ property, value, onChange }) {
 
+
+
     const handleChange = (event) => {
         onChange(event.target.value);
     };
@@ -25,6 +27,8 @@ export function MUISelectElement({ property, value, onChange }) {
         return helperText
     }
 
+
+
     return (
         <TextField
             select
@@ -37,12 +41,20 @@ export function MUISelectElement({ property, value, onChange }) {
             helperText={getHelperText()}
         >
 
-            {property.enum.map((item) => {
-                return (
-                    <MenuItem key={item} value={item}>
-                        {item}
-                    </MenuItem>
-                )
+            {(property.enum || property.options).map((item) => {
+                if (property.labelKey && property.valueKey) {
+                    return (
+                        <MenuItem key={item[property.valueKey]} value={item[property.valueKey]}>
+                            {item[property.labelKey]}
+                        </MenuItem>
+                    )
+                } else {
+                    return (
+                        <MenuItem key={item} value={item}>
+                            {item}
+                        </MenuItem>
+                    )
+                }
             })}
         </TextField>
     )

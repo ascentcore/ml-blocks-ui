@@ -1,40 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { getTargetIP, setTargetIP } from '../api/API';
-import { getGraph } from '../api/data';
+import { getGraph, getNodes } from '../api/data';
 import SVGBlock from '../components/SVGBlock';
+
+const BLOCK_HEIGHT = 120
 
 const HomeScreen = () => {
 
-    const [graph, setGraph] = useState([]);
+
+    // const [graph, setGraph] = useState([]);
     const [blocks, setBlocks] = useState([]);
     const [ip, setIP] = useState(getTargetIP());
 
     useEffect(() => {
         async function fetchData() {
-            const response = await getGraph()
+            const { data: hosts } = await getNodes()
+            const { data: edges } = await getGraph()
+
             const blocks = {}
 
-            const registerBlock = (ip) => {
-                let block = blocks[ip]
+            hosts.forEach((host, index) => {
 
-                if (ip !== 'None' && !blocks[ip]) {
-                    block = {
-                        ip,
-                        location: [0, 0],
-                        upstream: [],
-                        downstream: []
-                    }
-
-                    blocks[ip] = block
-
+                blocks[host.host] = {
+                    ip: host.host,
+                    location: [0, BLOCK_HEIGHT * index],
+                    upstream: [],
+                    downstream: []
                 }
+            });
 
-                return block
-            }
-
-            response.data.forEach(({ upstream, downstream, edge_type }) => {
-                const upstreamBlock = registerBlock(upstream)
-                const downstreamBlock = registerBlock(downstream)
+            edges.forEach(({ upstream, downstream, edge_type }) => {
+                const upstreamBlock = blocks[upstream]
+                const downstreamBlock = blocks[downstream]
                 if (upstreamBlock && downstreamBlock) {
                     downstreamBlock.upstream.push({ block: upstreamBlock, edgeType: edge_type })
                     upstreamBlock.downstream.push({ block: downstreamBlock, edgeType: edge_type })
@@ -60,12 +57,44 @@ const HomeScreen = () => {
             roots.forEach(root => {
                 currentY = positionBlock(0, root, currentY)
             })
-
-
             setBlocks(Object.values(blocks))
+
+            console.log(blocks)
+
         }
         fetchData();
     }, [])
+
+    // useEffect(() => {
+    //     async function fetchData() {
+    //         const response = await getGraph()
+    //         const blocks = {}
+
+    //         const registerBlock = (ip) => {
+    //             let block = blocks[ip]
+
+    //             if (ip !== 'None' && !blocks[ip]) {
+    //                 block = {
+    //                     ip,
+    //                     location: [0, 0],
+    //                     upstream: [],
+    //                     downstream: []
+    //                 }
+
+    //                 blocks[ip] = block
+
+    //             }
+
+    //             return block
+    //         }
+
+
+
+
+    //         setBlocks(Object.values(blocks))
+    //     }
+    //     fetchData();
+    // }, [])
 
     const handleClick = block => () => {
         setTargetIP(block.ip)
@@ -75,7 +104,7 @@ const HomeScreen = () => {
     const height = 120
 
     return (
-        <svg viewBox="-10 10 1280 190" width={1280} height={blocks.length * height} style={{ marginTop: 100 }}>
+        <svg viewBox={`-10 -20 1280 ${blocks.length * height}`} width={1280} height={blocks.length * height} style={{ marginTop: 100 }}>
             <defs>
                 <marker id="arrow-1" markerWidth="10" markerHeight="10" refX="12" refY="4">
                     <path d="M0,0 L4,4 L0,8 z" fill="#000"></path>

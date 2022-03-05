@@ -26,6 +26,7 @@ const UploadScreen = () => {
 
     const onSubmit = data => {
         const ip = getTargetIP()
+        console.log(data)
         upload(ip, data)
     }
 

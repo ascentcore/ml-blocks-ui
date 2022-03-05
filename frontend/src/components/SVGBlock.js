@@ -81,12 +81,12 @@ function SVGBlock({ block, transform, selected, onClick }) {
     const offset = 30
 
     useEffect(() => {
-        fetching = false
+        let fetching = false
         async function fetchData() {
             if (fetching === false) {
                 fetching = true
                 const response = await getStatusOfIp(block.ip)
-                if (response.data.status) {
+                if (response.data) {
                     setState(response.data.status)
                     setStatus(response.data)
                     fetching = false
@@ -100,7 +100,7 @@ function SVGBlock({ block, transform, selected, onClick }) {
         }, 5000)
         return () => clearInterval(interval)
 
-    }, [timer])
+    }, [])
 
     function isState(index) {
         return state && state.state_name === states[index]

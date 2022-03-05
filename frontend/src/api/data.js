@@ -13,6 +13,14 @@ export const getData = async (ip, page, count) => {
     });
 }
 
+export const getNodes = async () => {
+    return await API.get('/api/v1/pipeline/hosts')
+}
+
+export const reconfigure = async (data) => {
+    return await API.post('/api/v1/pipeline/reconfigure', data)
+}
+
 export const getGraph = async () => {
     return await API.get('/api/v1/pipeline/graph')
 }
@@ -46,5 +54,14 @@ export const download = async (file) => {
 }
 
 export const upload = async (ip, data) => {
-    return await API.post(`/proxy/${ip}/api/v1/data/upload`, data.files)
+    var formData = new FormData();
+    formData.append("append", data.append)
+    data.files.forEach(file => {
+        formData.append("files", file)
+    })
+    return await API.post(`/proxy/${ip}/api/v1/data/upload`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
 }
