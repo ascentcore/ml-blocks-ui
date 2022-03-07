@@ -108,6 +108,7 @@ const HomeScreen = () => {
     const handleClick = block => () => {
         const ip = dispatch(setIPReducer(block.ip));
         setIP(ip.payload)
+        setTargetIP(ip.payload)
     }
 
     const height = 120

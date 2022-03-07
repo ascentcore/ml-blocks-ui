@@ -91,7 +91,7 @@ function SVGBlock({ block, transform, selected, onClick }) {
                     setStatus(response.data)
                     fetching = false
                 }
-                
+
             }
         }
         fetchData()
