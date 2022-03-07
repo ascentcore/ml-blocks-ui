@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { getTargetIP } from '../api/API';
-import { getGraph } from '../api/data';
+import { getTargetIP, setTargetIP } from '../api/API';
+import { getGraph, getNodes } from '../api/data';
 import SVGBlock from '../components/SVGBlock';
 import { useDispatch } from 'react-redux';
 import { setIPReducer } from '../redux/ip-reducer';
 import { getGraphReducer } from '../redux/graph-reducer';
 
+const BLOCK_HEIGHT = 120
+
 const HomeScreen = () => {
 
+
+    // const [graph, setGraph] = useState([]);
     const [blocks, setBlocks] = useState([]);
     const dispatch = useDispatch();
     const [ip, setIP] = useState(getTargetIP());
@@ -15,64 +19,91 @@ const HomeScreen = () => {
 
     useEffect(() => {
         async function fetchData() {
-            const response = await getGraph()
-            const localBlocks = []
+            const { data: hosts } = await getNodes()
+            const { data: edges } = await getGraph()
+
             const blocks = {}
 
-            const registerBlock = (ip) => {
-                let block = blocks[ip]
+            hosts.forEach((host, index) => {
 
-                if (ip !== 'None' && !blocks[ip]) {
-                    block = {
-                        ip,
-                        location: [0, 20],
-                        downstream: {},
-                        upstream: {}
-                    }
-
-                    blocks[ip] = block
-
-                    localBlocks.push(block)
-                }
-
-                return block
-            }
-
-            response.data.forEach(({ upstream, downstream }) => {
-                const upstreamBlock = registerBlock(upstream)
-                const downstreamBlock = registerBlock(downstream, true)
-                if (upstreamBlock && downstreamBlock) {
-                    upstreamBlock.downstream[downstreamBlock.ip] = downstreamBlock
-                    downstreamBlock.upstream[upstreamBlock.ip] = upstreamBlock
+                blocks[host.host] = {
+                    ip: host.host,
+                    location: [0, BLOCK_HEIGHT * index],
+                    upstream: [],
+                    downstream: []
                 }
             });
 
-            function repositionDownstream(currentBlock) {
-                let lastYVal = currentBlock.location[1]
-                Object.values(currentBlock.downstream).forEach((block, index) => {
-                    const [cx, cy] = currentBlock.location
-                    block.location = [cx + 300, cy + 140 * index]
-                    lastYVal = Math.max(lastYVal, repositionDownstream(block))
-                })
-
-                return lastYVal
-            }
-
-            let lastYVal = 30
-            localBlocks.forEach(block => {
-                if (Object.keys(block.upstream).length === 0) {
-                    block.location[1] = lastYVal
-                    lastYVal = repositionDownstream(block)
+            edges.forEach(({ upstream, downstream, edge_type }) => {
+                const upstreamBlock = blocks[upstream]
+                const downstreamBlock = blocks[downstream]
+                if (upstreamBlock && downstreamBlock) {
+                    downstreamBlock.upstream.push({ block: upstreamBlock, edgeType: edge_type })
+                    upstreamBlock.downstream.push({ block: downstreamBlock, edgeType: edge_type })
                 }
             })
 
-            setBlocks(localBlocks)
+            let currentY = 0
 
-            console.log(localBlocks)
-            return dispatch(getGraphReducer(response.data))
+            //ANA Version
+            // console.log(localBlocks)
+            // return dispatch(getGraphReducer(response.data))
+
+            const roots = Object.values(blocks).filter(item => item.upstream.length === 0)
+            const positionBlock = (x, block, currentY) => {
+                let startFromY = currentY
+                if (!block.visited) {
+                    block.location = [x, startFromY]
+                    block.downstream.forEach(downstreamBlock => {
+                        positionBlock(x + 300, downstreamBlock.block, startFromY)
+                        startFromY += 120
+                    })
+                    block.visited = true
+                }
+                return startFromY
+            }
+
+            roots.forEach(root => {
+                currentY = positionBlock(0, root, currentY)
+            })
+            setBlocks(Object.values(blocks))
+
+            console.log(blocks)
+
         }
         fetchData();
     }, [ip, storedIP])
+
+    // useEffect(() => {
+    //     async function fetchData() {
+    //         const response = await getGraph()
+    //         const blocks = {}
+
+    //         const registerBlock = (ip) => {
+    //             let block = blocks[ip]
+
+    //             if (ip !== 'None' && !blocks[ip]) {
+    //                 block = {
+    //                     ip,
+    //                     location: [0, 0],
+    //                     upstream: [],
+    //                     downstream: []
+    //                 }
+
+    //                 blocks[ip] = block
+
+    //             }
+
+    //             return block
+    //         }
+
+
+
+
+    //         setBlocks(Object.values(blocks))
+    //     }
+    //     fetchData();
+    // }, [])
 
     const handleClick = block => () => {
         const ip = dispatch(setIPReducer(block.ip));
@@ -82,7 +113,7 @@ const HomeScreen = () => {
     const height = 120
 
     return (
-        <svg viewBox="-10 10 1280 190" width={1280} height={blocks.length * height} style={{ marginTop: 100 }}>
+        <svg viewBox={`-10 -20 1280 ${blocks.length * height}`} width={1280} height={blocks.length * height} style={{ marginTop: 100 }}>
             <defs>
                 <marker id="arrow-1" markerWidth="10" markerHeight="10" refX="12" refY="4">
                     <path d="M0,0 L4,4 L0,8 z" fill="#000"></path>

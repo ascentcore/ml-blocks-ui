@@ -4,8 +4,9 @@ import HomeScreen from './screens/HomeScreen';
 import UploadScreen from './screens/UploadScreen';
 import DataScreen from './screens/DataScreen';
 import StatusScreen from './screens/StatusScreen';
-import PredictScreen from './screens/PredictScreen'
+import PredictScreen from './screens/PredictScreen';
 import StaticsScreen from './screens/StaticsScreen';
+import SettingsScreen from './screens/SettingsScreen';
 
 function Routes() {
     return (
@@ -16,6 +17,7 @@ function Routes() {
             <Route exact path="/status" component={StatusScreen} />
             <Route exact path="/predict" component={PredictScreen} />
             <Route exact path="/statics" component={StaticsScreen} />
+            <Route exact path="/settings" component={SettingsScreen} />
         </Switch>
     )
 }

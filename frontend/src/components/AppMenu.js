@@ -6,37 +6,38 @@ import StorageIcon from '@mui/icons-material/Storage';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import SettingsIcon from '@mui/icons-material/Settings';
 import EqualizerIcon from '@mui/icons-material/Equalizer';
 function AppMenu() {
     return (
         <>
-            <ListItemButton button="true" component={Link} to="/">
+            <ListItemButton component={Link} to="/">
                 <ListItemIcon>
                     <DashboardIcon />
                 </ListItemIcon>
                 <ListItemText primary="Home" />
             </ListItemButton>
-            <ListItemButton button="true" component={Link} to="/upload">
+            <ListItemButton component={Link} to="/upload">
                 <ListItemIcon>
                     <CloudUploadIcon />
                 </ListItemIcon>
                 <ListItemText primary="Upload" />
             </ListItemButton>
-            <ListItemButton button="true" component={Link} to="/data">
+            <ListItemButton component={Link} to="/data">
                 <ListItemIcon>
                     <StorageIcon />
                 </ListItemIcon>
                 <ListItemText primary="Data" />
             </ListItemButton>
 
-            <ListItemButton button="true" component={Link} to="/status">
+            <ListItemButton component={Link} to="/status">
                 <ListItemIcon>
                     <PlaylistAddCheckIcon />
                 </ListItemIcon>
                 <ListItemText primary="Status" />
             </ListItemButton>
 
-            <ListItemButton button="true" component={Link} to="/predict">
+            <ListItemButton component={Link} to="/predict">
                 <ListItemIcon>
                     <PlayCircleOutlineIcon />
                 </ListItemIcon>
@@ -48,6 +49,13 @@ function AppMenu() {
                     <EqualizerIcon />
                 </ListItemIcon>
                 <ListItemText primary="Statics" />
+            </ListItemButton>
+
+            <ListItemButton component={Link} to="/settings">
+                <ListItemIcon>
+                    <SettingsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Settings" />
             </ListItemButton>
         </>
     )

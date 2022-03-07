@@ -21,13 +21,13 @@ const DataScreen = () => {
     const [value, setValue] = useState();
     const [page, setPage] = useState(0);
     const [columns, setColumns] = useState([]);
-    const [totalCount, settotalCount] = useState();
+    const [totalCount, settotalCount] = useState(0);
     const [pageSize, setPageSize] = useState(10);
     const [ip, setIP] = useState(getTargetIP());
 
     useEffect(() => {
         async function fetchData() {
-            const response = await getValue.dataCount()
+            const response = await getValue.dataCount(ip)
             return settotalCount(response.data)
         }
         fetchData();
@@ -37,12 +37,12 @@ const DataScreen = () => {
     useEffect(() => {
         if (!totalCount && ip === undefined && path === '') return
         async function fetchData() {
-            const response = await getIP.getProxy(ip, `api/v1/data/?page=${page}&count=${totalCount}`)
+            const response = await getValue.getData(ip, page, pageSize)
             return setValue(response)
         }
         fetchData();
 
-    }, [totalCount, page, ip]);
+    }, [totalCount, page, pageSize, ip]);
 
     useEffect(() => {
         if (!value) return

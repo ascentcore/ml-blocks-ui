@@ -7,11 +7,16 @@ import { Grid, List, ListItem, ListItemText } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Link } from 'react-router-dom';
 import { API_BASE } from '../api/API';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
 export const useStyles = makeStyles((theme) => ({
     list: {
         width: '300px',
         marginTop: '100px'
+    },
+    image: {
+        maxWidth: '100%',
+        height: 'auto'
     }
 }))
 
@@ -30,18 +35,33 @@ const StaticsScreen = () => {
 
     }, [ip]);
 
+    const getIconForFile = item => {
+        const re = /(?:\.([^.]+))?$/;
+        const extension = re.exec(item)[1]
+        console.log(extension)
+        switch (extension) {
+            case 'png':
+            case 'jpg':
+            case 'jpeg':
+                return <img className={classes.image} src={`/proxy/${ip}/api/v1/download/${item}`} />
+
+            default:
+                return <InsertDriveFileIcon />
+        }
+
+
+    }
+
     return (
         <>
             {value &&
                 <Grid container justifyContent="center">
-                    <List className={classes.list}>
-                        {value.map((item => (
-                            <ListItem key={item}>
-                                <ListItemText primary={item} />
-                                <Link to={`${API_BASE}/download/${item}`} target="_blank" download><DownloadIcon /></Link>
-                            </ListItem>
-                        )))}
-                    </List>
+                    {value.map((item => (
+                        <Grid item xs={12} md={6} lg={4} key={item}>
+                            <div>{getIconForFile(item)}</div>                            
+                            <Link to={`/proxy/${ip}/api/v1/download/${item}`} target="_blank" download><DownloadIcon /> {item}</Link>
+                        </Grid>
+                    )))}
                 </Grid>
             }
         </>

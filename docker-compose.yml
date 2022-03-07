@@ -8,11 +8,9 @@ services:
     build:
       context: ./samples/ml-blocks
       dockerfile: Dockerfile
-      args:
-        - INSTALL_DEV=true
     environment:
       - LOADER=pandas
-      - BLOCK_NAME=root
+      - BLOCK_NAME=Root
     ports:
       - "9080:80"
     command: [ "/app/start.sh" ]
@@ -28,17 +26,10 @@ services:
     build:
       context: ./samples/ml-blocks
       dockerfile: Dockerfile
-      args:
-        - INSTALL_DEV=true
-    links:
-      - "ml_blocks_root:ml_blocks_root"
     environment:
       - LOADER=pandas
-      - DEPENDENCY_BLOCK=ml_blocks_root
-      - REGISTRY=ml_blocks_root
       - BLOCK_NAME=layer1
-    ports:
-      - "9081:80"
+      - REGISTRY=ml_blocks_root
     command: [ "/app/start.sh" ]
     # command: [ "/app/start_dev.sh" ]
     networks:
@@ -53,16 +44,10 @@ services:
     build:
       context: ./samples/ml-blocks
       dockerfile: Dockerfile
-      args:
-        - INSTALL_DEV=true
-    links:
-      - "ml_blocks_root:ml_blocks_root"
-      - "layer1:layer1"
     environment:
       - LOADER=pandas
-      - DEPENDENCY_BLOCK=layer1
-      - REGISTRY=ml_blocks_root
       - BLOCK_NAME=layer2
+      - REGISTRY=ml_blocks_root
     ports:
       - "9082:80"
     command: [ "/app/start.sh" ]
@@ -73,25 +58,22 @@ services:
   ui:
     depends_on:
       - ml_blocks_root
-    container_name: ml-blocks-ui
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - REGISTRY=ml_blocks_root
     volumes:
-      - './frontend:/app'
-      - '/app/node_modules'
+      - ./frontend:/app
+      - /app/node_modules
     ports:
       - 3000:3000
     links:
       - "ml_blocks_root:ml_blocks_root"
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-      - REGISTRY=ml_blocks_root
     networks:
       - ml-blocks-net
-
-volumes:
-  store-data-volume: null
 
 networks:
   ml-blocks-net:
