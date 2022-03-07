@@ -49,7 +49,7 @@ function SVGMinimap({ block, transform, selected, onClick }) {
 
     const blockWidth = 15
     const blockHeight = 15
-    const offset = 13
+    const offset = 14
 
     useEffect(() => {
         let fetching = false

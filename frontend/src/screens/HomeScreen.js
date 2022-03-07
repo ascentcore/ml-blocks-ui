@@ -10,8 +10,6 @@ const BLOCK_HEIGHT = 120
 
 const HomeScreen = () => {
 
-
-    // const [graph, setGraph] = useState([]);
     const [blocks, setBlocks] = useState([]);
     const dispatch = useDispatch();
     const [ip, setIP] = useState(getTargetIP());
@@ -45,10 +43,6 @@ const HomeScreen = () => {
 
             let currentY = 0
 
-            //ANA Version
-            // console.log(localBlocks)
-            // return dispatch(getGraphReducer(response.data))
-
             const roots = Object.values(blocks).filter(item => item.upstream.length === 0)
             const positionBlock = (x, block, currentY) => {
                 let startFromY = currentY
@@ -69,41 +63,10 @@ const HomeScreen = () => {
             setBlocks(Object.values(blocks))
 
             console.log(blocks)
-
+            return dispatch(getGraphReducer(edges))
         }
         fetchData();
     }, [ip, storedIP])
-
-    // useEffect(() => {
-    //     async function fetchData() {
-    //         const response = await getGraph()
-    //         const blocks = {}
-
-    //         const registerBlock = (ip) => {
-    //             let block = blocks[ip]
-
-    //             if (ip !== 'None' && !blocks[ip]) {
-    //                 block = {
-    //                     ip,
-    //                     location: [0, 0],
-    //                     upstream: [],
-    //                     downstream: []
-    //                 }
-
-    //                 blocks[ip] = block
-
-    //             }
-
-    //             return block
-    //         }
-
-
-
-
-    //         setBlocks(Object.values(blocks))
-    //     }
-    //     fetchData();
-    // }, [])
 
     const handleClick = block => () => {
         const ip = dispatch(setIPReducer(block.ip));

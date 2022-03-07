@@ -97,10 +97,6 @@ const Layout = ({ children }) => {
 
             let currentY = 0
 
-            //ANA Version
-            // console.log(localBlocks)
-            // return dispatch(getGraphReducer(response.data))
-
             const roots = Object.values(blocks).filter(item => item.upstream.length === 0)
             const positionBlock = (x, block, currentY) => {
                 let startFromY = currentY
@@ -121,7 +117,7 @@ const Layout = ({ children }) => {
             setBlocks(Object.values(blocks))
 
             console.log(blocks)
-
+            return dispatch(getGraphReducer(edges))
         }
         fetchData();
     }, [ip, storedIP])
