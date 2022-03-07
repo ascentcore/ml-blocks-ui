@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getTargetIP, setTargetIP } from '../api/API';
+import { getTargetIP } from '../api/API';
 import { getGraph, getNodes } from '../api/data';
 import SVGBlock from '../components/SVGBlock';
 import { useDispatch } from 'react-redux';
@@ -108,7 +108,6 @@ const HomeScreen = () => {
     const handleClick = block => () => {
         const ip = dispatch(setIPReducer(block.ip));
         setIP(ip.payload)
-        setTargetIP(ip.payload)
     }
 
     const height = 120

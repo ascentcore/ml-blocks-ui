@@ -47,16 +47,22 @@ function SVGMinimap({ block, transform, selected, onClick }) {
     const [state, setState] = useState();
     const [timer, setTimer] = useState(Date.now());
 
-    const blockWidth = 12
-    const blockHeight = 12
-    const offset = 16
+    const blockWidth = 15
+    const blockHeight = 15
+    const offset = 13
 
     useEffect(() => {
+        let fetching = false
         async function fetchData() {
-            const response = await getStatusOfIp(block.ip)
-            if (response.data.status && response.data.status.length) {
-                setState(response.data.status[0])
-                setStatus(response.data)
+            if (fetching === false) {
+                fetching = true
+                const response = await getStatusOfIp(block.ip)
+                if (response.data) {
+                    setState(response.data.status)
+                    setStatus(response.data)
+                    fetching = false
+                }
+
             }
         }
         fetchData()
@@ -65,14 +71,24 @@ function SVGMinimap({ block, transform, selected, onClick }) {
         }, 5000)
         return () => clearInterval(interval)
 
-    }, [timer])
+    }, [])
 
-    function getUpstream(upstreamBlock) {
-        const [ux, uy] = upstreamBlock.location
-        const [dx, dy] = block.location
+    function getUpstream(upstreamEdge) {
+        const { block: upstreamBlock, edgeType } = upstreamEdge
+        let [ux, uy] = upstreamBlock.location
+        let [dx, dy] = block.location
+        if (edgeType === 1) {
+            uy += 10
+            dy += 7
+        }
+
+        let [sx, sy, ex, ey] = [ux + blockWidth + 21, uy + offset, dx + 19, dy + offset]
+
         let str = `
-            M ${ux + blockWidth + 62} ${uy + offset}
-              ${dx - 22} ${dy + offset}`
+            M ${sx} ${sy}
+            C ${sx + 15} ${sy}, ${ex - 15} ${ey}
+              ${ex} ${ey}`
+
         return (<path
             key={upstreamBlock.ip}
             d={str}
