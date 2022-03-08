@@ -17,7 +17,7 @@ export const graphSlice = createSlice({
 
 export const showSlice = createSlice({
     name: 'minigraph',
-    initialState: { value: false },
+    initialState: { value: true },
     reducers: {
         showGraphReducer: (state, action) => {
             state.value = action.payload

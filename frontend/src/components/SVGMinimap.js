@@ -49,7 +49,7 @@ function SVGMinimap({ block, transform, selected, onClick }) {
 
     const blockWidth = 15
     const blockHeight = 15
-    const offset = 14
+    const offset = 13
 
     useEffect(() => {
         let fetching = false
@@ -78,7 +78,7 @@ function SVGMinimap({ block, transform, selected, onClick }) {
         let [ux, uy] = upstreamBlock.location
         let [dx, dy] = block.location
         if (edgeType === 1) {
-            uy += 10
+            uy += 7
             dy += 7
         }
 
@@ -86,7 +86,7 @@ function SVGMinimap({ block, transform, selected, onClick }) {
 
         let str = `
             M ${sx} ${sy}
-            C ${sx + 12} ${sy}, ${ex - 12} ${ey}
+            C ${sx + 13} ${sy}, ${ex - 17} ${ey}
               ${ex} ${ey}`
 
         return (<path

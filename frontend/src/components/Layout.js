@@ -63,7 +63,6 @@ const BLOCK_HEIGHT = 30
 const Layout = ({ children }) => {
 
     let showMiniGraph = useSelector(state => state.minigraph.showSlice.value)
-    console.log('ss', showMiniGraph)
     const [show, setShow] = useState(showMiniGraph);
     const classes = useStyles({ show });
     const [blocks, setBlocks] = useState([]);
@@ -129,13 +128,16 @@ const Layout = ({ children }) => {
     const handleClick = block => () => {
         const ip = dispatch(setIPReducer(block.ip))
         setIP(ip.payload);
-
     }
 
     const handleShow = () => {
         const isShown = dispatch(showGraphReducer(!showMiniGraph))
         setShow(isShown.payload)
+        if (isShown.payload) {
+            window.location.reload();
+        }
     }
+
 
     const height = 100
 
