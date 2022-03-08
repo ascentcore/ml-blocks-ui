@@ -4,9 +4,9 @@ import { Grid, Typography } from '@mui/material';
 import { getTargetIP } from '../api/API';
 import { getGraph, getNodes } from '../api/data';
 import SVGMinimap from '../components/SVGMinimap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setIPReducer } from '../redux/ip-reducer';
-import { getGraphReducer } from '../redux/graph-reducer';
+import { getGraphReducer, showGraphReducer } from '../redux/graph-reducer';
 
 const useStyles = makeStyles(() => ({
     tableContainer: {
@@ -62,12 +62,15 @@ const BLOCK_HEIGHT = 30
 
 const Layout = ({ children }) => {
 
-    const [show, setShow] = useState(false);
+    let showMiniGraph = useSelector(state => state.minigraph.showSlice.value)
+    console.log('ss', showMiniGraph)
+    const [show, setShow] = useState(showMiniGraph);
     const classes = useStyles({ show });
     const [blocks, setBlocks] = useState([]);
     const dispatch = useDispatch();
     const [ip, setIP] = useState(getTargetIP());
     let storedIP = getTargetIP()
+
 
     useEffect(() => {
         async function fetchData() {
@@ -124,11 +127,15 @@ const Layout = ({ children }) => {
 
 
     const handleClick = block => () => {
-        const ip = dispatch(setIPReducer(block.ip));
+        const ip = dispatch(setIPReducer(block.ip))
         setIP(ip.payload);
+
     }
 
-    const handleShow = () => setShow(!show)
+    const handleShow = () => {
+        const isShown = dispatch(showGraphReducer(!showMiniGraph))
+        setShow(isShown.payload)
+    }
 
     const height = 100
 

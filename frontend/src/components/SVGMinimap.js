@@ -86,7 +86,7 @@ function SVGMinimap({ block, transform, selected, onClick }) {
 
         let str = `
             M ${sx} ${sy}
-            C ${sx + 15} ${sy}, ${ex - 15} ${ey}
+            C ${sx + 12} ${sy}, ${ex - 12} ${ey}
               ${ex} ${ey}`
 
         return (<path
