@@ -49,6 +49,10 @@ export const pipelineRebuild = async () => {
     return await API.post('/api/v1/pipeline/rebuild')
 }
 
+export const recreateGraph = async () => {
+    return await API.delete('/api/v1/pipeline/graph')
+}
+
 export const download = async (file) => {
     return await API.get(`/download/${file}`)
 }

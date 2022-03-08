@@ -57,6 +57,14 @@ function AppMenu() {
                 </ListItemIcon>
                 <ListItemText primary="Settings" />
             </ListItemButton>
+
+
+            <ListItemButton component={Link} to="/registry-settings">
+                <ListItemIcon>
+                    <SettingsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Registry Settings" />
+            </ListItemButton>
         </>
     )
 };

@@ -7,6 +7,7 @@ import StatusScreen from './screens/StatusScreen';
 import PredictScreen from './screens/PredictScreen';
 import StaticsScreen from './screens/StaticsScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import RegistrySettingsScreen from './screens/RegistrySettingsScreen';
 
 function Routes() {
     return (
@@ -18,6 +19,7 @@ function Routes() {
             <Route exact path="/predict" component={PredictScreen} />
             <Route exact path="/statics" component={StaticsScreen} />
             <Route exact path="/settings" component={SettingsScreen} />
+            <Route exact path="/registry-settings" component={RegistrySettingsScreen} />
         </Switch>
     )
 }
