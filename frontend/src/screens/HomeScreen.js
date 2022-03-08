@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { getTargetIP, setTargetIP } from '../api/API';
+import { getTargetIP } from '../api/API';
 import { getGraph, getNodes } from '../api/data';
 import SVGBlock from '../components/SVGBlock';
+import { useDispatch } from 'react-redux';
+import { setIPReducer } from '../redux/ip-reducer';
+import { getGraphReducer } from '../redux/graph-reducer';
 
 const BLOCK_HEIGHT = 120
 
 const HomeScreen = () => {
 
-
-    // const [graph, setGraph] = useState([]);
     const [blocks, setBlocks] = useState([]);
-    const [ip, setIP] = useState(getTargetIP());
+    const dispatch = useDispatch();
+    let storedIP = getTargetIP()
 
     useEffect(() => {
         async function fetchData() {
@@ -60,47 +62,15 @@ const HomeScreen = () => {
             setBlocks(Object.values(blocks))
 
             console.log(blocks)
-
+            return dispatch(getGraphReducer(edges))
         }
         fetchData();
-    }, [])
-
-    // useEffect(() => {
-    //     async function fetchData() {
-    //         const response = await getGraph()
-    //         const blocks = {}
-
-    //         const registerBlock = (ip) => {
-    //             let block = blocks[ip]
-
-    //             if (ip !== 'None' && !blocks[ip]) {
-    //                 block = {
-    //                     ip,
-    //                     location: [0, 0],
-    //                     upstream: [],
-    //                     downstream: []
-    //                 }
-
-    //                 blocks[ip] = block
-
-    //             }
-
-    //             return block
-    //         }
-
-
-
-
-    //         setBlocks(Object.values(blocks))
-    //     }
-    //     fetchData();
-    // }, [])
+    }, [storedIP])
 
     const handleClick = block => () => {
-        setTargetIP(block.ip)
-        setIP(block.ip);
-        window.location.reload();
+        const ip = dispatch(setIPReducer(block.ip));
     }
+
     const height = 120
 
     return (
@@ -123,7 +93,7 @@ const HomeScreen = () => {
             {blocks.map((block, index) => (<SVGBlock
                 key={block.ip}
                 block={block}
-                selected={block.ip === ip}
+                selected={block.ip === storedIP}
                 onClick={handleClick(block)}
             />))}
         </svg>

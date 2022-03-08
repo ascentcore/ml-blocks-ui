@@ -35,7 +35,7 @@ const StatusScreen = () => {
         if (!ip) return
         async function fetchData() {
             const response = await getStatusOfIp(ip)
-            setStatus(response.data.status[0])
+            setStatus(response.data.status)
             setFormat(response.data.export_formats[0])
             console.log('format', response.data.export_formats[0])
         }

@@ -26,6 +26,7 @@ const SettingsScreen = () => {
 
     const [schema, setSchema] = useState(null)
     const [data, setData] = useState(null)
+    let storedIP = getTargetIP()
 
     useEffect(() => {
         async function fetchData() {
@@ -39,7 +40,7 @@ const SettingsScreen = () => {
                     "data": {
                         "title": "Data Dependency",
                         "type": "string",
-                        "options": [{name:'None', host: undefined}, ...hosts],
+                        "options": [{ name: 'None', host: undefined }, ...hosts],
                         "labelKey": "name",
                         "valueKey": "host"
                     },
@@ -59,10 +60,9 @@ const SettingsScreen = () => {
             }
 
             const localData = { logic: [] }
-            const ip = getTargetIP()
 
             edges.forEach(edge => {
-                if (edge.downstream === ip) {
+                if (edge.downstream === storedIP) {
                     if (edge.edge_type === 0) {
                         localData.data = edge.upstream
                     } else {
@@ -80,9 +80,7 @@ const SettingsScreen = () => {
 
 
     const onSubmit = data => {
-        const ip = getTargetIP()
-        reconfigure({ current: ip, ...data })
-        console.log(ip, data)
+        reconfigure({ current: storedIP, ...data })
     }
 
     return (

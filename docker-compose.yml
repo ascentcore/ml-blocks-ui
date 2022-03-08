@@ -13,10 +13,9 @@ services:
       - BLOCK_NAME=Root
     ports:
       - "9080:80"
-    # command: [ "/app/start.sh" ]
-    command: [ "/app/start_dev.sh" ]
+    command: [ "/app/start.sh" ]
     networks:
-        - ml-blocks-net
+      - ml-blocks-net
 
   layer1:
     depends_on:
@@ -31,8 +30,8 @@ services:
       - LOADER=pandas
       - BLOCK_NAME=layer1
       - REGISTRY=ml_blocks_root
-    # command: [ "/app/start.sh" ]
-    command: [ "/app/start_dev.sh" ]
+    command: [ "/app/start.sh" ]
+    # command: [ "/app/start_dev.sh" ]
     networks:
       - ml-blocks-net
 
@@ -71,6 +70,8 @@ services:
       - /app/node_modules
     ports:
       - 3000:3000
+    links:
+      - "ml_blocks_root:ml_blocks_root"
     networks:
       - ml-blocks-net
 

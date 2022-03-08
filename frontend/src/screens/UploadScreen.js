@@ -23,17 +23,15 @@ export const useStyles = makeStyles((theme) => ({
 
 const UploadScreen = () => {
     const classes = useStyles();
-
+    let storedIP = getTargetIP()
     const onSubmit = data => {
-        const ip = getTargetIP()
-        console.log(data)
-        upload(ip, data)
+        upload(storedIP, data)
     }
 
     return (
         <>
             <h2>Upload</h2>
-            <Paper sx={{p:2}}>
+            <Paper sx={{ p: 2 }}>
                 {schema && <SchemaForm
                     className={classes.container}
                     schema={schema}

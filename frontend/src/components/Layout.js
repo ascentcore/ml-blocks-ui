@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Grid, Typography } from '@mui/material';
-import { getTargetIP, setTargetIP } from '../api/API';
-import { getGraph } from '../api/data';
+import { getTargetIP } from '../api/API';
+import { getGraph, getNodes } from '../api/data';
 import SVGMinimap from '../components/SVGMinimap';
+import { useDispatch, useSelector } from 'react-redux';
+import { setIPReducer } from '../redux/ip-reducer';
+import { getGraphReducer, showGraphReducer } from '../redux/graph-reducer';
 
 const useStyles = makeStyles(() => ({
     tableContainer: {
@@ -55,86 +58,86 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
+const BLOCK_HEIGHT = 30
+
 const Layout = ({ children }) => {
 
-    const [show, setShow] = useState(false);
+    let showMiniGraph = useSelector(state => state.minigraph.showSlice.value)
+    const [show, setShow] = useState(showMiniGraph);
     const classes = useStyles({ show });
-    const [graph, setGraph] = useState([]);
     const [blocks, setBlocks] = useState([]);
-    const [ip, setIP] = useState(getTargetIP());
+    const dispatch = useDispatch();
+    let storedIP = getTargetIP()
+
 
     useEffect(() => {
         async function fetchData() {
-            const response = await getGraph()
-            const localBlocks = []
+            const { data: hosts } = await getNodes()
+            const { data: edges } = await getGraph()
+
             const blocks = {}
 
-            const registerBlock = (ip) => {
-                let block = blocks[ip]
+            hosts.forEach((host, index) => {
 
-                if (ip !== 'None' && !blocks[ip]) {
-                    block = {
-                        ip,
-                        location: [0, 20],
-                        downstream: {},
-                        upstream: {}
-                    }
-
-                    blocks[ip] = block
-
-                    localBlocks.push(block)
-                }
-
-                return block
-            }
-
-            response.data.forEach(({ upstream, downstream }) => {
-                const upstreamBlock = registerBlock(upstream)
-                const downstreamBlock = registerBlock(downstream, true)
-                if (upstreamBlock && downstreamBlock) {
-                    upstreamBlock.downstream[downstreamBlock.ip] = downstreamBlock
-                    downstreamBlock.upstream[upstreamBlock.ip] = upstreamBlock
+                blocks[host.host] = {
+                    ip: host.host,
+                    location: [0, BLOCK_HEIGHT * index],
+                    upstream: [],
+                    downstream: []
                 }
             });
 
-            function repositionDownstream(currentBlock) {
-                let lastYVal = currentBlock.location[1]
-                Object.values(currentBlock.downstream).forEach((block, index) => {
-                    const [cx, cy] = currentBlock.location
-                    block.location = [cx + 55, cy + 50 * index]
-                    lastYVal = Math.max(lastYVal, repositionDownstream(block))
-                })
-
-                return lastYVal
-            }
-
-            let lastYVal = 30
-            localBlocks.forEach(block => {
-                if (Object.keys(block.upstream).length === 0) {
-                    block.location[1] = lastYVal
-                    lastYVal = repositionDownstream(block)
+            edges.forEach(({ upstream, downstream, edge_type }) => {
+                const upstreamBlock = blocks[upstream]
+                const downstreamBlock = blocks[downstream]
+                if (upstreamBlock && downstreamBlock) {
+                    downstreamBlock.upstream.push({ block: upstreamBlock, edgeType: edge_type })
+                    upstreamBlock.downstream.push({ block: downstreamBlock, edgeType: edge_type })
                 }
             })
 
-            setBlocks(localBlocks)
+            let currentY = 0
 
-            console.log(localBlocks)
+            const roots = Object.values(blocks).filter(item => item.upstream.length === 0)
+            const positionBlock = (x, block, currentY) => {
+                let startFromY = currentY
+                if (!block.visited) {
+                    block.location = [x, startFromY]
+                    block.downstream.forEach(downstreamBlock => {
+                        positionBlock(x + 45, downstreamBlock.block, startFromY)
+                        startFromY += 30
+                    })
+                    block.visited = true
+                }
+                return startFromY
+            }
 
-            return setGraph(response.data)
+            roots.forEach(root => {
+                currentY = positionBlock(0, root, currentY)
+            })
+            setBlocks(Object.values(blocks))
+
+            console.log(blocks)
+            return dispatch(getGraphReducer(edges))
         }
-        fetchData()
+        fetchData();
+    }, [storedIP])
 
-    }, [])
 
     const handleClick = block => () => {
-        setTargetIP(block.ip)
-        setIP(block.ip);
-        window.location.reload();
+        const ip = dispatch(setIPReducer(block.ip))
     }
 
-    const handleShow = () => setShow(!show)
+    const handleShow = () => {
+        const isShown = dispatch(showGraphReducer(!showMiniGraph))
+        setShow(isShown.payload)
+        if (isShown.payload) {
+            window.location.reload();
+        }
+    }
 
-    const height = 50
+
+    const height = 100
 
 
     return (
@@ -149,12 +152,12 @@ const Layout = ({ children }) => {
                         {blocks &&
                             <div className={classes.minigraph}>
                                 <Typography className={classes.typography}>Graph Minimap</Typography>
-                                <svg viewBox="-10 70 390 90" width={380} height={blocks.length * height} style={{ marginTop: 20 }}>
+                                <svg viewBox="-20 105 380 100" width={380} height={blocks.length * height} style={{ marginTop: 20 }}>
                                     {blocks.map(((block, index) => (
                                         <SVGMinimap
                                             key={block.ip}
                                             block={block}
-                                            selected={block.ip === ip}
+                                            selected={block.ip === storedIP}
                                             onClick={handleClick(block)}
                                         />)
                                     ))}

@@ -75,9 +75,9 @@ const DataScreen = () => {
                         {value?.data?.length > 0 &&
                             <TableBody>
                                 {value.data.map((row, index) => (
-                                    <TableRow hover>
+                                    <TableRow hover key={row.index}>
                                         {Object.keys(row).map((item) => (
-                                            <TableCell >{row[item]}</TableCell>
+                                            <TableCell key={item} >{row[item]}</TableCell>
                                         ))}
                                     </TableRow>))
                                 }
