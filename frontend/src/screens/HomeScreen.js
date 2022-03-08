@@ -12,7 +12,6 @@ const HomeScreen = () => {
 
     const [blocks, setBlocks] = useState([]);
     const dispatch = useDispatch();
-    const [ip, setIP] = useState(getTargetIP());
     let storedIP = getTargetIP()
 
     useEffect(() => {
@@ -66,11 +65,10 @@ const HomeScreen = () => {
             return dispatch(getGraphReducer(edges))
         }
         fetchData();
-    }, [ip, storedIP])
+    }, [storedIP])
 
     const handleClick = block => () => {
         const ip = dispatch(setIPReducer(block.ip));
-        setIP(ip.payload)
     }
 
     const height = 120

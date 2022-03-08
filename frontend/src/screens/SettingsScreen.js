@@ -60,10 +60,9 @@ const SettingsScreen = () => {
             }
 
             const localData = { logic: [] }
-            const ip = storedIP
 
             edges.forEach(edge => {
-                if (edge.downstream === ip) {
+                if (edge.downstream === storedIP) {
                     if (edge.edge_type === 0) {
                         localData.data = edge.upstream
                     } else {
