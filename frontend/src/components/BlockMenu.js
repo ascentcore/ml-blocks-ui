@@ -70,12 +70,7 @@ function LayerMenu() {
                 </ListItemButton>
 
 
-                <ListItemButton component={Link} to="/registry-settings" className={classes.button}>
-                    <ListItemIcon>
-                        <SettingsIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Registry Settings" className={classes.text} />
-                </ListItemButton>
+                
             </List>
         </div >
     )

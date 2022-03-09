@@ -41,6 +41,14 @@ function AppMenu({ setFalse, setTrue }) {
                     <ListItemText primary={`${status?.name}`} />
                 </ListItemButton>
             </div>
+            <div onClick={setFalse}>
+                <ListItemButton component={Link} to="/registry-settings">
+                    <ListItemIcon>
+                        <SettingsIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Registry Settings" />
+                </ListItemButton>
+            </div>
         </div>
     )
 };
