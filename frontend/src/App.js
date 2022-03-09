@@ -16,8 +16,8 @@ import './App.css';
 import Layout from './components/Layout';
 import Routes from './Routes';
 import AppMenu from './components/AppMenu';
-import { getTargetIP } from './api/API';
-import { getStatusOfIp } from './api/data';
+import BlockMenu from './components/BlockMenu';
+
 
 // function App() {
 //   return (
@@ -82,20 +82,15 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme()
 
 function App() {
-  const [status, setStatus] = React.useState();
-  const ip = getTargetIP()
+
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  const [click, setClick] = React.useState(false);
 
-  React.useEffect(() => {
-    async function fetchData() {
-      const response = await getStatusOfIp(ip)
-      return setStatus(response.data)
-    }
-    fetchData()
-  }, [ip])
+  const setFalse = () => setClick(false);
+  const setTrue = () => setClick(true);
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -103,7 +98,7 @@ function App() {
         <CssBaseline />
         <AppBar position="absolute">
           <Toolbar sx={{ pr: '24px' }}>
-            <IconButton
+            <> <IconButton
               edge="start"
               color="inherit"
               aria-label="open drawer"
@@ -114,16 +109,16 @@ function App() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              MLBlocks
-            </Typography>
-            <Typography>{status?.name}</Typography>
+              <Typography
+                component="h1"
+                variant="h6"
+                color="inherit"
+                noWrap
+                sx={{ flexGrow: 1 }}
+              >
+                MLBlocks
+              </Typography>
+            </>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -141,7 +136,7 @@ function App() {
           </Toolbar>
           <Divider />
           <List component="nav">
-            <AppMenu />
+            <AppMenu setFalse={setFalse} setTrue={setTrue} />
           </List>
         </Drawer>
         <Box
@@ -156,7 +151,8 @@ function App() {
             overflow: 'auto',
           }}
         >
-          <Container maxWidth="lg" sx={{ p: 4, mt: 8, mb: 4 }}>
+          <Container maxWidth="lg" sx={{ p: 4, mt: 8, mb: 4 }} >
+            {click && <BlockMenu />}
             <Routes />
             <Layout />
           </Container>
