@@ -123,14 +123,13 @@ const PredictScreen = () => {
     return (
         <>
             <h2>Predict</h2>
-            <Paper sx={{ p: 2 }}>
-                {schema && <SchemaForm
-                    className={classes.container}
-                    schema={schema}
-                    onSubmit={onSubmit}
-                    config={{ registry: customRegistry, exceptions: exceptions }}
-                />}
-            </Paper>
+            <hr />
+            {schema && <SchemaForm
+                className={classes.container}
+                schema={schema}
+                onSubmit={onSubmit}
+                config={{ registry: customRegistry, exceptions: exceptions }}
+            />}
         </>
     )
 }

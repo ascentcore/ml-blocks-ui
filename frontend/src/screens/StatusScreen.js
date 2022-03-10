@@ -6,9 +6,6 @@ import { getStatusOfIp, pipelineRebuild } from '../api/data';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 export const useStyles = makeStyles((theme) => ({
-    grid: {
-        marginTop: '100px'
-    },
     tableContainer: {
         width: '500px',
         marginTop: '30px',
@@ -54,13 +51,13 @@ const StatusScreen = () => {
     return (
         <>
             {status &&
-                <Grid container alignItems="flex-start" className={classes.grid} direction="column">
+                <Grid container className={classes.grid} direction="column">
                     <Grid item container className={classes.gridRow} >
-                        <Typography style={{ marginLeft: '-530px' }}>Status:</Typography>
+                        <Typography >Status:</Typography>
                         <Typography>{status?.state_name}</Typography>
                     </Grid>
                     <Grid item container className={classes.gridRow}>
-                        <Typography style={{ marginLeft: '-470px' }}>Format:</Typography>
+                        <Typography>Format:</Typography>
                         <Typography>{format}</Typography>
                     </Grid>
                     <Button variant="outlined" className={classes.button} onClick={handleClick}>Rebuild</Button>

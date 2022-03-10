@@ -60,42 +60,39 @@ const DataScreen = () => {
 
     return (
         <>
-            <Paper sx={{ p: 2 }}>
-                {totalCount && <TableContainer className={classes.tableContainer} md={{ maxHeight: 640 }}>
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                            {columns?.length > 0 &&
-                                <TableRow>
-                                    {columns.map((column) => (
-                                        <TableCell>{column}</TableCell>
-                                    ))}
-                                </TableRow>
-                            }
-                        </TableHead>
-                        {value?.data?.length > 0 &&
-                            <TableBody>
-                                {value.data.map((row, index) => (
-                                    <TableRow hover key={row.index}>
-                                        {Object.keys(row).map((item) => (
-                                            <TableCell key={item} >{row[item]}</TableCell>
-                                        ))}
-                                    </TableRow>))
-                                }
-                            </TableBody>
+            {totalCount && <TableContainer className={classes.tableContainer} md={{ maxHeight: 640 }}>
+                <Table stickyHeader aria-label="sticky table">
+                    <TableHead>
+                        {columns?.length > 0 &&
+                            <TableRow>
+                                {columns.map((column) => (
+                                    <TableCell>{column}</TableCell>
+                                ))}
+                            </TableRow>
                         }
-                    </Table>
-                </TableContainer>}
-                <TablePagination
-                    component="div"
-                    rowsPerPageOptions={[5, 10, 50]}
-                    count={totalCount}
-                    rowsPerPage={pageSize}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-            </Paper>
-
+                    </TableHead>
+                    {value?.data?.length > 0 &&
+                        <TableBody>
+                            {value.data.map((row, index) => (
+                                <TableRow hover key={row.index}>
+                                    {Object.keys(row).map((item) => (
+                                        <TableCell key={item} >{row[item]}</TableCell>
+                                    ))}
+                                </TableRow>))
+                            }
+                        </TableBody>
+                    }
+                </Table>
+            </TableContainer>}
+            <TablePagination
+                component="div"
+                rowsPerPageOptions={[5, 10, 50]}
+                count={totalCount}
+                rowsPerPage={pageSize}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
         </>
     )
 }

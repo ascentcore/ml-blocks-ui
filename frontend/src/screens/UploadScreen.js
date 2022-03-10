@@ -31,14 +31,13 @@ const UploadScreen = () => {
     return (
         <>
             <h2>Upload</h2>
-            <Paper sx={{ p: 2 }}>
-                {schema && <SchemaForm
-                    className={classes.container}
-                    schema={schema}
-                    onSubmit={onSubmit}
-                    config={{ registry: customRegistry }}
-                />}
-            </Paper>
+            <hr/>
+            {schema && <SchemaForm
+                className={classes.container}
+                schema={schema}
+                onSubmit={onSubmit}
+                config={{ registry: customRegistry }}
+            />}
         </>
     )
 }

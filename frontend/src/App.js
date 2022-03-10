@@ -17,6 +17,7 @@ import Layout from './components/Layout';
 import Routes from './Routes';
 import AppMenu from './components/AppMenu';
 import BlockMenu from './components/BlockMenu';
+import { Paper } from '@material-ui/core';
 
 
 // function App() {
@@ -153,7 +154,7 @@ function App() {
         >
           <Container maxWidth="lg" sx={{ p: 4, mt: 8, mb: 4 }} >
             {click && <BlockMenu />}
-            <Routes />
+              <Routes />
             <Layout />
           </Container>
         </Box>
