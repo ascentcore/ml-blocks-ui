@@ -27,14 +27,16 @@ export const useStyles = makeStyles((theme) => ({
 const StaticsScreen = () => {
     const classes = useStyles();
     const [value, setValue] = useState();
-    const [foundImage, setFoundImages] = useState();
+    const [image, setImage] = useState('');
+    const [filteredItems, setFilteredItems] = useState();
+
     let ip = getTargetIP()
 
     useEffect(() => {
         if (ip === undefined && path === '') return
         async function fetchData() {
             const response = await getIP.getProxy(ip, 'api/v1/statics/')
-            setFoundImages(response.data)
+            setFilteredItems(response.data)
             return setValue(response.data)
         }
 
@@ -44,7 +46,6 @@ const StaticsScreen = () => {
     const getIconForFile = item => {
         const re = /(?:\.([^.]+))?$/;
         const extension = re.exec(item)[1]
-        console.log(extension)
         switch (extension) {
             case 'png':
             case 'jpg':
@@ -55,23 +56,23 @@ const StaticsScreen = () => {
                 return <InsertDriveFileIcon />
         }
     }
-    const [image, setImage] = useState('');
+    
 
     const filter = (e) => {
         const keyword = e.target.value;
 
         if (keyword !== '') {
             const results = value.filter((image) => {
-                return image.toLowerCase().startsWith(keyword.toLowerCase());
+                return image.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
             });
-            setFoundImages(results);
+            setFilteredItems(results);
         } else {
-            setFoundImages(value);
+            setFilteredItems(value);
         }
 
         setImage(keyword);
     };
-    console.log('val', foundImage)
+
     return (
         <>
             {value &&
@@ -87,8 +88,8 @@ const StaticsScreen = () => {
                         />
                     </Grid>
                     <Grid container justifyContent="center">
-                        {foundImage && foundImage.length > 0 ?
-                            (foundImage.map((item => (
+                        {filteredItems && filteredItems.length > 0 ?
+                            (filteredItems.map((item => (
                                 <Grid item xs={12} md={6} lg={4} key={item}>
                                     <div>{getIconForFile(item)}</div>
                                     <Link to={`/proxy/${ip}/api/v1/download/${item}`} target="_blank" ><DownloadIcon /> {item}</Link>
