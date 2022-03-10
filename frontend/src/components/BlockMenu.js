@@ -12,8 +12,9 @@ import { makeStyles } from '@mui/styles';
 
 export const useStyles = makeStyles((theme) => ({
     container: {
-        margin: '-30px 0 30px -290px',
-        width: '90%',
+        float: 'left',
+        margin: '-30px 0 30px 0px',
+        width: '70%',
     },
     button: {
         padding: 0,
@@ -68,9 +69,6 @@ function LayerMenu() {
                     </ListItemIcon>
                     <ListItemText primary="Settings" className={classes.text} />
                 </ListItemButton>
-
-
-                
             </List>
         </div >
     )
