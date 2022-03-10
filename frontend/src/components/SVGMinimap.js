@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { getStatusOfIp } from '../api/data';
+import { getStatusOfIp, getNodes } from '../api/data';
 import { makeStyles } from '@mui/styles';
+import { Tooltip } from '@mui/material';
 
 
 const useStyles = makeStyles(() => ({
@@ -95,18 +96,52 @@ function SVGMinimap({ block, transform, selected, onClick }) {
             className={classes.path} fill="transparent" strokeWidth={1} />)
     }
 
+    const [name, setName] = React.useState()
+
+    React.useEffect(() => {
+        async function fetchData() {
+            const response = await getNodes()
+            return setName(response.data)
+        }
+        fetchData()
+    }, [])
+
+
+    let arr = [];
+    if (name) {
+        name.forEach(element => {
+            arr.push(element.name)
+        });
+    }
+
+    let blockIP = [];
+    if (name) {
+        name.forEach(element => {
+            blockIP.push(element.host)
+        });
+    }
+
+    let x = 0;
+    let blockName = ''
+    while (x < blockIP.length) {
+        if (block.ip === blockIP[x]) { blockName = arr[x] }
+        x++;
+    }
+
     return (
-        <g transform={transform}>
-            {status && (
-                <g >
-                    <g transform={`translate(${block.location[0]}, ${block.location[1]})`}>
-                        <rect x={20} y={10} width={blockWidth} height={blockHeight} className={selected ? classes.selectedRect : classes.rect} onClick={onClick} />
+        <Tooltip title={blockName} disableFocusListener disableTouchListener  >
+            <g transform={transform}>
+                {status && (
+                    <g >
+                        <g transform={`translate(${block.location[0]}, ${block.location[1]})`}>
+                            <rect x={20} y={10} width={blockWidth} height={blockHeight} className={selected ? classes.selectedRect : classes.rect} onClick={onClick} />
+                        </g>
+                        {Object.values(block.upstream).map(upstreamBlock => getUpstream(upstreamBlock))}
                     </g>
-                    {Object.values(block.upstream).map(upstreamBlock => getUpstream(upstreamBlock))}
-                </g>
-            )
-            }
-        </g >
+                )
+                }
+            </g >
+        </Tooltip>
     )
 };
 

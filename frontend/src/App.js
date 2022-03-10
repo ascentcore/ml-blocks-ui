@@ -87,7 +87,7 @@ function App() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  const [click, setClick] = React.useState(false);
+  const [click, setClick] = React.useState(true);
 
   const setFalse = () => setClick(false);
   const setTrue = () => setClick(true);
