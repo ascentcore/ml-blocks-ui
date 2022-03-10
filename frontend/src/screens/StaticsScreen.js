@@ -3,7 +3,7 @@ import { getTargetIP } from '../api/API';
 import * as getIP from '../api/data';
 import { download } from '../api/data';
 import { makeStyles } from '@mui/styles';
-import { Grid, List, ListItem, ListItemText } from '@mui/material';
+import { Grid, List, ListItem, ListItemText, TextField, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Link } from 'react-router-dom';
 import { API_BASE } from '../api/API';
@@ -17,22 +17,28 @@ export const useStyles = makeStyles((theme) => ({
     image: {
         maxWidth: '100%',
         height: 'auto'
+    },
+    search: {
+        marginBottom: '30px',
+        width: '300px',
     }
 }))
 
 const StaticsScreen = () => {
     const classes = useStyles();
     const [value, setValue] = useState();
+    const [foundImage, setFoundImages] = useState();
     let ip = getTargetIP()
 
     useEffect(() => {
         if (ip === undefined && path === '') return
         async function fetchData() {
             const response = await getIP.getProxy(ip, 'api/v1/statics/')
+            setFoundImages(response.data)
             return setValue(response.data)
         }
-        fetchData();
 
+        fetchData();
     }, [ip]);
 
     const getIconForFile = item => {
@@ -48,21 +54,52 @@ const StaticsScreen = () => {
             default:
                 return <InsertDriveFileIcon />
         }
-
-
     }
+    const [image, setImage] = useState('');
 
+    const filter = (e) => {
+        const keyword = e.target.value;
+
+        if (keyword !== '') {
+            const results = value.filter((image) => {
+                return image.toLowerCase().startsWith(keyword.toLowerCase());
+            });
+            setFoundImages(results);
+        } else {
+            setFoundImages(value);
+        }
+
+        setImage(keyword);
+    };
+    console.log('val', foundImage)
     return (
         <>
             {value &&
-                <Grid container justifyContent="center">
-                    {value.map((item => (
-                        <Grid item xs={12} md={6} lg={4} key={item}>
-                            <div>{getIconForFile(item)}</div>                            
-                            <Link to={`/proxy/${ip}/api/v1/download/${item}`} target="_blank" download><DownloadIcon /> {item}</Link>
-                        </Grid>
-                    )))}
-                </Grid>
+                <>
+                    <Grid container justifyContent="flex-start">
+                        <TextField
+                            variant="outlined"
+                            placeholder='Search'
+                            type="search"
+                            value={image}
+                            onChange={filter}
+                            className={classes.search}
+                        />
+                    </Grid>
+                    <Grid container justifyContent="center">
+                        {foundImage && foundImage.length > 0 ?
+                            (foundImage.map((item => (
+                                <Grid item xs={12} md={6} lg={4} key={item}>
+                                    <div>{getIconForFile(item)}</div>
+                                    <Link to={`/proxy/${ip}/api/v1/download/${item}`} target="_blank" ><DownloadIcon /> {item}</Link>
+                                </Grid>
+                            )))
+                            ) : (
+                                <Typography>No results found!</Typography>
+                            )
+                        }
+                    </Grid>
+                </>
             }
         </>
     )
