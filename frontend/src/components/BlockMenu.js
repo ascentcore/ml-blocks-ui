@@ -25,50 +25,51 @@ export const useStyles = makeStyles((theme) => ({
 function BlockMenu() {
     const classes = useStyles();
     return (
-        <div className={classes.container}>
-            <List component={Stack} direction="row" >
-                <ListItemButton component={Link} to="/status" className={classes.button}>
-                    <ListItemIcon>
-                        <PlaylistAddCheckIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Status" className={classes.text} />
-                </ListItemButton>
+        <List component={Stack}
+            direction="row"
+            justifyContent="flex-end"
+            alignItems="flex-end"
+        >
+            <ListItemButton component={Link} to="/status" className={classes.button}>
+                <ListItemIcon>
+                    <PlaylistAddCheckIcon />
+                </ListItemIcon>
+                <ListItemText primary="Status" className={classes.text} />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/upload" className={classes.button}>
+                <ListItemIcon>
+                    <CloudUploadIcon />
+                </ListItemIcon>
+                <ListItemText primary="Upload" className={classes.text} />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/data" className={classes.button}>
+                <ListItemIcon>
+                    <StorageIcon />
+                </ListItemIcon>
+                <ListItemText primary="Data" className={classes.text} />
+            </ListItemButton>
 
-                <ListItemButton component={Link} to="/upload" className={classes.button}>
-                    <ListItemIcon>
-                        <CloudUploadIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Upload" className={classes.text} />
-                </ListItemButton>
-                <ListItemButton component={Link} to="/data" className={classes.button}>
-                    <ListItemIcon>
-                        <StorageIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Data" className={classes.text} />
-                </ListItemButton>
+            <ListItemButton component={Link} to="/predict" className={classes.button}>
+                <ListItemIcon>
+                    <PlayCircleOutlineIcon />
+                </ListItemIcon>
+                <ListItemText primary="Predict" className={classes.text} />
+            </ListItemButton>
 
-                <ListItemButton component={Link} to="/predict" className={classes.button}>
-                    <ListItemIcon>
-                        <PlayCircleOutlineIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Predict" className={classes.text} />
-                </ListItemButton>
+            <ListItemButton button component={Link} to="/statics" className={classes.button}>
+                <ListItemIcon>
+                    <EqualizerIcon />
+                </ListItemIcon>
+                <ListItemText primary="Statics" className={classes.text} />
+            </ListItemButton>
 
-                <ListItemButton button component={Link} to="/statics" className={classes.button}>
-                    <ListItemIcon>
-                        <EqualizerIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Statics" className={classes.text} />
-                </ListItemButton>
-
-                <ListItemButton component={Link} to="/settings" className={classes.button}>
-                    <ListItemIcon>
-                        <SettingsIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Settings" className={classes.text} />
-                </ListItemButton>
-            </List>
-        </div >
+            <ListItemButton component={Link} to="/settings" className={classes.button}>
+                <ListItemIcon>
+                    <SettingsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Settings" className={classes.text} />
+            </ListItemButton>
+        </List>
     )
 };
 

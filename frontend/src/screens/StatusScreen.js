@@ -6,9 +6,6 @@ import { getStatusOfIp, pipelineRebuild } from '../api/data';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 export const useStyles = makeStyles((theme) => ({
-    grid: {
-        marginTop: '100px'
-    },
     tableContainer: {
         width: '500px',
         marginTop: '30px',

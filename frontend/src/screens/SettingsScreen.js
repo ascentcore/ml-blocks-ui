@@ -86,15 +86,14 @@ const SettingsScreen = () => {
     return (
         <>
             <h2>Settings</h2>
-            <Paper sx={{ p: 2 }}>
-                {schema && <SchemaForm
-                    className={classes.container}
-                    schema={schema}
-                    data={data}
-                    onSubmit={onSubmit}
-                    config={{ registry: customRegistry }}
-                />}
-            </Paper>
+            <hr />
+            {schema && <SchemaForm
+                className={classes.container}
+                schema={schema}
+                data={data}
+                onSubmit={onSubmit}
+                config={{ registry: customRegistry }}
+            />}
         </>
     )
 }

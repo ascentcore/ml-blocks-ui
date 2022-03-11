@@ -9,20 +9,23 @@ import StaticsScreen from './screens/StaticsScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import RegistrySettingsScreen from './screens/RegistrySettingsScreen';
 import BlockMenu from './components/BlockMenu';
+import { Paper } from '@material-ui/core';
 
 function Routes() {
     return (
-        <Switch>
-            <Route exact path="/" component={HomeScreen} />
-            <Route exact path="/upload" component={UploadScreen} />
-            <Route exact path="/data" component={DataScreen} />
-            <Route exact path="/status" component={StatusScreen} />
-            <Route exact path="/predict" component={PredictScreen} />
-            <Route exact path="/statics" component={StaticsScreen} />
-            <Route exact path="/settings" component={SettingsScreen} />
-            <Route exact path="/registry-settings" component={RegistrySettingsScreen} />
-            <Route exact path="/block-menu" component={BlockMenu} />
-        </Switch>
+        <div style={{ backgroundColor: '#FFF', padding: 10 }}>
+            <Switch>
+                <Route exact path="/" component={HomeScreen} />
+                <Route exact path="/upload" component={UploadScreen} />
+                <Route exact path="/data" component={DataScreen} />
+                <Route exact path="/status" component={StatusScreen} />
+                <Route exact path="/predict" component={PredictScreen} />
+                <Route exact path="/statics" component={StaticsScreen} />
+                <Route exact path="/settings" component={SettingsScreen} />
+                <Route exact path="/registry-settings" component={RegistrySettingsScreen} />
+                <Route exact path="/block-menu" component={BlockMenu} />
+            </Switch>
+        </div>
     )
 }
 
