@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as getValue from '../api/data';
 import { makeStyles } from '@mui/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
-import * as getIP from '../api/data';
-import { getTargetIP, setTargetIP } from '../api/API';
+import { getTargetIP } from '../api/API';
 
 const useStyles = makeStyles(() => ({
     tableContainer: {
