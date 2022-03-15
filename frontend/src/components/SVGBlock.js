@@ -14,17 +14,17 @@ const useStyles = makeStyles(() => ({
             fill: '#FFF',
         },
         '30%': {
-            fill: '#8ad18c',
+            fill: '#80b0ff',
         },
         '60%': {
-            fill: '#8ad18c',
+            fill: '#80b0ff',
         },
         '100%': {
             fill: '#FFF',
         }
     },
     path: {
-        stroke: '#000',
+        stroke: '#447ead',
         fill: 'transparent'
     },
     animated_stroke: {
@@ -40,7 +40,7 @@ const useStyles = makeStyles(() => ({
         fill: 'transparent',
     },
     animated_circle: {
-        fill: '#8ad18c',
+        fill: '#80b0ff',
         stroke: '#000',
         strokeWidth: 1,
         animation: `$loading linear infinite`,
@@ -52,19 +52,19 @@ const useStyles = makeStyles(() => ({
         fill: '#FAFAFA'
     },
     ready_circle: {
-        fill: '#8ad18c',
-        stroke: '#000',
+        fill: '#80b0ff',
+        stroke: '#447ead',
         strokeWidth: 1,
     },
     rect: {
-        stroke: "#000",
+        stroke: "#447ead",
         strokeWidth: "1",
         fill: 'transparent'
     },
     selectedRect: {
-        stroke: "#000",
+        stroke: "#447ead",
         strokeWidth: "1",
-        fill: '#c9c9ff'
+        fill: '#b8dfff'
     }
 }))
 
@@ -75,10 +75,11 @@ function SVGBlock({ block, transform, selected, onClick }) {
     const [state, setState] = useState();
     const [timer, setTimer] = useState(Date.now());
 
-    const radius = 6;
-    const blockWidth = 200
+    const radius = 4;
+    const blockWidth = 150
     const blockHeight = 70
-    const offset = 30
+    const offset = 35
+    const firstLayerY = 35
 
     useEffect(() => {
         let fetching = false
@@ -111,11 +112,11 @@ function SVGBlock({ block, transform, selected, onClick }) {
         let [ux, uy] = upstreamBlock.location
         let [dx, dy] = block.location
         if (edgeType === 1) {
-            uy += 35
-            dy += 35
+            uy += 30
+            dy += 30
         }
 
-        let [sx, sy, ex, ey] = [ux + blockWidth + radius, uy + offset, dx - radius, dy + offset]
+        let [sx, sy, ex, ey] = [ux + blockWidth + radius + 2 , uy + offset, dx - radius - 5, dy + offset]
 
         let str = `
             M ${sx} ${sy}
@@ -126,7 +127,10 @@ function SVGBlock({ block, transform, selected, onClick }) {
         return (<path
             key={upstreamBlock.ip}
             d={str}
-            className={className} fill="transparent" strokeWidth={1} />)
+            className={className} 
+            fill="transparent"
+            markerEnd="url(#arrow-1)" 
+            strokeWidth={1} />)
     }
 
     function getCircleState(circleState) {
@@ -134,26 +138,39 @@ function SVGBlock({ block, transform, selected, onClick }) {
         return circleState === index ? classes.animated_circle : circleState > index ? classes.pending_circle : classes.ready_circle
     }
 
+    const hasOperation = operation => status && status.operations && status.operations.indexOf(operation) !== -1
+    console.log(status)
     return (
         <g transform={transform}>
-            <g>
-                <g transform={`translate(${block.location[0]}, ${block.location[1]})`}>
-                    <text textAnchor='middle' x={blockWidth / 2}>{status ? status.name : 'Status Pending...'}</text>
-                    <rect x={0} y={10} width={blockWidth} height={blockHeight} className={selected ? classes.selectedRect : classes.rect} onClick={onClick} />
-                    <circle cx="0" cy="30" r={radius} className={getCircleState(0)} />
-                    <circle cx="0" cy="65" r={radius} className={classes.pending_circle} />
+            <g transform={`translate(${block.location[0]}, ${block.location[1]})`}>
+                <text fontSize={12} textAnchor='middle' x={blockWidth / 2}>{status ? status.name : 'Status Pending...'}</text>
+                <rect x={0} y={10} rx="3" ry="3" width={blockWidth} height={blockHeight} className={selected ? classes.selectedRect : classes.rect} onClick={onClick} />
+                <circle cx="0" cy={firstLayerY} r={radius} className={getCircleState(0)} />
 
-                    <path d="M 6 30 H 100 " className={isState(1) ? classes.animated_stroke : classes.path} markerEnd="url(#arrow-1)" />
-                    <circle cx="100" cy="30" r="8" className={getCircleState(1)} />
+                <text fontSize={10} textAnchor='middle' x={blockWidth / 2} y={22}>storage</text>
+                <circle cx={blockWidth / 2} cy={firstLayerY} r="8" className={getCircleState(states.indexOf('ingesting'))} />
+                
+                <text fontSize={10} textAnchor='start' x={blockWidth + 4} y={27}>data</text>
+                <circle cx="0" cy="65" r={radius} className={classes.pending_circle} />
+                
 
-                    <path d="M 200 30 H 108 " className={classes.path} markerEnd="url(#arrow-2)" />
-                    <circle cx="200" cy="30" r={radius} className={getCircleState(3)} />
+                <path d={`M 6 ${firstLayerY} H ${blockWidth / 2 - 13}`} className={isState(states.indexOf('ingesting')) ? classes.animated_stroke : classes.path} markerEnd="url(#arrow-1)" />
+                
 
-                    <path d="M 100 38 C 100 72, 90 65, 200 65" className={isState(5) ? classes.animated_stroke : classes.path} markerEnd="url(#arrow-3)" />
-                    <circle cx="200" cy="65" r={radius} className={getCircleState(5)} />
-                </g>
-                {Object.values(block.upstream).map(upstreamBlock => getUpstream(upstreamBlock))}
+                <path d={`M ${blockWidth / 2 + 10} ${firstLayerY} H ${blockWidth - 9}`} transform={`translate(${blockWidth, 0})`} className={classes.path} markerEnd="url(#arrow-1)" />
+                <circle cx={blockWidth} cy={firstLayerY} r={radius} className={getCircleState(states.indexOf('storing'))} />
+
+                {hasOperation('train') && <>
+                    <text fontSize={10} textAnchor='middle' x={blockWidth * 0.7} y={53}>model</text>
+                    <text fontSize={10} textAnchor='sstart' x={blockWidth + 4} y={blockHeight + 6}>predict</text>
+                    <path d={`M ${blockWidth / 2} ${firstLayerY + 10} C ${blockWidth / 2} 65, ${blockWidth / 2} 65, ${blockWidth / 2 + 16} 65`} className={isState(states.indexOf('training')) ? classes.animated_stroke : classes.path} markerEnd="url(#arrow-1)" />
+                    <path d={`M ${blockWidth * 0.7} 65 H ${blockWidth - 9}`} className={isState(states.indexOf('predicting')) ? classes.animated_stroke : classes.path} markerEnd="url(#arrow-1)" />
+
+                    <circle cx={blockWidth / 2 + 30} cy="65" r={radius * 2} className={getCircleState(states.indexOf('training'))} />
+                    <circle cx={blockWidth} cy="65" r={radius} className={getCircleState(states.indexOf('predicting'))} />
+                </>}
             </g>
+            {Object.values(block.upstream).map(upstreamBlock => getUpstream(upstreamBlock))}
         </g>
     )
 };

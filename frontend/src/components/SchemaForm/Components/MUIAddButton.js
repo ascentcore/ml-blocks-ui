@@ -6,10 +6,8 @@ import AddIcon from '@mui/icons-material/Add';
 export function MUIAddButton({ property, onChange }) {
     const classes = useStyles();
     return (
-        <div>
-            <Button onClick={onChange} >
-                <AddIcon />
-            </Button>
-        </div>
+        <Button onClick={onChange} >
+            <AddIcon /> Add Item
+        </Button>
     )
 }

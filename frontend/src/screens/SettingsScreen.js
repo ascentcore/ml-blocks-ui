@@ -3,9 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { getTargetIP } from '../api/API';
 import { makeStyles } from '@mui/styles';
 import customRegistry from '../components/SchemaForm/CustomRegistry';
-import schema from '../components/SchemaForm/settings-schema.json'
-import { Paper } from '@mui/material';
-import { getGraph, getNodes, reconfigure } from '../api/data';
+import { getGraph, getNodes, reconfigure, getStatusOfIp, getSettingsSchema, saveSettings, getSettings } from '../api/data';
 
 export const useStyles = makeStyles((theme) => ({
     container: {
@@ -25,13 +23,26 @@ const SettingsScreen = () => {
     const classes = useStyles();
 
     const [schema, setSchema] = useState(null)
+    const [settings, setSettings] = useState({})
     const [data, setData] = useState(null)
+    const [settingsSchema, setSettingsSchema] = useState(null)
+
     let storedIP = getTargetIP()
 
     useEffect(() => {
         async function fetchData() {
             const { data: hosts } = await getNodes()
             const { data: edges } = await getGraph()
+            const { data: status } = await getStatusOfIp(storedIP)
+
+            const { operations } = status
+
+            if (operations.indexOf("settings_schema") !== -1) {
+                const { data: settingsSchema } = await getSettingsSchema(storedIP)
+                const { data: settings } = await getSettings(storedIP)
+                setSettingsSchema(settingsSchema)
+                setSettings(settings)
+            }
 
             const prepSchema = {
                 "title": "Settings",
@@ -83,9 +94,13 @@ const SettingsScreen = () => {
         reconfigure({ current: storedIP, ...data })
     }
 
+    const onSettingsSubmit = data => {
+        saveSettings(storedIP, data)
+    }
+
     return (
         <>
-            <h2>Settings</h2>
+            <h2>Pipeline</h2>
             <hr />
             {schema && <SchemaForm
                 className={classes.container}
@@ -94,6 +109,17 @@ const SettingsScreen = () => {
                 onSubmit={onSubmit}
                 config={{ registry: customRegistry }}
             />}
+            {settingsSchema && <>
+                <h2>Settings</h2>
+                <hr />
+                {schema && <SchemaForm
+                    className={classes.container}
+                    schema={settingsSchema}
+                    data={settings}
+                    onSubmit={onSettingsSubmit}
+                    config={{ registry: customRegistry }}
+                />}
+            </>}
         </>
     )
 }

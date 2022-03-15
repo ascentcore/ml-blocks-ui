@@ -44,13 +44,17 @@ const HomeScreen = () => {
 
             const roots = Object.values(blocks).filter(item => item.upstream.length === 0)
             const positionBlock = (x, block, currentY) => {
+                console.log(`position block at ${currentY}`)
                 let startFromY = currentY
                 if (!block.visited) {
                     block.location = [x, startFromY]
                     block.downstream.forEach(downstreamBlock => {
-                        positionBlock(x + 300, downstreamBlock.block, startFromY)
+                        positionBlock(x + 250, downstreamBlock.block, startFromY)
                         startFromY += 120
                     })
+                    if (currentY === startFromY) {
+                        startFromY += 120
+                    }
                     block.visited = true
                 }
                 return startFromY
@@ -76,20 +80,10 @@ const HomeScreen = () => {
     return (
         <svg viewBox={`-10 -20 1280 ${blocks.length * height}`} width={1280} height={blocks.length * height} style={{ marginTop: 100 }}>
             <defs>
-                <marker id="arrow-1" markerWidth="10" markerHeight="10" refX="12" refY="4">
-                    <path d="M0,0 L4,4 L0,8 z" fill="#000"></path>
+                <marker id="arrow-1" markerWidth="10" markerHeight="10" refX="0" refY="4">
+                    <path d="M0,0 L4,4 L0,8 z" fill="#447ead"></path>
                 </marker>
-            </defs>
-            <defs>
-                <marker id="arrow-2" markerWidth="10" markerHeight="10" refX="-82" refY="4">
-                    <path d="M0,0 L4,4 L0,8 z" fill="#000"></path>
-                </marker>
-            </defs>
-            <defs>
-                <marker id="arrow-3" markerWidth="10" markerHeight="10" refX="10" refY="4">
-                    <path d="M0,0 L4,4 L0,8 z" fill="#000"></path>
-                </marker>
-            </defs>
+            </defs>            
             {blocks.map((block, index) => (<SVGBlock
                 key={block.ip}
                 block={block}

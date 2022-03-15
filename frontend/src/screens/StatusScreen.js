@@ -2,7 +2,7 @@ import { Button, Grid, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { getTargetIP } from '../api/API';
-import { getStatusOfIp, pipelineRebuild } from '../api/data';
+import { getStatusOfIp, pipelineRebuild, train } from '../api/data';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 export const useStyles = makeStyles((theme) => ({
@@ -10,31 +10,25 @@ export const useStyles = makeStyles((theme) => ({
         width: '500px',
         marginTop: '30px',
         border: 'thin solid grey'
-    },
-    button: {
-        width: '100px',
-        margin: '-50px 0 0 400px'
-    },
-    gridRow: {
-        justifyContent: "center",
-        direction: "row",
-        marginLeft: '-250px'
     }
+
 }))
 
 const StatusScreen = () => {
     const classes = useStyles();
+    const [data, setData] = useState()
     const [status, setStatus] = useState()
     const [format, setFormat] = useState();
     let ip = getTargetIP();
 
     useEffect(() => {
+        console.log('Fetching for', ip)
         if (!ip) return
         async function fetchData() {
             const response = await getStatusOfIp(ip)
-            setStatus(response.data.status)
+            setData(response.data || {})
+            setStatus(response.data.status || [])
             setFormat(response.data.export_formats[0])
-            console.log('format', response.data.export_formats[0])
         }
         fetchData();
     }, [ip])
@@ -48,6 +42,12 @@ const StatusScreen = () => {
         }
     }
 
+    const handleRetrain = () => {
+        train(ip)
+    }
+
+    const hasOperation = operation => data && data.operations && data.operations.indexOf(operation) !== -1
+
     return (
         <>
             {status &&
@@ -60,7 +60,11 @@ const StatusScreen = () => {
                         <Typography>Format:</Typography>
                         <Typography>{format}</Typography>
                     </Grid>
-                    <Button variant="outlined" className={classes.button} onClick={handleClick}>Rebuild</Button>
+                    <Grid item xs={12}>
+                        {hasOperation('train') && <Button variant="outlined" onClick={handleRetrain}>Train</Button>}
+                        <Button variant="outlined" onClick={handleClick}>Rebuild</Button>
+                    </Grid>
+                    
                     <TableContainer className={classes.tableContainer} md={{ maxHeight: 640 }}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>

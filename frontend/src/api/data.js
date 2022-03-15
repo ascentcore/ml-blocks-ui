@@ -29,6 +29,10 @@ export const getStatusOfIp = async (ip) => {
     return await API.get(`/proxy/${ip}/api/v1/status/`)
 }
 
+export const getSettingsSchema = async (ip) => {
+    return await API.get(`/proxy/${ip}/api/v1/status/settings_schema`)
+}
+
 export const getSchemaForBlock = async ip => {
     return await API.get(`/proxy/${ip}/api/v1/model/predict_schema`)
 }
@@ -37,7 +41,20 @@ export const predict = async (ip, data) => {
     return await API.post(`/proxy/${ip}/api/v1/model/predict`, data)
 }
 
-export const predict_bg = async (ip, data) => {
+export const saveSettings = async (ip, data) => {
+    return await API.post(`/proxy/${ip}/api/v1/status/settings`, data)
+}
+
+export const train = async (ip) => {
+    return await API.post(`/proxy/${ip}/api/v1/model/train`)
+}
+
+export const getSettings = async (ip) => {
+    return await API.get(`/proxy/${ip}/api/v1/status/settings`)
+}
+
+
+export const predict_bg = async (ip, data) => {    
     return await API.post(`/proxy/${ip}/api/v1/model/predict_bg`, data)
 }
 

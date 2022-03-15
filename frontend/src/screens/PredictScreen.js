@@ -117,7 +117,22 @@ const PredictScreen = () => {
     }, [ip])
 
     const onSubmit = data => {
-        predict_bg(ip, data)
+        console.log(data)
+        if (data.predict_file) {
+            
+            let reader = new FileReader();
+
+            reader.readAsDataURL(data.predict_file);
+
+            reader.onload = function () {
+                data.predict = reader.result
+                delete data.predict_file
+                predict_bg(ip, data)
+            };
+            
+        } else {
+            predict_bg(ip, data)
+        }
     }
 
     return (
