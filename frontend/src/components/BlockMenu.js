@@ -1,9 +1,8 @@
-import { ListItemButton, ListItemIcon, ListItemText, Toolbar, List, Stack, Grid, Divider } from '@mui/material';
+import { ListItemButton, ListItemIcon, ListItemText, List, Stack } from '@mui/material';
 import { Link } from "react-router-dom";
 import React from 'react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import StorageIcon from '@mui/icons-material/Storage';
-import DashboardIcon from '@mui/icons-material/Dashboard';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -12,8 +11,7 @@ import { makeStyles } from '@mui/styles';
 
 export const useStyles = makeStyles((theme) => ({
     container: {
-        float: 'left',
-        margin: '-30px 0 30px 0px',
+        margin: '-30px 0 50px 0px',
         width: '70%',
     },
     button: {
@@ -24,7 +22,7 @@ export const useStyles = makeStyles((theme) => ({
     }
 }))
 
-function LayerMenu() {
+function BlockMenu() {
     const classes = useStyles();
     return (
         <List component={Stack}
@@ -75,4 +73,4 @@ function LayerMenu() {
     )
 };
 
-export default LayerMenu;
+export default BlockMenu;

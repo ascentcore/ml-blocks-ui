@@ -51,13 +51,13 @@ const StatusScreen = () => {
     return (
         <>
             {status &&
-                <Grid container className={classes.grid} direction="column">
+                <Grid container alignItems="center" className={classes.grid} direction="column">
                     <Grid item container className={classes.gridRow} >
-                        <Typography >Status:</Typography>
+                        <Typography style={{ marginLeft: '-130px' }}>Status:</Typography>
                         <Typography>{status?.state_name}</Typography>
                     </Grid>
                     <Grid item container className={classes.gridRow}>
-                        <Typography>Format:</Typography>
+                        <Typography style={{ marginLeft: '-70px' }}>Format:</Typography>
                         <Typography>{format}</Typography>
                     </Grid>
                     <Grid item xs={12}>

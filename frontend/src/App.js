@@ -17,8 +17,8 @@ import Layout from './components/Layout';
 import Routes from './Routes';
 import AppMenu from './components/AppMenu';
 import BlockMenu from './components/BlockMenu';
+import { useLocation } from 'react-router-dom';
 import { Paper } from '@material-ui/core';
-
 
 // function App() {
 //   return (
@@ -88,10 +88,8 @@ function App() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  const [click, setClick] = React.useState(false);
 
-  const setFalse = () => setClick(false);
-  const setTrue = () => setClick(true);
+  let location = useLocation();
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -137,7 +135,7 @@ function App() {
           </Toolbar>
           <Divider />
           <List component="nav">
-            <AppMenu setFalse={setFalse} setTrue={setTrue} />
+            <AppMenu />
           </List>
         </Drawer>
         <Box
@@ -153,8 +151,8 @@ function App() {
           }}
         >
           <Container maxWidth="lg" sx={{ p: 4, mt: 8, mb: 4 }} >
-            {click && <BlockMenu />}
-              <Routes />
+            {(location.pathname !== '/' && location.pathname !== '/registry-settings') && <BlockMenu />}
+            <Routes />
             <Layout />
           </Container>
         </Box>

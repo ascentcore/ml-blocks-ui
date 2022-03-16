@@ -159,8 +159,8 @@ const Layout = ({ children }) => {
                                             block={block}
                                             selected={block.ip === storedIP}
                                             onClick={handleClick(block)}
-                                        />)
-                                    ))}
+                                        />
+                                    )))}
                                 </svg>
                             </div>
                         }
