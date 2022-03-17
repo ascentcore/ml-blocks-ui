@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { getStatusOfIp } from '../api/data';
 import { makeStyles } from '@mui/styles';
-
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
     '@keyframes dash': {
@@ -73,8 +73,8 @@ function SVGBlock({ block, transform, selected, onClick }) {
     const classes = useStyles();
     const [status, setStatus] = useState();
     const [state, setState] = useState();
-    const [timer, setTimer] = useState(Date.now());
 
+    let report = useSelector(state => state && state.graph && state.graph.statuses && state.graph.statuses.value ? state.graph.statuses.value[block.ip] : {})
     const radius = 4;
     const blockWidth = 150
     const blockHeight = 70
@@ -96,15 +96,12 @@ function SVGBlock({ block, transform, selected, onClick }) {
             }
         }
         fetchData()
-        const interval = setInterval(() => {
-            fetchData()
-        }, 5000)
-        return () => clearInterval(interval)
-
     }, [])
 
+
+
     function isState(index) {
-        return state && state.state_name === states[index]
+        return report && report.status === states[index]
     }
 
     function getUpstream(upstreamEdge) {
@@ -116,7 +113,7 @@ function SVGBlock({ block, transform, selected, onClick }) {
             dy += 30
         }
 
-        let [sx, sy, ex, ey] = [ux + blockWidth + radius + 2 , uy + offset, dx - radius - 5, dy + offset]
+        let [sx, sy, ex, ey] = [ux + blockWidth + radius + 2, uy + offset, dx - radius - 5, dy + offset]
 
         let str = `
             M ${sx} ${sy}
@@ -127,35 +124,47 @@ function SVGBlock({ block, transform, selected, onClick }) {
         return (<path
             key={upstreamBlock.ip}
             d={str}
-            className={className} 
+            className={className}
             fill="transparent"
-            markerEnd="url(#arrow-1)" 
+            markerEnd="url(#arrow-1)"
             strokeWidth={1} />)
     }
 
     function getCircleState(circleState) {
-        const index = state ? states.indexOf(state.state_name) : -1
+        const index = states && report ? states.indexOf(report.status) : -1
         return circleState === index ? classes.animated_circle : circleState > index ? classes.pending_circle : classes.ready_circle
     }
 
+    const getProgressComponent = () => {
+        if (report && report.progress && report.progress !== '100') {
+            const progress = parseInt(report.progress);
+            return <g>
+                <rect x={0} y={10} rx="3" ry="3" width={blockWidth * progress / 100} height={blockHeight} fill="rgba(77, 144, 255,.3)" />
+                <text fontSize={10} textAnchor='start' x={blockWidth * progress / 100 + 2} y={blockHeight / 2 + 20}>{progress}%</text>
+            </g>
+        }
+    }
+
     const hasOperation = operation => status && status.operations && status.operations.indexOf(operation) !== -1
-    console.log(status)
     return (
         <g transform={transform}>
             <g transform={`translate(${block.location[0]}, ${block.location[1]})`}>
+
                 <text fontSize={12} textAnchor='middle' x={blockWidth / 2}>{status ? status.name : 'Status Pending...'}</text>
+                <text fontSize={10} textAnchor='middle' x={blockWidth / 2} y={blockHeight + 20}>{block.ip}</text>
                 <rect x={0} y={10} rx="3" ry="3" width={blockWidth} height={blockHeight} className={selected ? classes.selectedRect : classes.rect} onClick={onClick} />
+                {getProgressComponent()}
                 <circle cx="0" cy={firstLayerY} r={radius} className={getCircleState(0)} />
 
                 <text fontSize={10} textAnchor='middle' x={blockWidth / 2} y={22}>storage</text>
                 <circle cx={blockWidth / 2} cy={firstLayerY} r="8" className={getCircleState(states.indexOf('ingesting'))} />
-                
+
                 <text fontSize={10} textAnchor='start' x={blockWidth + 4} y={27}>data</text>
                 <circle cx="0" cy="65" r={radius} className={classes.pending_circle} />
-                
+
 
                 <path d={`M 6 ${firstLayerY} H ${blockWidth / 2 - 13}`} className={isState(states.indexOf('ingesting')) ? classes.animated_stroke : classes.path} markerEnd="url(#arrow-1)" />
-                
+
 
                 <path d={`M ${blockWidth / 2 + 10} ${firstLayerY} H ${blockWidth - 9}`} transform={`translate(${blockWidth, 0})`} className={classes.path} markerEnd="url(#arrow-1)" />
                 <circle cx={blockWidth} cy={firstLayerY} r={radius} className={getCircleState(states.indexOf('storing'))} />

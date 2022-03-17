@@ -15,6 +15,16 @@ export const graphSlice = createSlice({
     },
 })
 
+export const statusesSlice = createSlice({
+    name: 'statuses',
+    initialState: {},
+    reducers: {
+        setStatuses: (state, action) => {
+            state.value = action.payload
+        },
+    },
+})
+
 export const showSlice = createSlice({
     name: 'minigraph',
     initialState: { value: true },
@@ -26,9 +36,11 @@ export const showSlice = createSlice({
 })
 
 export const { getGraphReducer } = graphSlice.actions;
+export const { setStatuses } = statusesSlice.actions;
 export const { showGraphReducer } = showSlice.actions;
 
 export default combineReducers({
     graphSlice: graphSlice.reducer,
-    showSlice: showSlice.reducer
+    showSlice: showSlice.reducer,
+    statuses: statusesSlice.reducer
 })

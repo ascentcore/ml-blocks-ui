@@ -117,7 +117,6 @@ const Layout = ({ children }) => {
             })
             setBlocks(Object.values(blocks))
 
-            console.log(blocks)
             return dispatch(getGraphReducer(edges))
         }
         fetchData();

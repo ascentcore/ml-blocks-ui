@@ -44,16 +44,15 @@ const HomeScreen = () => {
 
             const roots = Object.values(blocks).filter(item => item.upstream.length === 0)
             const positionBlock = (x, block, currentY) => {
-                console.log(`position block at ${currentY}`)
                 let startFromY = currentY
                 if (!block.visited) {
                     block.location = [x, startFromY]
                     block.downstream.forEach(downstreamBlock => {
                         positionBlock(x + 250, downstreamBlock.block, startFromY)
-                        startFromY += 120
+                        startFromY += 140
                     })
                     if (currentY === startFromY) {
-                        startFromY += 120
+                        startFromY += 140
                     }
                     block.visited = true
                 }
@@ -65,7 +64,6 @@ const HomeScreen = () => {
             })
             setBlocks(Object.values(blocks))
 
-            console.log(blocks)
             return dispatch(getGraphReducer(edges))
         }
         fetchData();

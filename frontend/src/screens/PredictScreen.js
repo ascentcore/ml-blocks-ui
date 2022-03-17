@@ -1,11 +1,11 @@
 import { SchemaForm } from '@ascentcore/react-schema-form';
-import { Grid, Paper } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import { getTargetIP } from '../api/API';
 import { makeStyles } from '@mui/styles';
 import { getSchemaForBlock, predict_bg } from '../api/data';
 import customRegistry from '../components/SchemaForm/CustomRegistry';
 import MUIWrapper from '../components/SchemaForm/Components/wrappers/MUIWrapper';
+import { Input, Button } from '@mui/material';
 
 export const useStyles = makeStyles((theme) => ({
     container: {
@@ -100,6 +100,8 @@ const PredictScreen = () => {
     const classes = useStyles();
     let ip = getTargetIP();
     const [schema, setSchema] = useState()
+    const [data, setData] = useState({})
+    const [hash, setHash] = useState(Math.random())
 
     const exceptions = {
         keys: {
@@ -117,30 +119,36 @@ const PredictScreen = () => {
     }, [ip])
 
     const onSubmit = data => {
-        console.log(data)
-        if (data.predict_file) {
-            
-            let reader = new FileReader();
-
-            reader.readAsDataURL(data.predict_file);
-
-            reader.onload = function () {
-                data.predict = reader.result
-                delete data.predict_file
-                predict_bg(ip, data)
-            };
-            
-        } else {
-            predict_bg(ip, data)
-        }
+        predict_bg(ip, data)
     }
+
+    const handleChange = evt => {
+        let reader = new FileReader();
+        reader.readAsText(evt.target.files[0]);
+        console.log('whoa?', evt.target.files[0])
+        reader.onload = function () {
+            const jsonData = JSON.parse(reader.result)
+            setData(jsonData)
+            setHash(Math.random())
+        };
+    }
+
 
     return (
         <>
-            <h2>Predict</h2>
+            <h2>Predict
+                <Button sx={{ ml: 4 }} variant="contained" component="label">
+                    <Input style={{ display: 'none' }} onChange={handleChange}
+                        type="file"
+                        hidden />
+                    Upload Predict
+                </Button>
+            </h2>
             <hr />
             {schema && <SchemaForm
                 className={classes.container}
+                key={hash}
+                data={data}
                 schema={schema}
                 onSubmit={onSubmit}
                 config={{ registry: customRegistry, exceptions: exceptions }}

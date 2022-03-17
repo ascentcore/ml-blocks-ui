@@ -51,27 +51,27 @@ function SVGMinimap({ block, transform, selected, onClick }) {
     const blockHeight = 15
     const offset = 13
 
-    useEffect(() => {
-        let fetching = false
-        async function fetchData() {
-            if (fetching === false) {
-                fetching = true
-                const response = await getStatusOfIp(block.ip)
-                if (response.data) {
-                    setState(response.data.status)
-                    setStatus(response.data)
-                    fetching = false
-                }
+    // useEffect(() => {
+    //     let fetching = false
+    //     async function fetchData() {
+    //         if (fetching === false) {
+    //             fetching = true
+    //             const response = await getStatusOfIp(block.ip)
+    //             if (response.data) {
+    //                 setState(response.data.status)
+    //                 setStatus(response.data)
+    //                 fetching = false
+    //             }
 
-            }
-        }
-        fetchData()
-        const interval = setInterval(() => {
-            fetchData()
-        }, 5000)
-        return () => clearInterval(interval)
+    //         }
+    //     }
+    //     fetchData()
+    //     const interval = setInterval(() => {
+    //         fetchData()
+    //     }, 5000)
+    //     return () => clearInterval(interval)
 
-    }, [])
+    // }, [])
 
     function getUpstream(upstreamEdge) {
         const { block: upstreamBlock, edgeType } = upstreamEdge

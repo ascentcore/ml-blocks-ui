@@ -17,5 +17,4 @@ export const store = configureStore({
         graph: graphReducer,
         minigraph: showGraphReducer
     },
-}, composeWithDevTools()
-);
+}, composeWithDevTools());

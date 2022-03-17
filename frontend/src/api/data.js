@@ -25,6 +25,10 @@ export const getGraph = async () => {
     return await API.get('/api/v1/pipeline/graph')
 }
 
+export const getReport = async () => {
+    return await API.get('/api/v1/status/report')
+}
+
 export const getStatusOfIp = async (ip) => {
     return await API.get(`/proxy/${ip}/api/v1/status/`)
 }

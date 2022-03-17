@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { useState } from 'react'
+import { useDispatch } from 'react-redux';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -17,20 +19,9 @@ import Layout from './components/Layout';
 import Routes from './Routes';
 import AppMenu from './components/AppMenu';
 import BlockMenu from './components/BlockMenu';
-import { Paper } from '@material-ui/core';
+import { getReport } from './api/data';
+import { setStatuses } from './redux/graph-reducer';
 
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <Layout>
-//         <Router>
-//           <Route component={Routes} />
-//         </Router>
-//       </Layout>
-//     </div>
-//   );
-// }
 
 
 const drawerWidth = 240;
@@ -84,6 +75,8 @@ const mdTheme = createTheme()
 
 function App() {
 
+  const dispatch = useDispatch();
+
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -92,6 +85,30 @@ function App() {
 
   const setFalse = () => setClick(false);
   const setTrue = () => setClick(true);
+
+  useState(() => {
+
+    let fetching = false
+    async function fetchData() {
+      if (fetching === false) {
+        const { data: report } = await getReport()
+        const res = report.reduce((memo, item) => {
+          const { host, type, value } = item
+          memo[host] = memo[host] || {}
+          memo[host][type] = value
+
+          return memo
+        }, {})
+        dispatch(setStatuses(res))
+      }
+    }
+
+    const interval = setInterval(() => {
+      fetchData()
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -154,7 +171,7 @@ function App() {
         >
           <Container maxWidth="lg" sx={{ p: 4, mt: 8, mb: 4 }} >
             {click && <BlockMenu />}
-              <Routes />
+            <Routes />
             <Layout />
           </Container>
         </Box>
