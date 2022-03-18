@@ -40,8 +40,11 @@ const SettingsScreen = () => {
             if (operations.indexOf("settings_schema") !== -1) {
                 const { data: settingsSchema } = await getSettingsSchema(storedIP)
                 const { data: settings } = await getSettings(storedIP)
-                setSettingsSchema(settingsSchema)
+                
                 setSettings(settings)
+                setSettingsSchema(settingsSchema)
+                
+                console.log(settings)
             }
 
             const prepSchema = {
@@ -112,7 +115,7 @@ const SettingsScreen = () => {
             {settingsSchema && <>
                 <h2>Settings</h2>
                 <hr />
-                {schema && <SchemaForm
+                {settingsSchema && <SchemaForm
                     className={classes.container}
                     schema={settingsSchema}
                     data={settings}

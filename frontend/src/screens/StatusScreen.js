@@ -35,7 +35,7 @@ const StatusScreen = () => {
 
     const handleClick = async () => {
         try {
-            const response = await pipelineRebuild()
+            const response = await pipelineRebuild(ip)
             console.log('res', response)
         } catch (error) {
             console.log('error', error);

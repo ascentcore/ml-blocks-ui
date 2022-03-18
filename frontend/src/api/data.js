@@ -66,8 +66,8 @@ export const getProxy = async (ip, path) => {
     return await API.get(`/proxy/${ip}/${path}`)
 }
 
-export const pipelineRebuild = async () => {
-    return await API.post('/api/v1/pipeline/rebuild')
+export const pipelineRebuild = async (ip) => {
+    return await API.post(`/proxy/${ip}/api/v1/pipeline/rebuild`)
 }
 
 export const recreateGraph = async () => {
