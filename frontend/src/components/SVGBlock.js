@@ -23,6 +23,21 @@ const useStyles = makeStyles(() => ({
             fill: '#FFF',
         }
     },
+    '@keyframes aniloading': {
+        '0%': {
+            fill: '#c4dbff',
+        },
+        '45%': {
+            fill: '#80b0ff',
+        },
+        '55%': {
+            fill: '#80b0ff',
+        },
+        '100%': {
+            fill: '#c4dbff',
+        }
+    },
+
     path: {
         stroke: '#447ead',
         fill: 'transparent'
@@ -65,6 +80,11 @@ const useStyles = makeStyles(() => ({
         stroke: "#447ead",
         strokeWidth: "1",
         fill: '#b8dfff'
+    },
+    progressAnimation: {
+        opacity: 0.5,
+        animation: `$aniloading linear infinite`,
+        animationDuration: '2s'
     }
 }))
 
@@ -98,10 +118,17 @@ function SVGBlock({ block, transform, selected, onClick }) {
         fetchData()
     }, [])
 
-
+    const getState = () => {
+        return report ? report.status : state ? state.state_name : undefined
+    }
 
     function isState(index) {
-        return report && report.status === states[index]
+        return getState() === states[index]
+    }
+
+    function getCircleState(circleState) {
+        const index = states ? states.indexOf(getState()) : -1
+        return circleState === index ? classes.animated_circle : circleState > index ? classes.pending_circle : classes.ready_circle
     }
 
     function getUpstream(upstreamEdge) {
@@ -130,17 +157,14 @@ function SVGBlock({ block, transform, selected, onClick }) {
             strokeWidth={1} />)
     }
 
-    function getCircleState(circleState) {
-        const index = states && report ? states.indexOf(report.status) : -1
-        return circleState === index ? classes.animated_circle : circleState > index ? classes.pending_circle : classes.ready_circle
-    }
+
 
     const getProgressComponent = () => {
         if (report && report.progress && report.progress !== '100') {
             const progress = parseInt(report.progress);
             return <g>
-                <rect x={0} y={10} rx="3" ry="3" width={blockWidth * progress / 100} height={blockHeight} fill="rgba(77, 144, 255,.3)" />
-                <text fontSize={10} textAnchor='start' x={blockWidth * progress / 100 + 2} y={blockHeight / 2 + 20}>{progress}%</text>
+                <rect x={1} y={11} rx="3" ry="3" width={blockWidth * progress / 100 - 2} height={blockHeight - 2} className={classes.progressAnimation} />
+                <text fontSize={10} textAnchor='middle' x={blockWidth * 0.5} y={blockHeight + 5}>{progress}%</text>
             </g>
         }
     }
@@ -171,7 +195,7 @@ function SVGBlock({ block, transform, selected, onClick }) {
 
                 {hasOperation('train') && <>
                     <text fontSize={10} textAnchor='middle' x={blockWidth * 0.7} y={53}>model</text>
-                    <text fontSize={10} textAnchor='sstart' x={blockWidth + 4} y={blockHeight + 6}>predict</text>
+                    <text fontSize={10} textAnchor='start' x={blockWidth + 4} y={blockHeight + 6}>predict</text>
                     <path d={`M ${blockWidth / 2} ${firstLayerY + 10} C ${blockWidth / 2} 65, ${blockWidth / 2} 65, ${blockWidth / 2 + 16} 65`} className={isState(states.indexOf('training')) ? classes.animated_stroke : classes.path} markerEnd="url(#arrow-1)" />
                     <path d={`M ${blockWidth * 0.7} 65 H ${blockWidth - 9}`} className={isState(states.indexOf('predicting')) ? classes.animated_stroke : classes.path} markerEnd="url(#arrow-1)" />
 

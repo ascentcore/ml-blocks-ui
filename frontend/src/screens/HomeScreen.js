@@ -81,7 +81,7 @@ const HomeScreen = () => {
                 <marker id="arrow-1" markerWidth="10" markerHeight="10" refX="0" refY="4">
                     <path d="M0,0 L4,4 L0,8 z" fill="#447ead"></path>
                 </marker>
-            </defs>            
+            </defs>
             {blocks.map((block, index) => (<SVGBlock
                 key={block.ip}
                 block={block}

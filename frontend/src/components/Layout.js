@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 import { Grid, Typography } from '@mui/material';
 import { getTargetIP } from '../api/API';
 import { getGraph, getNodes } from '../api/data';
-import SVGMinimap from '../components/SVGMinimap';
+// import SVGMinimap from '../components/SVGMinimap';
 import { useDispatch, useSelector } from 'react-redux';
 import { setIPReducer } from '../redux/ip-reducer';
 import { getGraphReducer, showGraphReducer } from '../redux/graph-reducer';
@@ -144,7 +144,7 @@ const Layout = ({ children }) => {
             <Grid container justifyContent="center" direction="column" >
                 {children}
             </Grid>
-            <Grid container direction="column" alignContent="flex-end" justifyContent="flex-end" style={{ marginTop: '20px' }}>
+            {/* <Grid container direction="column" alignContent="flex-end" justifyContent="flex-end" style={{ marginTop: '20px' }}>
                 <div className={classes.paper} onClick={handleShow} ><i className={classes.downArrow}></i></div>
                 {show ?
                     <>
@@ -165,7 +165,7 @@ const Layout = ({ children }) => {
                         }
                     </>
                     : <></>}
-            </Grid>
+            </Grid> */}
         </>
     );
 }
