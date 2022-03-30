@@ -1,16 +1,21 @@
-import React from 'react';
-import { Checkbox, FormControlLabel, Grid } from '@mui/material';
-import { useStyles } from './Style.styles';
+import React from "react";
+import { Checkbox, FormControlLabel, Grid } from "@mui/material";
+import { useStyles } from "./Style.styles";
 
-export function MUICheckbox({ property }) {
-    const classes = useStyles();
+export function MUICheckbox({ property, value, onChange }) {
+  const classes = useStyles();
 
-
-    return (
-        <div>
-            <FormControlLabel
-                fullWidth={true}
-                control={<Checkbox checked={property.value || false} />} label={property.title} />
-        </div>
-    )
+  return (
+    <FormControlLabel
+      control={
+        <Checkbox
+          checked={value}
+          onChange={(evt) => {
+            onChange(evt.target.checked);
+          }}
+        />
+      }
+      label={property.title}
+    />
+  );
 }
