@@ -9,6 +9,12 @@ import { Input, Button, Box } from "@mui/material";
 
 export const useStyles = makeStyles((theme) => ({
   container: {
+    "& .ra-form-title": {
+      padding: '10px 10px',
+      margin: '20px -10px',
+      borderBottom: "1px solid rgb(200,200,200)",
+      backgroundColor: "rgb(240,240,240)",
+    },
     "& .ra-elem-array": {
       display: "block",
       width: "100%",
@@ -118,7 +124,7 @@ const PredictScreen = () => {
   const onSubmit = async (data) => {
     let predictData = data;
     setPredictResults(false);
-    
+
     let predictImmediately = false;
     if (data["__PredictImmediately__"]) {
       predictData = { ...data };

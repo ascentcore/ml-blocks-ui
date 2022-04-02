@@ -1,5 +1,5 @@
 # pull official base image
-FROM node:latest
+FROM --platform=linux/amd64 node:latest
 
 # set working directory
 WORKDIR /app
