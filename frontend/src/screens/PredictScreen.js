@@ -10,8 +10,8 @@ import { Input, Button, Box } from "@mui/material";
 export const useStyles = makeStyles((theme) => ({
   container: {
     "& .ra-form-title": {
-      padding: '10px 10px',
-      margin: '20px -10px',
+      padding: "10px 10px",
+      margin: "20px -10px",
       borderBottom: "1px solid rgb(200,200,200)",
       backgroundColor: "rgb(240,240,240)",
     },
@@ -141,6 +141,17 @@ const PredictScreen = () => {
     }
   };
 
+  const replayLatPredict = (immediately) => async () => {
+    console.log('reply')
+    if (immediately) {
+      const result = await predict(ip, undefined, true);
+      console.log(JSON.stringify(result.data, null, 2));
+      setPredictResults(JSON.stringify(result.data, null, 2));
+    } else {
+      predict_bg(ip, undefined, true);
+    }
+  };
+
   const handleChange = (evt) => {
     let reader = new FileReader();
     reader.readAsText(evt.target.files[0]);
@@ -164,6 +175,22 @@ const PredictScreen = () => {
             hidden
           />
           Upload Predict
+        </Button>
+        <Button
+          sx={{ ml: 4 }}
+          variant="contained"
+          component="label"
+          onClick={replayLatPredict(false)}
+        >
+          Replay Last Predict
+        </Button>
+        <Button
+          sx={{ ml: 4 }}
+          variant="contained"
+          component="label"
+          onClick={replayLatPredict(true)}
+        >
+          Replay Last Predict Immediately
         </Button>
       </h2>
       <hr />

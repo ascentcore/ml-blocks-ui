@@ -54,12 +54,12 @@ export const getSettings = async (ip) => {
 }
 
 
-export const predict_bg = async (ip, data) => {    
-    return await API.post(`/proxy/${ip}/api/v1/model/predict_bg`, data)
+export const predict_bg = async (ip, data, replay) => {    
+    return await API.post(`/proxy/${ip}/api/v1/model/predict_bg?replay=${replay || false}`, data)
 }
 
-export const predict = async (ip, data) => {
-    return await API.post(`/proxy/${ip}/api/v1/model/predict`, data)
+export const predict = async (ip, data, replay) => {
+    return await API.post(`/proxy/${ip}/api/v1/model/predict?replay=${replay || false}`, data)
 }
 
 export const getProxy = async (ip, path) => {
