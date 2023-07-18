@@ -1,13 +1,9 @@
-import SearchBar from '../components/ui/SearchBar';
 import Grid from '@mui/system/Unstable_Grid';
 import CardElement from '../components/ui/Card';
 const Home = () => {
   return(
     <>
         <Grid container spacing={2}>
-          <Grid xs={12}>
-              <SearchBar />
-          </Grid>
           <Grid xs={4}>
             <CardElement>
               Card 1
