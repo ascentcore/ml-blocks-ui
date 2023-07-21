@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
 import router from './routes';
 import { RouterProvider } from 'react-router-dom'
 import MenuDrawer from './components/ui/MenuDrawer';

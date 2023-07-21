@@ -1,0 +1,33 @@
+.cardWrapper {
+  height: 100%;
+  flex-direction: column;
+  display: flex;
+  justify-content: space-between;
+  .cardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    .cardHeader {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      h2 {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+    .ip {
+      color: #666666;
+      margin-bottom:0
+    }
+    .description {
+      color: #212121;
+      margin-bottom: 0;
+    }
+  }
+  .cardActions {
+    justify-content: space-between;
+  }
+}
+
