@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import LinearProgress from '@mui/material/LinearProgress';
 import { Link } from 'react-router-dom';
 import './CardBlocks.scss'
-
+import {CardBlocksProps} from './CardBlock.interface';
 
 
 
