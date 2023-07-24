@@ -34,10 +34,10 @@ const Block = () => {
       setIsLoading(false);
     }).catch(e=>console.log(e));
 
-    api.getLogs().then((result) => {
-      console.log(result)
-    }).catch((e)=> console.log(e));
-  }, []);
+    // api.getLogs().then((result) => {
+    //   console.log(result)
+    // }).catch((e)=> console.log(e));
+  }, [id]);
 
   function handleClick(event: MouseEvent<Element, MouseEvent>) {
     event.preventDefault();
@@ -73,6 +73,7 @@ const Block = () => {
   return(
     <>
       <Loading loading={isLoading}>
+        <h1>{block.name}</h1>
         { (block.name)?
         <div role="presentation" onClick={() => handleClick}>
           <Breadcrumbs aria-label="breadcrumb">

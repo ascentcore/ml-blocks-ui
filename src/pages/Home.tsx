@@ -13,10 +13,10 @@ const Home = () => {
       setCardElements(result.data);
     }).catch(e=>console.log(e));
 
-    api.getLogs().then((result) => {
-      console.log(result)
-    }).catch((e)=> console.log(e));
+    api.getLogs().then((result) => {console.log(result)}).catch((e)=> console.log(e));
+
   }, []);
+
 
   const displayCardElements = (data: Array<{
       id:number,
