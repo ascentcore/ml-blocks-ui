@@ -13,7 +13,7 @@ const Home = () => {
       setCardElements(result.data);
     }).catch(e=>console.log(e));
 
-    api.getLogs().then((result) => {console.log(result)}).catch((e)=> console.log(e));
+    api.getLogs().then((result) => {console.log('logs ', result.data)}).catch((e)=> console.log(e));
 
   }, []);
 
