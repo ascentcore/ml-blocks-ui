@@ -29,14 +29,13 @@ const Block = () => {
   });
 
   useEffect(() => {
-    api.getCard(id).then((result) => {
-      setBlock(result.data);
-      setIsLoading(false);
-    }).catch(e=>console.log(e));
+    if(id) {
+      api.getCard(id).then((result) => {
+        setBlock(result.data);
+        setIsLoading(false);
+      }).catch(e=>console.log(e));
+    }
 
-    // api.getLogs().then((result) => {
-    //   console.log(result)
-    // }).catch((e)=> console.log(e));
   }, [id]);
 
   function handleClick(event: MouseEvent<Element, MouseEvent>) {
