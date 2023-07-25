@@ -13,7 +13,7 @@ const router = createBrowserRouter([
     element: <div>Dashboard</div>,
   },
   {
-    path:'/block/:id',
+    path:'/block/:uuid',
     element: <Block />
   }
 ]);

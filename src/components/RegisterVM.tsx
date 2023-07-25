@@ -6,7 +6,11 @@ import Loading from './ui/Loading';
 import {useState, ChangeEvent, FormEvent} from 'react';
 import api from '../api/api';
 
-const RegisterVM = () => {
+interface RegisterVMProps {
+  onRegisterVM: () => void
+}
+
+const RegisterVM = ({onRegisterVM}: RegisterVMProps) => {
 
   const [inputValue, setInputValue] = useState<string>('');
   const [inputError, setInputError] = useState<boolean>(false);
@@ -16,13 +20,13 @@ const RegisterVM = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    setIsFormSubmitting(true);
-    setFormError('');
-
     if(inputValue === '') {
       setInputError(true);
       return
     }
+
+    setIsFormSubmitting(true);
+    setFormError('');
 
     const IPArray =  inputValue.split(':')
     const ip = IPArray[0].trim();
@@ -32,25 +36,23 @@ const RegisterVM = () => {
       ip: ip,
     }
     if(port !== ''){
-      console.log('port if', port);
       dataObj.port = port
     }
-    console.log('dataObj ', dataObj);
 
     api.registerVM(dataObj).then((result) => {
-      console.log('result', result.data);
-      setIsFormSubmitting(false);
+      onRegisterVM();
     }).catch(e=>{
       console.log(e)
-      setIsFormSubmitting(false);
       if(e.response.data.response) {
-        setFormError(e.response.data.response);
+        setFormError(JSON.parse(e.response.data.response).message);
       }
-    });
+    }).finally(()=>{
+      setIsFormSubmitting(false);
+      setInputValue('');
+    })
   }
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log('change');
     setInputValue(event.target.value);
   };
 
