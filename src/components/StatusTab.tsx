@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 const StatusTab = () => {
   return(
     <Grid container spacing={2}>
-      <Grid xs={4}>
+      <Grid xs={12} sm={4}>
         <Card className='statusCard card'>
           <CardContent className='cardContent'>
             <p>Load</p>
@@ -16,7 +16,7 @@ const StatusTab = () => {
           </CardContent>
         </Card>
       </Grid>
-      <Grid xs={4}>
+      <Grid xs={12} sm={4}>
         <Card className='avgResponseCard card'>
           <CardContent className='cardContent'>
             <p>Avg response time</p>
@@ -28,7 +28,7 @@ const StatusTab = () => {
           </CardContent>
         </Card>
       </Grid>
-      <Grid xs={4}>
+      <Grid xs={12} sm={4}>
         <Card className='lastUpdateCard card'>
           <CardContent className='cardContent'>
             <p>Last update</p>

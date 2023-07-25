@@ -1,43 +1,48 @@
+import {MouseEvent, SyntheticEvent, ReactNode, useEffect, useState} from 'react';
 import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
-import {MouseEvent, SyntheticEvent, ReactNode, useEffect, useState} from 'react';
-import api from '../api/api';
-import {useParams} from 'react-router-dom';
-import {CardBlocksProps} from '../components/CardBlock.interface';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import api from '../api/api';
+import {useParams, useNavigate} from 'react-router-dom';
+import {CardBlocksProps} from '../components/CardBlock.interface';
 import StatusTab from '../components/StatusTab';
 import PredictTab from '../components/PredictTab';
 import PerformanceTab from '../components/Performance';
 import Loading from '../components/ui/Loading';
+import Button from '@mui/material/Button';
 
 const Block = () => {
 
-  const { id } = useParams();
-
+  const { uuid } = useParams();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true)
   const [ block, setBlock ] = useState<CardBlocksProps>({
     description: '',
-    id: 0,
+    uuid: '',
     ip: '',
     name: '',
     port: '',
     progress: false,
-    status: ''
+    state: ''
   });
 
   useEffect(() => {
-    api.getCard(id).then((result) => {
-      setBlock(result.data);
-      setIsLoading(false);
-    }).catch(e=>console.log(e));
+    if(uuid) {
+      api.getBlocks(uuid).then((result) => {
+        const resultList = JSON.parse(result.data.response);
+        if(resultList.length !== 1) navigate('/')
+        setBlock(resultList[0]);
+        setIsLoading(false);
+      }).catch(e=>{
+        console.log(e)
+        navigate('/')
+      });
+    }
 
-    // api.getLogs().then((result) => {
-    //   console.log(result)
-    // }).catch((e)=> console.log(e));
-  }, [id]);
+  }, [uuid]);
 
   function handleClick(event: MouseEvent<Element, MouseEvent>) {
     event.preventDefault();
@@ -50,7 +55,19 @@ const Block = () => {
     setValue(newValue);
   };
 
-  function BlockTabPanel(props: { children?: ReactNode, index: number, value: number;}) {
+  const handleDelete = (uuid:string) => {
+    const confirmDelete = confirm('Do you really want to perform this action?');
+    if(confirmDelete) {
+      api.deleteBlock(uuid).then((result) => {
+        navigate('/')
+      }).catch(e=>{
+        console.log(e)
+        navigate('/')
+      });
+    }
+  }
+
+  const BlockTabPanel = (props: { children?: ReactNode, index: number, value: number;}) => {
     const { children, value, index, ...other } = props;
 
     return (
@@ -73,14 +90,17 @@ const Block = () => {
   return(
     <>
       <Loading loading={isLoading}>
-        <h1>{block.name}</h1>
+        <div style={{'display': 'flex', 'alignItems':'center', 'justifyContent': 'space-between'}}>
+          <h1>{block.name}</h1>
+          {(uuid) ? <Button variant="contained" color="error" onClick={() => handleDelete(uuid)}>Delete</Button> : ''}
+        </div>
         { (block.name)?
         <div role="presentation" onClick={() => handleClick}>
           <Breadcrumbs aria-label="breadcrumb">
             <Link underline="hover" color="inherit" href="/">
               Home
             </Link>
-             <Typography color="text.primary">{block.name}</Typography>
+            <Typography color="text.primary">{block.name}</Typography>
           </Breadcrumbs>
         </div>
           : ''}

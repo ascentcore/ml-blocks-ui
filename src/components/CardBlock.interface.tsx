@@ -1,8 +1,8 @@
 export interface CardBlocksProps {
-  id: number,
+  uuid: string,
   name: string,
   description: string
-  status: string,
+  state: string,
   ip: string,
   port: string,
   progress: boolean,

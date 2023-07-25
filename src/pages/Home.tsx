@@ -3,39 +3,49 @@ import RegisterVM from '../components/RegisterVM';
 import CardBlocks from '../components/CardBlocks';
 import {useEffect, useState} from 'react';
 import api from '../api/api';
+import Alert from '@mui/material/Alert';
+
 
 const Home = () => {
 
   const [cardElements, setCardElements] = useState([]);
 
   useEffect(() => {
-    api.getCards().then((result) => {
-      setCardElements(result.data);
-    }).catch(e=>console.log(e));
+    getBlocks();
 
-    api.getLogs().then((result) => {console.log(result)}).catch((e)=> console.log(e));
+    // api.getLogs().then((result) => {console.log('logs ', result.data)}).catch((e)=> console.log(e));
 
   }, []);
 
+  const getBlocks = () => {
+    api.getBlocks().then((result) => {
+      const resultList = JSON.parse(result.data.response);
+      setCardElements(resultList);
+    }).catch((e)=> console.log(e));
+  }
+
+  const handleOnRegisterVM = () => {
+    getBlocks();
+  }
 
   const displayCardElements = (data: Array<{
-      id:number,
+      uuid:string,
       ip: string,
       port:string,
       progress:boolean,
       name: string,
-      status:string,
+      state:string,
       description: string}>) => {
     return data.map((card, index) =>
       (
-        <Grid xs={4} key={index}>
+        <Grid xs={6} sm={4} key={index}>
           <CardBlocks
             ip={card.ip}
-            id={card.id}
+            uuid={card.uuid}
             port={card.port}
             progress={card.progress}
             name={card.name}
-            status={card.status}
+            state={card.state}
             description={card.description} />
         </Grid>
       )
@@ -46,9 +56,16 @@ const Home = () => {
     <>
         <Grid container spacing={2}>
           <Grid xs={12}>
-            <RegisterVM />
+            <RegisterVM  onRegisterVM={handleOnRegisterVM}/>
           </Grid>
-          {displayCardElements(cardElements) }
+          {
+            (cardElements.length > 0) ?
+            displayCardElements(cardElements)
+            :
+            <div style={{'margin': '0 auto'}}>
+              <Alert severity="info">{'Oops! It seems you haven\'t registered any VM yet'}</Alert>
+            </div>
+          }
         </Grid>
     </>
   )

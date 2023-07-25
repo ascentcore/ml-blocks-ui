@@ -10,24 +10,23 @@ import {CardBlocksProps} from './CardBlock.interface';
 
 
 
-const CardBlocks = ({id, name, description,status, ip, port, progress}: CardBlocksProps) => {
-  const displayStatus = (status: string) => {
-    console.log('status', status)
-    if(status === 'idle')
+const CardBlocks = ({uuid, name, description, state, ip, port, progress}: CardBlocksProps) => {
+  const displayStatus = (state: string) => {
+    if(state === 'idle')
       return(
-        <Chip variant='filled' color='default' size="small" label={status} />
+        <Chip variant='filled' color='default' size="small" label={state} />
       )
-    if(status === 'training')
+    if(state === 'training')
       return(
-        <Chip variant='filled' color='primary' size="small" label={status} />
+        <Chip variant='filled' color='primary' size="small" label={state} />
       )
-    if(status === 'predicting')
+    if(state === 'predicting')
       return(
-        <Chip variant='filled' color='primary' size="small" label={status} />
+        <Chip variant='filled' color='primary' size="small" label={state} />
       )
 
     return(
-      <Chip variant='filled' color='primary' size="small" label={status} />
+      <Chip variant='filled' color='primary' size="small" label={state} />
     )
   }
   return(
@@ -35,15 +34,15 @@ const CardBlocks = ({id, name, description,status, ip, port, progress}: CardBloc
       <CardContent className='cardContent'>
         <div className='cardHeader'>
           <h2>{name}</h2>
-          <div>{ displayStatus(status) }</div>
+          <div>{ displayStatus(state) }</div>
         </div>
-        <p className='ip'>{ip}:{port}</p>
+        <p className='ip'>{ip} {(port) ? `: ${port}`  : ''}</p>
         <p className='description'>{description}</p>
         { (progress) ? <LinearProgress /> : '' }
       </CardContent>
       <CardActions className='cardActions'>
         { (progress) ? <Button size='small' color='error'>Stop</Button> : <div></div> }
-        <Link to={`/block/${id}`}><Button size='small'>Details</Button></Link>
+        <Link to={`/block/${uuid}`}><Button size='small'>Details</Button></Link>
       </CardActions>
     </Card>
     )
