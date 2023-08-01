@@ -1,0 +1,23 @@
+.card {
+  height: 100%;
+  .cardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    p {
+      color: #fff;
+    }
+  }
+  &.cpuCard {
+    background: linear-gradient(180deg, #575a6c, #6e7186);
+  }
+  &.memoryCard {
+    background: linear-gradient(180deg, #b4c540, #d7e17c);
+  }
+  &.diskCard {
+    background: linear-gradient(180deg, #ee6a59, #f39490);
+  }
+  &.gpuCard {
+    background: linear-gradient(180deg, #36869c, #5e9bb5);
+  }
+}

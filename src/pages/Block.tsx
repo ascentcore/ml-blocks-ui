@@ -10,7 +10,7 @@ import {useParams, useNavigate} from 'react-router-dom';
 import {CardBlocksProps} from '../components/CardBlock.interface';
 import StatusTab from '../components/StatusTab';
 import PredictTab from '../components/PredictTab';
-import PerformanceTab from '../components/Performance';
+import PerformanceTab from '../components/PerformanceTab';
 import Loading from '../components/ui/Loading';
 import Button from '@mui/material/Button';
 
@@ -120,7 +120,7 @@ const Block = () => {
               <PredictTab />
             </BlockTabPanel>
             <BlockTabPanel value={value} index={2}>
-              <PerformanceTab />
+              {(uuid) ? <PerformanceTab uuid={uuid}/> :''}
             </BlockTabPanel>
           </Box>
       </Loading>
