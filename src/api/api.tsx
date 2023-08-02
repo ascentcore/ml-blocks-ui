@@ -47,5 +47,13 @@ export default {
   },
   getPerformanceGPU(uuid:string) {
     return api.get(`/api/blocks/${uuid}/performance/gpu`, options);
+  },
+  getPerformance(uuid:string) {
+    return Promise.all([
+      this.getPerformanceCPU(uuid),
+      this.getPerformanceMemory(uuid),
+      this.getPerformanceDiskUsage(uuid),
+      this.getPerformanceGPU(uuid)
+    ])
   }
 }

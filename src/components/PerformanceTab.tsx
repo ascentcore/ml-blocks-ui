@@ -1,105 +1,107 @@
-import LinearWithValueLabel from './ui/LinearProgressWithLabel';
+import Loading  from './ui/Loading';
+import MLBlocksCircularProgress  from './ui/MLBlocksCircularProgress';
 import api from '../api/api';
 import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import './PerformanceTab.scss'
+import * as React from 'react';
 
 interface PerformanceTabProps {
   uuid: string
 }
-const PerformanceTab = ({uuid}:PerformanceTabProps) => {
 
+const PerformanceTab = ({uuid}:PerformanceTabProps) => {
 
   const [performanceCPU, setPerformanceCPU] = useState({cpu_percent : '0'})
   const [performanceMemory, setPerformanceMemory] = useState({available: '', free: '', percentage: '0', total: '', used:''})
   const [performanceDiskUsage, setPerformanceDiskUsage] = useState({free: '', percentage: '0', total: '', used:''})
-  const [performanceGPU, setPerformanceGPU] = useState({message:'not supported', type:''})
-
+  const [performanceGPU, setPerformanceGPU] = useState({message:'',gpu_usage:'0',  type:''})
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    fetchPerformanceData();
-
-    const interval = setInterval(fetchPerformanceData, 30000);
+    getPerformance(uuid);
+    const interval = setInterval(getPerformance, 30000);
 
     return () => {
       clearInterval(interval);
     };
   }, [uuid])
 
-  const getPerformanceCPU = (uuid:string) => {
-    api.getPerformanceCPU(uuid).then((result  ) => {
-      setPerformanceCPU( JSON.parse(result.data.response));
-    }).catch((e)=>{
-      console.log(e)
-    })
-  }
-  const getPerformanceMemory = (uuid:string) =>{
-    api.getPerformanceMemory(uuid).then((result  ) => {
-      setPerformanceMemory(JSON.parse(result.data.response));
+  const getPerformance = (uuid:string) => {
+    api.getPerformance(uuid).then((result )  => {
+      const [
+        performanceCPUResponse,
+        performanceMemoryResponse,
+        performanceDiskUsageResponse, performanceGPUResponse] = result;
+
+      const performanceCPUDetails = JSON.parse(performanceCPUResponse.data.response);
+      const performanceMemoryDetails = JSON.parse(performanceMemoryResponse.data.response);
+      const performanceDiskUsageDetails = JSON.parse(performanceDiskUsageResponse.data.response);
+      const performanceGPUDetails = JSON.parse(performanceGPUResponse.data.response);
+
+      setPerformanceCPU(performanceCPUDetails);
+      setPerformanceMemory(performanceMemoryDetails);
+      setPerformanceDiskUsage(performanceDiskUsageDetails);
+      setPerformanceGPU(performanceGPUDetails);
+      setIsLoading(false)
     }).catch((e)=>{
       console.log(e)
     })
   }
 
-  const getPerformanceDiskUsage = (uuid:string) =>{
-    api.getPerformanceDiskUsage(uuid).then((result  ) => {
-      setPerformanceDiskUsage(JSON.parse(result.data.response));
-    }).catch((e)=>{
-      console.log(e)
-    })
-  }
-
-  const getPerformanceGPU = (uuid:string) =>{
-    api.getPerformanceGPU(uuid).then((result  ) => {
-      setPerformanceGPU(JSON.parse(result.data.response));
-    }).catch((e)=>{
-      console.log(e)
-    })
-  }
-
-  const fetchPerformanceData = () => {
-    getPerformanceCPU(uuid);
-    getPerformanceMemory(uuid);
-    getPerformanceDiskUsage(uuid);
-    getPerformanceGPU(uuid);
-  }
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid xs={12} sm={3}>
-          <Card className='cpuCard card'>
-            <CardContent className='cardContent'>
-              <p>CPU</p>
-              <LinearWithValueLabel value={parseInt(performanceCPU.cpu_percent)}/>
-            </CardContent>
-          </Card>
+      <Loading loading={isLoading}>
+        <Grid container spacing={2}>
+          <Grid xs={12} sm={3}>
+            <Card className='cpuCard card card-performance' elevation={3}>
+              <CardContent className='cardContent'>
+                <MLBlocksCircularProgress value={parseInt(performanceCPU.cpu_percent)}/>
+                <div className='cardWrapper'>
+                  <p className='title'>CPU</p>
+                  <p className='performance'>{Math.round(parseInt(performanceCPU.cpu_percent))}<span>%</span></p>
+                </div>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid xs={12} sm={3}>
+            <Card className='memoryCard card card-performance' elevation={3}>
+              <CardContent className='cardContent'>
+                <MLBlocksCircularProgress value={parseInt(performanceMemory.percentage)}/>
+                <div className='cardWrapper'>
+                  <p className='title'>Memory</p>
+                  <p className='performance'>{Math.round(parseInt(performanceMemory.percentage))}<span>%</span></p>
+                </div>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid xs={12} sm={3}>
+            <Card className='diskCard card card-performance' elevation={3}>
+              <CardContent className='cardContent'>
+                <MLBlocksCircularProgress value={parseInt(performanceDiskUsage.percentage)}/>
+                <div className='cardWrapper'>
+                  <p className='title'>Disk</p>
+                  <p className='performance'>{Math.round(parseInt(performanceDiskUsage.percentage))}<span>%</span></p>
+                </div>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid xs={12} sm={3}>
+            <Card className='gpuCard card card-performance' elevation={3}>
+              <CardContent className='cardContent'>
+                { performanceGPU.message !== 'not supported' ?
+                  <MLBlocksCircularProgress value={parseInt(performanceDiskUsage.percentage)}/> : ''}
+                <div className='cardWrapper'>
+                  <p className='title'>GPU</p>
+                  { performanceGPU.message === 'not supported' ? <p className='performanceError'>Not supported</p> :
+                    <p className='performance'>{Math.round(parseInt(performanceGPU.gpu_usage))}<span>%</span></p> }
+                </div>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
-        <Grid xs={12} sm={3}>
-          <Card className='memoryCard card'>
-            <CardContent className='cardContent'>
-              <p>Memory</p>
-              <LinearWithValueLabel value={parseInt(performanceMemory.percentage)}/>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid xs={12} sm={3}>
-          <Card className='diskCard card'>
-            <CardContent className='cardContent'>
-              <p>Disk</p>
-              <LinearWithValueLabel value={parseInt(performanceDiskUsage.percentage)}/>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid xs={12} sm={3}>
-          <Card className='gpuCard card'>
-            <CardContent className='cardContent'>
-              <p>GPU</p>
-              <p>{ performanceGPU.message }</p>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+      </Loading>
     </>
   )
 }

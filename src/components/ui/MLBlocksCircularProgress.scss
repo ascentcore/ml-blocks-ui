@@ -1,0 +1,20 @@
+.background {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  svg {
+    color: #dcdcdc;
+    circle {
+      stroke-dashoffset: 0px !important;
+    }
+  }
+}
+.foreground {
+  position: relative;
+  z-index: 2;
+  svg {
+    color: var(--color_050);
+    circle {
+    }
+  }
+}

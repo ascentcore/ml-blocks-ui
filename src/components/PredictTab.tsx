@@ -4,7 +4,7 @@ import Paper from '@mui/material/Paper';
 import { SchemaForm} from '@ascentcore/react-schema-form';
 import schema from './basic-schema';
 import TextField from '@mui/material/TextField';
-
+import Button from '@mui/material/Button';
 interface RegistryKeys {
   [key: string]: {
     component?: ReactNode | string | any;
@@ -52,10 +52,25 @@ const PredictTab = () => {
     <>
       <Grid container spacing={2}>
         <Grid xs={6}>
-          <SchemaForm schema={schema} onSubmit={onSubmit} data={data} config={{registry: customRegistry}} />
+          {/*<SchemaForm schema={schema} onSubmit={onSubmit} data={data} config={{registry: customRegistry}} />*/}
+          <form>
+            <TextField
+              id="outlined-multiline-static"
+              label='JSON Input'
+              multiline
+              rows={12}
+              defaultValue=""
+              sx={{'backgroundColor': 'white', 'width': '100%'}}
+            />
+            <Button variant="contained" size="large" sx={{'marginTop': '1rem'}}>
+              Submit
+            </Button>
+          </form>
         </Grid>
         <Grid xs={6}>
-          <Paper elevation={3} sx={{ height: 300, width: 300 }} />
+          <Paper elevation={3} sx={{minHeight:'250px', width: '100%' }}>
+            <p>output</p>
+          </Paper>
         </Grid>
       </Grid>
     </>

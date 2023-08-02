@@ -11,6 +11,7 @@ import {CardBlocksProps} from '../components/CardBlock.interface';
 import StatusTab from '../components/StatusTab';
 import PredictTab from '../components/PredictTab';
 import PerformanceTab from '../components/PerformanceTab';
+import ActionTab from '../components/ActionTab';
 import Loading from '../components/ui/Loading';
 import Button from '@mui/material/Button';
 
@@ -26,7 +27,8 @@ const Block = () => {
     name: '',
     port: '',
     progress: false,
-    state: ''
+    state: '',
+    type: '',
   });
 
   useEffect(() => {
@@ -109,7 +111,7 @@ const Block = () => {
             <Box>
               <Tabs value={value} onChange={handleChange} aria-label="block tabs">
                 <Tab value={0} label="Status" />
-                <Tab value={1} label="Predict" />
+                { (block.type === 'train') ? <Tab value={1} label="Action" /> : <Tab value={1} label="Predict" /> }
                 <Tab value={2} label="Performance" />
               </Tabs>
             </Box>
@@ -117,7 +119,8 @@ const Block = () => {
               <StatusTab />
             </BlockTabPanel>
             <BlockTabPanel value={value} index={1}>
-              <PredictTab />
+              { (block.type === 'train') ? <ActionTab /> : <PredictTab /> }
+
             </BlockTabPanel>
             <BlockTabPanel value={value} index={2}>
               {(uuid) ? <PerformanceTab uuid={uuid}/> :''}

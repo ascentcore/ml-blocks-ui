@@ -1,23 +1,48 @@
-.card {
+.card-performance{
   height: 100%;
   .cardContent {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 1rem;
     p {
-      color: #fff;
+      color: #000;
+    }
+    .cardWrapper{
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: auto;
+    }
+    .title{
+      color: #000;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .performanceError{
+      color: rgba(0,0,0,0.5);
+      margin-top: 1rem;
+    }
+    .performance{
+      color: #000;
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: rgba(0,0,0,0.9);
+      span{
+        font-size: 1rem;
+        color: rgba(0,0,0,0.5);
+      }
     }
   }
   &.cpuCard {
-    background: linear-gradient(180deg, #575a6c, #6e7186);
+    background: #ffffff;
   }
   &.memoryCard {
-    background: linear-gradient(180deg, #b4c540, #d7e17c);
+    background:  #ffffff;
   }
   &.diskCard {
-    background: linear-gradient(180deg, #ee6a59, #f39490);
+    background: #ffffff;
   }
   &.gpuCard {
-    background: linear-gradient(180deg, #36869c, #5e9bb5);
+    background:  #ffffff;
   }
 }
