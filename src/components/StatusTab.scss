@@ -1,40 +1,48 @@
-.card {
+.card-performance{
   height: 100%;
   .cardContent {
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    flex-direction: row;
+    gap: 1rem;
     p {
-      color: #fff;
-      big {
-        font-size: 40px;
-        font-weight: 600;
+      color: #000;
+    }
+    .cardWrapper{
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: auto;
+    }
+    .title{
+      color: #000;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .performanceError{
+      color: rgba(0,0,0,0.5);
+      margin-top: 1rem;
+    }
+    .performance{
+      color: #000;
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: rgba(0,0,0,0.9);
+      span{
+        font-size: 1rem;
+        color: rgba(0,0,0,0.5);
       }
     }
   }
-}
-.statusCard {
-  background: linear-gradient(180deg, #7939FF 0%, #BFA0FF 100%);
-}
-.avgResponseCard {
-  background: linear-gradient(180deg, #164B3C 0%, #23652A 100%);
-}
-.lastUpdateCard {
-  background: linear-gradient(180deg, #5D7DF0 0%, #283077 100%);
-  .cardContent {
-    gap: unset;
-    justify-content: space-between;
-    height: 100%;
-    box-sizing: border-box;
-    padding-bottom: 20px;
-    .cardFooter {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      .listButton {
-        color:#ffffff;
-      }
-    }
+  &.cpuCard {
+    background: #ffffff;
+  }
+  &.memoryCard {
+    background:  #ffffff;
+  }
+  &.diskCard {
+    background: #ffffff;
+  }
+  &.gpuCard {
+    background:  #ffffff;
   }
 }

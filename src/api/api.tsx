@@ -55,5 +55,17 @@ export default {
       this.getPerformanceDiskUsage(uuid),
       this.getPerformanceGPU(uuid)
     ])
+  },
+  postTrainStart(uuid:string) {
+    return api.post(`/api/blocks/train/start?uuid=${uuid}`, options);
+  },
+  getTrainStatus(uuid:string) {
+    return api.get(`/api/blocks/train/training_status?uuid=${uuid}`, options);
+  },
+  postPredict(uuid:string, jsonInput:string) {
+    return api.post(`/api/blocks/inference/predict?uuid=${uuid}`,  jsonInput,options);
+  },
+  getPublish(uuid:string, targetUUID:string, runId=1, epoch=1) {
+    return api.get(`/api/blocks/train/publish?uuid=${uuid}&target_uuid=${targetUUID}&run_id=${runId}&epoch=${epoch}`, options);
   }
 }

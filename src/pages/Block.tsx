@@ -10,7 +10,6 @@ import {useParams, useNavigate} from 'react-router-dom';
 import {CardBlocksProps} from '../components/CardBlock.interface';
 import StatusTab from '../components/StatusTab';
 import PredictTab from '../components/PredictTab';
-import PerformanceTab from '../components/PerformanceTab';
 import ActionTab from '../components/ActionTab';
 import Loading from '../components/ui/Loading';
 import Button from '@mui/material/Button';
@@ -18,6 +17,7 @@ import Button from '@mui/material/Button';
 const Block = () => {
 
   const { uuid } = useParams();
+  const uuidValue = uuid ?? '';
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true)
   const [ block, setBlock ] = useState<CardBlocksProps>({
@@ -32,20 +32,18 @@ const Block = () => {
   });
 
   useEffect(() => {
-    if(uuid) {
-      api.getBlocks(uuid).then((result) => {
-        const resultList = JSON.parse(result.data.response);
-        if(resultList.length !== 1) navigate('/')
-        setBlock(resultList[0]);
-        setIsLoading(false);
-      }).catch(e=>{
-        console.log(e)
-        navigate('/')
-      });
-    }
 
-  }, [uuid]);
+    api.getBlocks(uuidValue).then((result) => {
+      const resultList = JSON.parse(result.data.response);
+      if(resultList.length !== 1) navigate('/')
+      setBlock(resultList[0]);
+      setIsLoading(false);
+    }).catch(e=>{
+      console.log(e)
+      navigate('/')
+    });
 
+  }, [uuidValue]);
   function handleClick(event: MouseEvent<Element, MouseEvent>) {
     event.preventDefault();
     console.info('You clicked a breadcrumb.');
@@ -57,10 +55,10 @@ const Block = () => {
     setValue(newValue);
   };
 
-  const handleDelete = (uuid:string) => {
+  const handleDelete = (uuidValue:string) => {
     const confirmDelete = confirm('Do you really want to perform this action?');
     if(confirmDelete) {
-      api.deleteBlock(uuid).then((result) => {
+      api.deleteBlock(uuidValue).then((result) => {
         navigate('/')
       }).catch(e=>{
         console.log(e)
@@ -94,7 +92,7 @@ const Block = () => {
       <Loading loading={isLoading}>
         <div style={{'display': 'flex', 'alignItems':'center', 'justifyContent': 'space-between'}}>
           <h1>{block.name}</h1>
-          {(uuid) ? <Button variant="contained" color="error" onClick={() => handleDelete(uuid)}>Delete</Button> : ''}
+          {(uuidValue) ? <Button variant="contained" color="error" onClick={() => handleDelete(uuidValue)}>Delete</Button> : ''}
         </div>
         { (block.name)?
         <div role="presentation" onClick={() => handleClick}>
@@ -112,19 +110,19 @@ const Block = () => {
               <Tabs value={value} onChange={handleChange} aria-label="block tabs">
                 <Tab value={0} label="Status" />
                 { (block.type === 'train') ? <Tab value={1} label="Action" /> : <Tab value={1} label="Predict" /> }
-                <Tab value={2} label="Performance" />
+                {/*<Tab value={2} label="Performance" />*/}
               </Tabs>
             </Box>
             <BlockTabPanel value={value} index={0}>
-              <StatusTab />
+              <StatusTab uuid={uuidValue}/>
             </BlockTabPanel>
             <BlockTabPanel value={value} index={1}>
-              { (block.type === 'train') ? <ActionTab /> : <PredictTab /> }
+              { (block.type === 'train') ? <ActionTab uuid={uuidValue}/> : <PredictTab uuid={uuidValue} /> }
 
             </BlockTabPanel>
-            <BlockTabPanel value={value} index={2}>
-              {(uuid) ? <PerformanceTab uuid={uuid}/> :''}
-            </BlockTabPanel>
+            {/*<BlockTabPanel value={value} index={2}>*/}
+            {/*  <PerformanceTab uuid={uuidValue}/>*/}
+            {/*</BlockTabPanel>*/}
           </Box>
       </Loading>
     </>
