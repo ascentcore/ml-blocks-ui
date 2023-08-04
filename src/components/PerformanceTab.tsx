@@ -1,19 +1,19 @@
-import Grid from '@mui/material/Unstable_Grid2';
-import CardContent from '@mui/material/CardContent';
-import Card from '@mui/material/Card';
-import './StatusTab.scss'
-import loadGraph from '../assets/images/load-graph.svg'
-import Button from '@mui/material/Button';
-import {useEffect, useState} from 'react';
+import Loading  from './ui/Loading';
+import MLBlocksCircularProgress  from './ui/MLBlocksCircularProgress';
 import api from '../api/api';
-import Loading from './ui/Loading';
-import MLBlocksCircularProgress from './ui/MLBlocksCircularProgress';
+import { useEffect, useState } from 'react';
+import Grid from '@mui/material/Unstable_Grid2';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import './PerformanceTab.scss'
 import * as React from 'react';
 
-interface StatusTabProps {
+interface PerformanceTabProps {
   uuid: string
 }
-const StatusTab = ({uuid}:StatusTabProps) => {
+
+const PerformanceTab = ({uuid}:PerformanceTabProps) => {
+
   const [performanceCPU, setPerformanceCPU] = useState({cpu_percent : '0'})
   const [performanceMemory, setPerformanceMemory] = useState({available: '', free: '', percentage: '0', total: '', used:''})
   const [performanceDiskUsage, setPerformanceDiskUsage] = useState({free: '', percentage: '0', total: '', used:''})
@@ -21,7 +21,7 @@ const StatusTab = ({uuid}:StatusTabProps) => {
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     getPerformance(uuid);
-    const interval = setInterval(()=>getPerformance(uuid), 30000);
+    const interval = setInterval(getPerformance, 30000);
 
     return () => {
       clearInterval(interval);
@@ -105,4 +105,4 @@ const StatusTab = ({uuid}:StatusTabProps) => {
     </>
   )
 }
-export default StatusTab
+export default PerformanceTab

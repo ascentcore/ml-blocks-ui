@@ -36,6 +36,7 @@ const CardBlocks = ({uuid, name, description, state, ip, port, progress}: CardBl
           <h2>{name}</h2>
           <div>{ displayStatus(state) }</div>
         </div>
+        <p className='uuid'>{uuid}</p>
         <p className='ip'>{ip} {(port) ? `: ${port}`  : ''}</p>
         <p className='description'>{description}</p>
         { (progress) ? <LinearProgress /> : '' }

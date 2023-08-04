@@ -6,4 +6,5 @@ export interface CardBlocksProps {
   ip: string,
   port: string,
   progress: boolean,
+  type?: string,
 }

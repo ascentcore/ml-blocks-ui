@@ -24,13 +24,48 @@ export default {
   deleteBlock(uuid:string) {
     return api.delete(`/api/blocks?uuid=${uuid}`);
   },
-  getCards() {
-    return axios.get('https://6409a9fb6ecd4f9e18b75df5.mockapi.io/getstudents');
-  },
-  getCard(id:string) {
-    return axios.get(`https://6409a9fb6ecd4f9e18b75df5.mockapi.io/getstudents/${id}`);
-  },
   getLogs() {
     return api.get('/api/log', options);
+  },
+  getPerformanceCPU(uuid:string) {
+    return api.get(`/api/blocks/${uuid}/performance/cpu`, options);
+  },
+  getPerformanceCPUStats(uuid:string) {
+    return api.get(`/api/blocks/${uuid}/performance/cpu_stats`, options);
+  },
+  getPerformanceMemory(uuid:string) {
+    return api.get(`/api/blocks/${uuid}/performance/memory`, options);
+  },
+  getPerformanceDiskUsage(uuid:string) {
+    return api.get(`/api/blocks/${uuid}/performance/disk_usage`, options);
+  },
+  getPerformanceDiskStats(uuid:string) {
+    return api.get(`/api/blocks/${uuid}/performance/disk_stats`, options);
+  },
+  getPerformanceNetwork(uuid:string) {
+    return api.get(`/api/blocks/${uuid}/performance/network`, options);
+  },
+  getPerformanceGPU(uuid:string) {
+    return api.get(`/api/blocks/${uuid}/performance/gpu`, options);
+  },
+  getPerformance(uuid:string) {
+    return Promise.all([
+      this.getPerformanceCPU(uuid),
+      this.getPerformanceMemory(uuid),
+      this.getPerformanceDiskUsage(uuid),
+      this.getPerformanceGPU(uuid)
+    ])
+  },
+  postTrainStart(uuid:string) {
+    return api.post(`/api/blocks/train/start?uuid=${uuid}`, options);
+  },
+  getTrainStatus(uuid:string) {
+    return api.get(`/api/blocks/train/training_status?uuid=${uuid}`, options);
+  },
+  postPredict(uuid:string, jsonInput:string) {
+    return api.post(`/api/blocks/inference/predict?uuid=${uuid}`,  jsonInput,options);
+  },
+  getPublish(uuid:string, targetUUID:string, runId=1, epoch=1) {
+    return api.get(`/api/blocks/train/publish?uuid=${uuid}&target_uuid=${targetUUID}&run_id=${runId}&epoch=${epoch}`, options);
   }
 }
