@@ -2,8 +2,6 @@ import Grid from '@mui/material/Unstable_Grid2';
 import CardContent from '@mui/material/CardContent';
 import Card from '@mui/material/Card';
 import './StatusTab.scss'
-import loadGraph from '../assets/images/load-graph.svg'
-import Button from '@mui/material/Button';
 import {useEffect, useState} from 'react';
 import api from '../api/api';
 import Loading from './ui/Loading';

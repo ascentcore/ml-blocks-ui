@@ -43,7 +43,7 @@ const Block = () => {
       navigate('/')
     });
 
-  }, [uuidValue]);
+  }, [uuidValue, navigate]);
   function handleClick(event: MouseEvent<Element, MouseEvent>) {
     event.preventDefault();
     console.info('You clicked a breadcrumb.');
@@ -110,7 +110,6 @@ const Block = () => {
               <Tabs value={value} onChange={handleChange} aria-label="block tabs">
                 <Tab value={0} label="Status" />
                 { (block.type === 'train') ? <Tab value={1} label="Action" /> : <Tab value={1} label="Predict" /> }
-                {/*<Tab value={2} label="Performance" />*/}
               </Tabs>
             </Box>
             <BlockTabPanel value={value} index={0}>
