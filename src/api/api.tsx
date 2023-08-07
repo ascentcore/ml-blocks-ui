@@ -67,5 +67,8 @@ export default {
   },
   getPublish(uuid:string, targetUUID:string, runId=1, epoch=1) {
     return api.get(`/api/blocks/train/publish?uuid=${uuid}&target_uuid=${targetUUID}&run_id=${runId}&epoch=${epoch}`, options);
+  },
+  getActiveInference(uuid:string) {
+    return api.get(`/api/blocks/inference/active?uuid=${uuid}`, options);
   }
 }
