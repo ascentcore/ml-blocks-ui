@@ -2,6 +2,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
+import Alert from '@mui/material/Alert';
 import LinearProgress from '@mui/material/LinearProgress';
 import usePredictHook from './PredictHook';
 
@@ -13,6 +14,7 @@ const NaturalLanguageProcessing =({uuid}: NaturalLanguageProcessingProps) => {
   const {
     inputError,
     predictResponse,
+    predictErrorResponse,
     loadingPredict,
     handleFormSubmit
   } = usePredictHook(uuid);
@@ -38,7 +40,7 @@ const NaturalLanguageProcessing =({uuid}: NaturalLanguageProcessingProps) => {
         <Grid xs={6}>
           <Paper elevation={3} sx={{minHeight:'307px', width: '100%' }}>
             {loadingPredict && <LinearProgress />}
-            <p>{predictResponse}</p>
+            {predictErrorResponse && <Alert severity="error" sx={{marginTop:'1rem'}}>{predictErrorResponse}</Alert>}
           </Paper>
         </Grid>
       </Grid>

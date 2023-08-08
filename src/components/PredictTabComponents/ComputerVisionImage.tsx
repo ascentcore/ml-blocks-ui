@@ -3,6 +3,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import usePredictHook from './PredictHook';
 import LinearProgress from '@mui/material/LinearProgress';
+import Alert from '@mui/material/Alert';
 interface ComputerVisionImageProps {
   uuid: string,
 }
@@ -10,6 +11,7 @@ const ComputerVisionImage = ({uuid}: ComputerVisionImageProps) => {
   const {
     inputError,
     predictResponse,
+    predictErrorResponse,
     loadingPredict,
     handleFormSubmit
   } = usePredictHook(uuid);
@@ -32,6 +34,7 @@ const ComputerVisionImage = ({uuid}: ComputerVisionImageProps) => {
         </form>
         {loadingPredict && <LinearProgress />}
         <p>{predictResponse}</p>
+        {predictErrorResponse && <Alert severity="error" sx={{marginTop:'1rem'}}>{predictErrorResponse}</Alert>}
       </Grid>
     </>
   )
