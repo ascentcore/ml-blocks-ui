@@ -3,6 +3,11 @@
   flex-direction: column;
   display: flex;
   justify-content: space-between;
+  &.cardModels{
+    .cardActions{
+      justify-content: flex-end;
+    }
+  }
   .cardContent {
     display: flex;
     flex-direction: column;

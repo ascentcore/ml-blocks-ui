@@ -6,11 +6,13 @@ const usePredictHook = (uuid: string) => {
   const [predictResponse, setPredictResponse] = useState<string>('');
   const [predictErrorResponse, setPredictErrorResponse] = useState<string>('');
   const [loadingPredict, setLoadingPredict] = useState<boolean>(false);
+  const [showPredictResponse, setShowPredictResponse] = useState<boolean>(false);
 
   const handleFormSubmit = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     setInputError(false);
     setPredictResponse('');
+    setShowPredictResponse(true);
     const { modelInput } = event.target;
 
     if (modelInput.value === '') {
@@ -23,10 +25,9 @@ const usePredictHook = (uuid: string) => {
 
   const postPredict = (uuid: string, modelInput: string) => {
     api.postPredict(uuid, modelInput).then((result) => {
+      setPredictResponse(JSON.parse(result.data.response).payload);
       setLoadingPredict(false);
     }).catch((e) => {
-      console.log('msg', );
-      // setPredictResponse(e.response.data.response);
       setPredictErrorResponse(JSON.parse(e.response.data.response).message);
       setLoadingPredict(false);
     });
@@ -40,6 +41,7 @@ const usePredictHook = (uuid: string) => {
     setPredictErrorResponse,
     setPredictResponse,
     loadingPredict,
+    showPredictResponse,
     handleFormSubmit
   };
 };
