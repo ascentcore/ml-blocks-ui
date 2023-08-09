@@ -23,10 +23,9 @@ const usePredictHook = (uuid: string) => {
 
   const postPredict = (uuid: string, modelInput: string) => {
     api.postPredict(uuid, modelInput).then((result) => {
+      setPredictResponse(JSON.parse(result.data.response).payload);
       setLoadingPredict(false);
     }).catch((e) => {
-      console.log('msg', );
-      // setPredictResponse(e.response.data.response);
       setPredictErrorResponse(JSON.parse(e.response.data.response).message);
       setLoadingPredict(false);
     });

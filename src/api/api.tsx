@@ -1,7 +1,8 @@
+import config from '../config';
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:9082/'
+  baseURL: config.backendUrl
 });
 
 const options = {
@@ -70,5 +71,11 @@ export default {
   },
   getActiveInference(uuid:string) {
     return api.get(`/api/blocks/inference/active?uuid=${uuid}`, options);
-  }
+  },
+  getInferenceList(uuid:string) {
+    return api.get(`/api/blocks/inference/list?uuid=${uuid}`, options);
+  },
+  selectInferenceModel(uuid:string, modelName:string, verison:number) {
+    return api.get(`/api/blocks/inference/select?uuid=${uuid}&model_name=${modelName}&model_version=${verison}`, options);
+  },
 }

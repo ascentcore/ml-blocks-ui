@@ -11,6 +11,7 @@ import {CardBlocksProps} from '../components/CardBlock.interface';
 import StatusTab from '../components/StatusTab';
 import PredictTab from '../components/PredictTab';
 import ActionTab from '../components/ActionTab';
+import ModelsTab from '../components/ModelsTab';
 import Loading from '../components/ui/Loading';
 import Button from '@mui/material/Button';
 
@@ -110,6 +111,7 @@ const Block = () => {
               <Tabs value={value} onChange={handleChange} aria-label="block tabs">
                 <Tab value={0} label="Status" />
                 { (block.type === 'train') ? <Tab value={1} label="Action" /> : <Tab value={1} label="Predict" /> }
+                { (block.type === 'inference') && <Tab value={2} label="Models" /> }
               </Tabs>
             </Box>
             <BlockTabPanel value={value} index={0}>
@@ -117,11 +119,11 @@ const Block = () => {
             </BlockTabPanel>
             <BlockTabPanel value={value} index={1}>
               { (block.type === 'train') ? <ActionTab uuid={uuidValue}/> : <PredictTab uuid={uuidValue} /> }
-
             </BlockTabPanel>
-            {/*<BlockTabPanel value={value} index={2}>*/}
-            {/*  <PerformanceTab uuid={uuidValue}/>*/}
-            {/*</BlockTabPanel>*/}
+            { (block.type === 'inference') &&             <BlockTabPanel value={value} index={2}>
+              <ModelsTab uuid={uuidValue}/>
+            </BlockTabPanel> }
+
           </Box>
       </Loading>
     </>
