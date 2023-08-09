@@ -54,11 +54,11 @@ const PredictTab = ({uuid}:PredictTabProps) => {
   return (
     <>
       <Loading loading={isLoading}>
-        {/*{activeInferenceModel.content.properties.type === 'Computer Vision Image' &&*/}
+        {activeInferenceModel.content.properties.type === 'Computer Vision Images' &&
           <ComputerVisionImage uuid={uuid} />
-        {/*}*/}
-        {/*{activeInferenceModel.content.properties.type === 'Natural Language Processing' &&*/}
-        {/*  <NaturalLanguageProcessing uuid={uuid} />}*/}
+        }
+        {activeInferenceModel.content.properties.type === 'Natural Language Processing' &&
+          <NaturalLanguageProcessing uuid={uuid} />}
         { errorResponse && <Alert severity="info" sx={{ marginTop:'1rem'}}>{ errorResponse }</Alert>}
       </Loading>
     </>

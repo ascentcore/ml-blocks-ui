@@ -14,9 +14,9 @@ const ComputerVisionImage = ({uuid}: ComputerVisionImageProps) => {
     predictResponse,
     predictErrorResponse,
     loadingPredict,
+    showPredictResponse,
     handleFormSubmit
   } = usePredictHook(uuid);
-
   return(
     <>
       <Grid container spacing={2}>
@@ -33,12 +33,14 @@ const ComputerVisionImage = ({uuid}: ComputerVisionImageProps) => {
           </Button>
         </form>
         {loadingPredict && <LinearProgress />}
-        <p>{predictResponse}</p>
         {predictErrorResponse && <Alert severity="error" sx={{marginTop:'1rem'}}>{predictErrorResponse}</Alert>}
-        { predictResponse &&
-        <Loading loading={loadingPredict}>
-          <img src={'data:image/png;base64,' + predictResponse} alt="result" style={{'margin': '1rem auto', 'display':'block'}} />
-        </Loading>}
+        <Grid xs={12} sx={{marginTop:'2rem'}}>
+          { showPredictResponse &&
+          <Loading loading={loadingPredict}>
+            <img src={'data:image/png;base64,' + predictResponse} alt="result" style={{'margin': '0 auto', 'display':'block'}} />
+          </Loading>
+          }
+        </Grid>
       </Grid>
     </>
   )

@@ -89,11 +89,11 @@ const StatusTab = ({uuid}:StatusTabProps) => {
             <Card className='gpuCard card card-performance' elevation={3}>
               <CardContent className='cardContent'>
                 { performanceGPU.message !== 'not supported' ?
-                  <MLBlocksCircularProgress value={parseInt(performanceDiskUsage.percentage)}/> : ''}
+                  <MLBlocksCircularProgress value={parseInt(performanceGPU.gpu_usage[0])}/> : ''}
                 <div className='cardWrapper'>
                   <p className='title'>GPU</p>
                   { performanceGPU.message === 'not supported' ? <p className='performanceError'>Not supported</p> :
-                    <p className='performance'>{Math.round(parseInt(performanceGPU.gpu_usage))}<span>%</span></p> }
+                    <p className='performance'>{Math.round(parseInt(performanceGPU.gpu_usage[0]))}<span>%</span></p> }
                 </div>
               </CardContent>
             </Card>

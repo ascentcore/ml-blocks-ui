@@ -6,11 +6,13 @@ const usePredictHook = (uuid: string) => {
   const [predictResponse, setPredictResponse] = useState<string>('');
   const [predictErrorResponse, setPredictErrorResponse] = useState<string>('');
   const [loadingPredict, setLoadingPredict] = useState<boolean>(false);
+  const [showPredictResponse, setShowPredictResponse] = useState<boolean>(false);
 
   const handleFormSubmit = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     setInputError(false);
     setPredictResponse('');
+    setShowPredictResponse(true);
     const { modelInput } = event.target;
 
     if (modelInput.value === '') {
@@ -39,6 +41,7 @@ const usePredictHook = (uuid: string) => {
     setPredictErrorResponse,
     setPredictResponse,
     loadingPredict,
+    showPredictResponse,
     handleFormSubmit
   };
 };
