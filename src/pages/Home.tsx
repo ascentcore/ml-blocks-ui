@@ -4,24 +4,27 @@ import CardBlocks from '../components/CardBlocks';
 import {useEffect, useState} from 'react';
 import api from '../api/api';
 import Alert from '@mui/material/Alert';
+import Loading from '../components/ui/Loading';
 
 
 const Home = () => {
 
   const [cardElements, setCardElements] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     getBlocks();
-
-    // api.getLogs().then((result) => {console.log('logs ', result.data)}).catch((e)=> console.log(e));
-
   }, []);
 
   const getBlocks = () => {
+
     api.getBlocks().then((result) => {
       const resultList = JSON.parse(result.data.response);
       setCardElements(resultList);
-    }).catch((e)=> console.log(e));
+      setIsLoading(false);
+    }).catch((e)=> {
+      console.log(e)
+      setIsLoading(false);
+    });
   }
 
   const handleOnRegisterVM = () => {
@@ -54,19 +57,25 @@ const Home = () => {
 
   return(
     <>
-        <Grid container spacing={2}>
-          <Grid xs={12}>
-            <RegisterVM  onRegisterVM={handleOnRegisterVM}/>
-          </Grid>
-          {
-            (cardElements.length > 0) ?
-            displayCardElements(cardElements)
-            :
-            <div style={{'margin': '0 auto'}}>
-              <Alert severity="info">{'Oops! It seems you haven\'t registered any VM yet'}</Alert>
-            </div>
-          }
+      <Grid container spacing={2}>
+        <Grid xs={12}>
+          <RegisterVM  onRegisterVM={handleOnRegisterVM}/>
         </Grid>
+        <Grid xs={12}>
+          <Loading loading={isLoading}>
+            <Grid container spacing={2}>
+              {
+              (cardElements.length > 0) ?
+              displayCardElements(cardElements)
+              :
+              <div style={{'margin': '0 auto'}}>
+                <Alert severity="info">{'Oops! It seems you haven\'t registered any VM yet'}</Alert>
+              </div>
+              }
+            </Grid>
+          </Loading>
+        </Grid>
+      </Grid>
     </>
   )
 }
